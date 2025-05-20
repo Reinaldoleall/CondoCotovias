@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Sistema de Encomendas</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<meta name="theme-color" content="#2c3e50">
+
+</head>
+<body>
+  <style>
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.btn-loading .material-icons {
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+    /* Estilos Personalizados para Página de Cadastro */
+:root {
+    --cor-primaria: #2c3e50;       /* Azul escuro */
+    --cor-secundaria: #3498db;     /* Azul principal */
+    --cor-sucesso: #27ae60;        /* Verde */
+    --cor-alerta: #f39c12;         /* Laranja */
+    --cor-erro: #e74c3c;           /* Vermelho */
+    --cor-fundo: #f8fafc;          /* Cinza muito claro */
+    --cor-texto: #2d3436;          /* Texto escuro */
+    --cor-texto-secundario: #636e72; /* Texto cinza */
+    --cor-borda: #dfe6e9;          /* Bordas claras */
+    --sombra-card: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --sombra-card-hover: 0 6px 12px rgba(0, 0, 0, 0.1);
+    --fonte-principal: 'Roboto', 'Segoe UI', sans-serif;
+}
+
+/* Reset e Base */
+body {
+    font-family: var(--fonte-principal);
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container Principal */
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+    flex: 1;
+}
+
+/* Card de Cadastro */
+.card {
+    border-radius: 10px;
+    box-shadow: var(--sombra-card);
+    border: none;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+    margin-bottom: 30px;
+}
+
+.card:hover {
+    box-shadow: var(--sombra-card-hover);
+}
+
+.card-content {
+    padding: 30px;
+}
+
+.card-title {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--cor-primaria);
+    margin-bottom: 30px;
+    text-align: center;
+    border-bottom: 2px solid var(--cor-borda);
+    padding-bottom: 15px;
+}
+
+.card-title h4 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+/* Mensagens de Status */
+.status-message {
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 5px;
+    display: none;
+}
+
+.status-message.success {
+    background-color: rgba(39, 174, 96, 0.1);
+    color: var(--cor-sucesso);
+    border-left: 4px solid var(--cor-sucesso);
+}
+
+.status-message.error {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--cor-erro);
+    border-left: 4px solid var(--cor-erro);
+}
+
+/* Campos do Formulário */
+.input-field {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.input-field label {
+    color: var(--cor-texto-secundario);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-field .prefix {
+    color: var(--cor-texto-secundario);
+    transition: color 0.3s ease;
+}
+
+.input-field .prefix.active {
+    color: var(--cor-secundaria);
+}
+
+.input-field input:focus + label,
+.input-field textarea:focus + label {
+    color: var(--cor-secundaria);
+}
+
+.input-field input:focus,
+.input-field textarea:focus {
+    border-bottom: 2px solid var(--cor-secundaria) !important;
+    box-shadow: 0 1px 0 0 var(--cor-secundaria) !important;
+}
+
+/* Mensagens de Validação */
+.helper-text {
+    color: var(--cor-texto-secundario);
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: block;
+}
+
+.error-message {
+    color: var(--cor-erro);
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: none;
+}
+
+.success-message {
+    color: var(--cor-sucesso);
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: none;
+}
+
+.input-field .valid ~ .success-message {
+    display: block;
+}
+
+.input-field .invalid ~ .error-message {
+    display: block;
+}
+
+/* Radio Buttons */
+[type="radio"]:not(:checked) + span:before,
+[type="radio"]:not(:checked) + span:after {
+    border-color: var(--cor-texto-secundario);
+}
+
+[type="radio"]:checked + span:after {
+    background-color: var(--cor-secundaria);
+    border-color: var(--cor-secundaria);
+}
+
+/* Botão de Cadastro */
+.btn {
+    width: 100%;
+    background-color: var(--cor-secundaria);
+    border-radius: 5px;
+    padding: 0 30px;
+    height: 48px;
+    line-height: 48px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: normal;
+    box-shadow: none;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn i.left {
+    margin-right: 10px;
+}
+
+/* Link de Login */
+.row .col.center-align {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.row .col.center-align a {
+    color: var(--cor-secundaria);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.row .col.center-align a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* Seções condicionais */
+#dadosMorador, #dadosPorteiro {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--cor-borda);
+}
+
+/* Avisos de formato */
+#dadosMorador p {
+    font-size: 0.8rem;
+    color: var(--cor-alerta);
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .container {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+    
+    .card-content {
+        padding: 20px;
+    }
+    
+    .card-title, .card-title h4 {
+        font-size: 1.5rem;
+    }
+    
+    .input-field {
+        margin-bottom: 20px;
+    }
+    
+    .btn {
+        height: 44px;
+        line-height: 44px;
+    }
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.input-field {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Melhorias para validação */
+input:required, textarea:required {
+    border-left: 3px solid var(--cor-alerta) !important;
+}
+
+input:required:valid, textarea:required:valid {
+    border-left: 3px solid var(--cor-sucesso) !important;
+}
+
+/* Ajustes para Materialize */
+.row {
+    margin-bottom: 0;
+}
+
+/* Mensagem de atenção */
+.attention-message {
+    background-color: rgba(243, 156, 18, 0.1);
+    color: var(--cor-alerta);
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--cor-alerta);
+    font-size: 0.9rem;
+}
+  </style>
+
+    <!-- Botão de ajuda flutuante -->
+
+    <div class="container">
+        <div class="section">
+            <div class="row">
+                <div class="col s12 m8 offset-m2">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title center-align"><h4>Cadastro</h4></span>
+                            
+                            <!-- Mensagem de status -->
+                            <div id="statusMessage" class="status-message"></div>
+                            
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">person</i>
+                                    <input id="nome" type="text" class="validate" required>
+                                    <label for="nome">Nome Completo *</label>
+                                    <span class="helper-text">Informe seu nome completo</span>
+                                    <span class="error-message" id="nome-error">Por favor, informe seu nome completo</span>
+                                    <span class="success-message">Nome válido</span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">email</i>
+                                    <input id="emailCadastro" type="email" class="validate" required>
+                                    <label for="emailCadastro">Email *</label>
+                                    <span class="helper-text">Informe um email válido</span>
+                                    <span class="error-message" id="email-error">Por favor, informe um email válido</span>
+                                    <span class="success-message">Email válido</span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">lock</i>
+                                    <input id="senhaCadastro" type="password" class="validate" required>
+                                    <label for="senhaCadastro">Senha *</label>
+                                    <span class="helper-text">Mínimo 6 caracteres</span>
+                                    <span class="error-message" id="senha-error">A senha deve ter pelo menos 6 caracteres</span>
+                                    <span class="success-message">Senha válida</span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">lock</i>
+                                    <input id="confirmarSenha" type="password" class="validate" required>
+                                    <label for="confirmarSenha">Confirmar Senha *</label>
+                                    <span class="helper-text">Digite a senha novamente</span>
+                                    <span class="error-message" id="confirmar-senha-error">As senhas não coincidem</span>
+                                    <span class="success-message">Senhas coincidem</span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col s12">
+                                    <p><strong>Tipo de Cadastro: *</strong></p>
+                                    <label>
+                                        <input name="tipoUsuario" type="radio" value="portaria" id="tipoPortaria" />
+                                        <span>Portaria</span>
+                                    </label>
+                                    <label>
+                                        <input name="tipoUsuario" type="radio" value="morador" id="tipoMorador" checked />
+                                        <span>Morador</span>
+                                    </label>
+                                    <span class="error-message" id="tipo-usuario-error">Selecione um tipo de cadastro</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Dados específicos para moradores -->
+                            <div id="dadosMorador">
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <i class="material-icons prefix">home</i>
+                                        <input id="bloco" type="text" class="validate" required>
+<p>Atenção ao cadastro: sempre utilize 2 dígitos para o bloco (exemplo: 01).</p>
+                                        <label for="bloco">Bloco 2 Digitos*</label>
+                                        <span class="error-message" id="bloco-error">Informe o bloco</span>
+                                        <span class="success-message">Bloco válido</span>
+                                    </div>
+                                    <div class="input-field col s6">
+                                      
+                                        <i class="material-icons prefix">meeting_room</i>
+                                        <input id="apartamento" type="text" class="validate" required>
+                                        <label for="apartamento">Apartamento 3 Digitos*</label>
+                                        
+                                        <p>Atenção ao cadastro: sempre utilize 3 dígitos para o apartamento (exemplo: 123).</p>
+                                        <span class="error-message" id="apartamento-error">Informe o apartamento</span>
+                                        <span class="success-message">Apartamento válido</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Dados específicos para porteiros -->
+                            <div id="dadosPorteiro">
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix">vpn_key</i>
+                                        <input id="codigoPorteiro" type="password" class="validate" required>
+                                        <label for="codigoPorteiro">Código de Acesso *</label>
+                                        <span class="helper-text">Fornecido pela administração do condomínio</span>
+                                        <span class="error-message" id="codigo-porteiro-error">Código de acesso inválido</span>
+                                        <span class="success-message">Código válido</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col s12 center-align">
+                                    <button id="btnCadastrar" class="btn waves-effect waves-light blue darken-3">
+                                        <i class="material-icons left">person_add</i>
+                                        Cadastrar
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col s12 center-align">
+                                    Já tem uma conta? <a href="login.html">Faça login</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+  apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
+  authDomain: "rifas-c414b.firebaseapp.com",
+  databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
+  projectId: "rifas-c414b",
+  storageBucket: "rifas-c414b.firebasestorage.app",
+  messagingSenderId: "770195193538",
+  appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
+};
+
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos do DOM
+            const nomeInput = document.getElementById('nome');
+            const emailInput = document.getElementById('emailCadastro');
+            const senhaInput = document.getElementById('senhaCadastro');
+            const confirmarSenhaInput = document.getElementById('confirmarSenha');
+            const tipoPortaria = document.getElementById('tipoPortaria');
+            const tipoMorador = document.getElementById('tipoMorador');
+            const blocoInput = document.getElementById('bloco');
+            const apartamentoInput = document.getElementById('apartamento');
+            const codigoPorteiroInput = document.getElementById('codigoPorteiro');
+            const btnCadastrar = document.getElementById('btnCadastrar');
+            const dadosMorador = document.getElementById('dadosMorador');
+            const dadosPorteiro = document.getElementById('dadosPorteiro');
+            const statusMessage = document.getElementById('statusMessage');
+
+            // Mostra os campos de morador por padrão
+            dadosMorador.style.display = 'block';
+            dadosPorteiro.style.display = 'none';
+
+            // Validação em tempo real
+            nomeInput.addEventListener('blur', validarNome);
+            emailInput.addEventListener('blur', validarEmail);
+            senhaInput.addEventListener('input', validarSenha);
+            confirmarSenhaInput.addEventListener('blur', validarConfirmarSenha);
+            blocoInput.addEventListener('blur', validarBloco);
+            apartamentoInput.addEventListener('blur', validarApartamento);
+            codigoPorteiroInput.addEventListener('blur', validarCodigoPorteiro);
+
+            // Alternar entre morador e porteiro
+            tipoPortaria.addEventListener('change', function() {
+                if (this.checked) {
+                    dadosMorador.style.display = 'none';
+                    dadosPorteiro.style.display = 'block';
+                    // Limpa erros dos campos de morador
+                    clearValidation(blocoInput);
+                    clearValidation(apartamentoInput);
+                }
+            });
+
+            tipoMorador.addEventListener('change', function() {
+                if (this.checked) {
+                    dadosMorador.style.display = 'block';
+                    dadosPorteiro.style.display = 'none';
+                    // Limpa erros dos campos de porteiro
+                    clearValidation(codigoPorteiroInput);
+                }
+            });
+
+            // Submissão do formulário
+            btnCadastrar.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Validar todos os campos
+                const isNomeValid = validarNome();
+                const isEmailValid = validarEmail();
+                const isSenhaValid = validarSenha();
+                const isConfirmarSenhaValid = validarConfirmarSenha();
+                
+                let isTipoUsuarioValid = true;
+                if (!tipoMorador.checked && !tipoPortaria.checked) {
+                    showError('tipo-usuario-error', 'Selecione um tipo de usuário');
+                    isTipoUsuarioValid = false;
+                } else {
+                    clearError('tipo-usuario-error');
+                }
+                
+                let isDadosEspecificosValid = true;
+                if (tipoMorador.checked) {
+                    const isBlocoValid = validarBloco();
+                    const isApartamentoValid = validarApartamento();
+                    isDadosEspecificosValid = isBlocoValid && isApartamentoValid;
+                } else if (tipoPortaria.checked) {
+                    const isCodigoValid = validarCodigoPorteiro();
+                    isDadosEspecificosValid = isCodigoValid;
+                }
+                
+                // Se todos os campos forem válidos, prosseguir com o cadastro
+                if (isNomeValid && isEmailValid && isSenhaValid && isConfirmarSenhaValid && 
+                    isTipoUsuarioValid && isDadosEspecificosValid) {
+                    
+                    cadastrarUsuario();
+                } else {
+                    showStatusMessage('Por favor, corrija os erros no formulário', 'error');
+                }
+            });
+
+            // Funções de validação
+            function validarNome() {
+                const nome = nomeInput.value.trim();
+                if (!nome) {
+                    setInvalid(nomeInput, 'Por favor, informe seu nome completo');
+                    return false;
+                } else if (nome.length < 3) {
+                    setInvalid(nomeInput, 'O nome deve ter pelo menos 3 caracteres');
+                    return false;
+                } else {
+                    setValid(nomeInput);
+                    return true;
+                }
+            }
+            
+            function validarEmail() {
+                const email = emailInput.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (!email) {
+                    setInvalid(emailInput, 'Por favor, informe seu e-mail');
+                    return false;
+                } else if (!emailRegex.test(email)) {
+                    setInvalid(emailInput, 'Por favor, insira um e-mail válido');
+                    return false;
+                } else {
+                    setValid(emailInput);
+                    return true;
+                }
+            }
+            
+            function validarSenha() {
+                const senha = senhaInput.value;
+                
+                if (!senha) {
+                    setInvalid(senhaInput, 'Por favor, crie uma senha');
+                    return false;
+                } else if (senha.length < 6) {
+                    setInvalid(senhaInput, 'A senha deve ter pelo menos 6 caracteres');
+                    return false;
+                } else {
+                    setValid(senhaInput);
+                    return true;
+                }
+            }
+            
+            function validarConfirmarSenha() {
+                const senha = senhaInput.value;
+                const confirmarSenha = confirmarSenhaInput.value;
+                
+                if (!confirmarSenha) {
+                    setInvalid(confirmarSenhaInput, 'Por favor, confirme sua senha');
+                    return false;
+                } else if (senha !== confirmarSenha) {
+                    setInvalid(confirmarSenhaInput, 'As senhas não coincidem');
+                    return false;
+                } else {
+                    setValid(confirmarSenhaInput);
+                    return true;
+                }
+            }
+            
+            function validarBloco() {
+                const bloco = blocoInput.value.trim();
+                if (!bloco) {
+                    setInvalid(blocoInput, 'Por favor, informe o bloco');
+                    return false;
+                } else {
+                    setValid(blocoInput);
+                    return true;
+                }
+            }
+            
+            function validarApartamento() {
+                const apartamento = apartamentoInput.value.trim();
+                if (!apartamento) {
+                    setInvalid(apartamentoInput, 'Por favor, informe o apartamento');
+                    return false;
+                } else {
+                    setValid(apartamentoInput);
+                    return true;
+                }
+            }
+            
+            function validarCodigoPorteiro() {
+                const codigo = codigoPorteiroInput.value.trim();
+                if (!codigo) {
+                    setInvalid(codigoPorteiroInput, 'Por favor, informe o código de acesso');
+                    return false;
+                } else if (codigo !== "PORTARIA123") {
+                    setInvalid(codigoPorteiroInput, 'Código de acesso inválido');
+                    return false;
+                } else {
+                    setValid(codigoPorteiroInput);
+                    return true;
+                }
+            }
+            
+            // Funções auxiliares de validação
+            function setInvalid(inputElement, message) {
+                const fieldId = inputElement.id;
+                const errorElement = document.getElementById(`${fieldId}-error`);
+                
+                if (errorElement) {
+                    errorElement.textContent = message;
+                    errorElement.style.display = 'block';
+                    inputElement.parentElement.querySelector('.success-message').style.display = 'none';
+                }
+                
+                inputElement.classList.add('invalid');
+                inputElement.classList.remove('valid');
+            }
+            
+            function setValid(inputElement) {
+                const fieldId = inputElement.id;
+                const errorElement = document.getElementById(`${fieldId}-error`);
+                const successElement = inputElement.parentElement.querySelector('.success-message');
+                
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+                
+                if (successElement) {
+                    successElement.style.display = 'block';
+                }
+                
+                inputElement.classList.add('valid');
+                inputElement.classList.remove('invalid');
+            }
+            
+            function clearValidation(inputElement) {
+                const fieldId = inputElement.id;
+                const errorElement = document.getElementById(`${fieldId}-error`);
+                const successElement = inputElement.parentElement.querySelector('.success-message');
+                
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+                
+                if (successElement) {
+                    successElement.style.display = 'none';
+                }
+                
+                inputElement.classList.remove('invalid');
+                inputElement.classList.remove('valid');
+            }
+            
+            function showError(elementId, message) {
+                const errorElement = document.getElementById(elementId);
+                if (errorElement) {
+                    errorElement.textContent = message;
+                    errorElement.style.display = 'block';
+                }
+            }
+            
+            function clearError(elementId) {
+                const errorElement = document.getElementById(elementId);
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            }
+            
+            function showStatusMessage(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = `status-message ${type}`;
+                statusMessage.style.display = 'block';
+                
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Função para cadastrar usuário no Firebase
+        function cadastrarUsuario() {
+            const nome = nomeInput.value.trim();
+            const email = emailInput.value.trim();
+            const senha = senhaInput.value;
+            const tipoUsuario = tipoMorador.checked ? 'morador' : 'portaria';
+            const bloco = tipoMorador.checked ? blocoInput.value.trim() : null;
+            const apartamento = tipoMorador.checked ? apartamentoInput.value.trim() : null;
+            
+            btnCadastrar.disabled = true;
+            // No seu JavaScript, quando o cadastro estiver em andamento:
+btnCadastrar.innerHTML = '<i class="material-icons left btn-loading">hourglass_empty</i> Cadastrando...';
+            
+            // Criar usuário no Firebase Auth
+            auth.createUserWithEmailAndPassword(email, senha)
+                .then((userCredential) => {
+                    // Salvar informações adicionais no Realtime Database
+                    const userData = {
+                        nome: nome,
+                        email: email,
+                        tipo: tipoUsuario,
+                        dataCadastro: firebase.database.ServerValue.TIMESTAMP
+                    };
+                    
+                    if (tipoUsuario === 'morador') {
+                        userData.bloco = bloco;
+                        userData.apartamento = apartamento;
+                        userData.blocoApto = `${bloco}-${apartamento}`;
+                    }
+                    
+                    return database.ref('users/' + userCredential.user.uid).set(userData);
+                })
+                .then(() => {
+                    showToast('Cadastro realizado com sucesso!', 'success');
+                    
+                    // Redirecionar após 2 segundos - CORREÇÃO APLICADA AQUI
+                    setTimeout(() => {
+                        if (tipoUsuario === 'morador') {
+                            window.location.href = 'usuario.html';
+                        } else {
+                            window.location.href = 'portaria.html'; // Corrigido para portaria.html
+                        }
+                    }, 2000);
+                })
+                .catch((error) => {
+                    handleFirebaseError(error);
+                    btnCadastrar.disabled = false;
+                    btnCadastrar.innerHTML = '<i class="material-icons left">person_add</i> Cadastrar';
+                });
+        }
+            
+            // Manipulador de erros do Firebase
+            function handleFirebaseError(error) {
+                let errorMessage = 'Erro ao cadastrar';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'Este email já está em uso';
+                        setInvalid(emailInput, errorMessage);
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Email inválido';
+                        setInvalid(emailInput, errorMessage);
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'Senha muito fraca (mínimo 6 caracteres)';
+                        setInvalid(senhaInput, errorMessage);
+                        break;
+                    case 'auth/operation-not-allowed':
+                        errorMessage = 'Operação não permitida';
+                        break;
+                    default:
+                        errorMessage = error.message || 'Erro desconhecido';
+                }
+                
+                showToast(errorMessage, 'error');
+                showStatusMessage(errorMessage, 'error');
+            }
+            
+            // Mostrar toast notification
+            function showToast(message, type) {
+                M.toast({
+                    html: message,
+                    classes: type,
+                    displayLength: 4000
+                });
+            }
+        });
+    </script>
+</body>
+</html>

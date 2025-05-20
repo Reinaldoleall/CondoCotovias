@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Condomínio Cotovias - Avisos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Materialize CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!-- IntroJS para o tutorial -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+</head>
+<style>
+  /* Reset e Fontes - Versão Atualizada para seu HTML */
+:root {
+    --cor-primaria: #2c3e50;     /* Azul escuro suave */
+    --cor-secundaria: #34495e;   /* Azul médio */
+    --cor-destaque: #3498db;     /* Azul claro (para links/botões) */
+    --cor-fundo: #f8f9fa;        /* Cinza claro (fundo) */
+    --cor-texto: #333333;        /* Texto escuro (legível) */
+    --cor-texto-claro: #7f8c8d;  /* Texto secundário */
+    --cor-borda: #e0e0e0;        /* Bordas sutis */
+    --cor-urgente: #e74c3c;      /* Vermelho para avisos urgentes */
+    --cor-normal: #2ecc71;       /* Verde para avisos normais */
+    --sombra-box: 0 2px 10px rgba(0, 0, 0, 0.05);
+    --fonte-principal: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+body {
+  background-image: url('img/fundo01.jpg');
+  background-size: cover;      /* Faz a imagem cobrir toda a tela */
+  background-position: center; /* Centraliza a imagem */
+  background-repeat: no-repeat; /* Evita que a imagem se repita */
+}
+
+
+
+/* Reset Básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--fonte-principal);
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container Principal - Ajustado para Materialize */
+.container {
+    width: 100%;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+@media (min-width: 600px) {
+    .container {
+        max-width: 85%;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 70%;
+    }
+}
+
+/* Avisos Container */
+.avisos-container {
+    margin: 2rem 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+/* Cards de Avisos */
+.aviso-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--sombra-box);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.aviso-card:hover {
+    transform: translateY(-5px);
+}
+
+.aviso-header {
+    padding: 1.2rem;
+    color: white;
+}
+
+.aviso-header.normal {
+    background-color: var(--cor-normal);
+}
+
+.aviso-header.urgente {
+    background-color: var(--cor-urgente);
+}
+
+.aviso-titulo {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.aviso-data {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.aviso-data i {
+    margin-right: 5px;
+    font-size: 1rem;
+}
+
+.aviso-body {
+    padding: 1.2rem;
+}
+
+.aviso-resumo {
+    color: var(--cor-texto);
+    margin-bottom: 0;
+}
+
+.aviso-footer {
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--cor-borda);
+}
+
+.aviso-tag {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+}
+
+.aviso-tag.normal {
+    background-color: var(--cor-normal);
+}
+
+.aviso-tag.urgente {
+    background-color: var(--cor-urgente);
+}
+
+.aviso-autor {
+    display: flex;
+    align-items: center;
+    color: var(--cor-texto-claro);
+    font-size: 0.9rem;
+}
+
+.aviso-autor i {
+    margin-right: 5px;
+}
+
+/* Modal de Aviso */
+.aviso-modal {
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 700px;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    color: white;
+}
+
+.modal-header.normal {
+    background-color: var(--cor-normal);
+}
+
+.modal-header.urgente {
+    background-color: var(--cor-urgente);
+}
+
+.modal-titulo {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.modal-subheader {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.modal-data {
+    display: flex;
+    align-items: center;
+}
+
+.modal-data i {
+    margin-right: 5px;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.modal-conteudo {
+    line-height: 1.7;
+}
+
+.modal-conteudo p {
+    margin-bottom: 1rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--cor-borda);
+}
+
+/* Estado quando não há avisos */
+.no-avisos {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--cor-texto-claro);
+}
+
+.no-avisos i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--cor-borda);
+}
+
+.no-avisos h5 {
+    margin-bottom: 0.5rem;
+    color: var(--cor-texto);
+}
+
+/* Loading */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+}
+
+/* Rodapé */
+.page-footer {
+    background-color: var(--cor-primaria) !important;
+    padding: 2rem 0 !important;
+    margin-top: auto;
+}
+
+.page-footer h5 {
+    margin-bottom: 1rem;
+}
+
+/* Ajustes para Material Icons */
+.material-icons {
+    vertical-align: middle;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .aviso-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .modal-body {
+        max-height: 50vh;
+    }
+}
+</style>
+
+<body>
+
+
+
+  <!-- Conteúdo principal -->
+  <main class="container">
+
+    <h4>Fique por dentro das últimas informações e comunicados</h4>
+    
+    <div id="avisos-container" class="avisos-container" data-intro="Os avisos são exibidos em cards organizados. Clique em qualquer um para ver os detalhes" data-step="2">
+      <!-- Loading state -->
+      <div class="loading-container">
+        <div class="preloader-wrapper big active">
+          <div class="spinner-layer spinner-green-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div><div class="gap-patch">
+              <div class="circle"></div>
+            </div><div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="page-footer" style="background-color: var(--primary-color);">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text"><h4>Condomínio Cotovias</h4>
+          <p class="grey-text text-lighten-4">Sistema de comunicação interna</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal de Aviso -->
+  <div id="avisoModal" class="modal aviso-modal" data-intro="Este é o menu onde voçê acessa outros conteúdos." data-step="3">
+    <div class="modal-header normal" id="modalHeader">
+      <h4 class="modal-titulo" id="modalTitulo"></h4>
+      <div class="modal-subheader">
+        <div class="modal-data" id="modalData"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-conteudo" id="modalConteudo"></div>
+    </div>
+    <div class="modal-footer">
+      <div class="aviso-autor" id="modalAutor"></div>
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat"></a>
+    </div>
+  </div>
+
+  <!-- Materialize JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!-- IntroJS para o tutorial -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script>
+    // Inicializa componentes
+    document.addEventListener('DOMContentLoaded', function() {
+      M.Sidenav.init(document.querySelectorAll('.sidenav'));
+      const modalInstance = M.Modal.init(document.querySelectorAll('.modal'));
+      
+      // Configuração do Firebase
+      const firebaseConfig = {
+  apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
+  authDomain: "rifas-c414b.firebaseapp.com",
+  databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
+  projectId: "rifas-c414b",
+  storageBucket: "rifas-c414b.firebasestorage.app",
+  messagingSenderId: "770195193538",
+  appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
+};
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      
+      // Referência ao banco de dados
+      const db = firebase.database();
+      const avisosRef = db.ref('avisos');
+      
+      // Elemento onde os avisos serão exibidos
+      const avisosContainer = document.getElementById('avisos-container');
+      
+      // Carrega os avisos do Firebase
+      avisosRef.orderByChild('data').limitToLast(20).on('value', (snapshot) => {
+        avisosContainer.innerHTML = ''; // Limpa o container
+        
+        if (!snapshot.exists()) {
+          avisosContainer.innerHTML = `
+            <div class="no-avisos">
+              <i class="material-icons">info_outline</i>
+              <br><br><br><br><br><br><br><br><br><br><br><br><br>
+              <h5>Nenhum aviso disponível</h5>
+              <p>Quando houver novos avisos, eles aparecerão aqui</p>
+            </div>
+          `;
+          return;
+        }
+        
+        const avisos = [];
+        snapshot.forEach((childSnapshot) => {
+          const aviso = childSnapshot.val();
+          aviso.id = childSnapshot.key;
+          avisos.push(aviso);
+        });
+        
+        // Ordena por data (mais recente primeiro)
+        avisos.sort((a, b) => b.data - a.data);
+        
+        // Exibe cada aviso
+        avisos.forEach((aviso, index) => {
+          const avisoElement = document.createElement('div');
+          avisoElement.className = `aviso-card ${aviso.urgente ? 'urgente' : ''}`;
+          avisoElement.setAttribute('data-intro', `Este é um aviso ${aviso.urgente ? 'urgente' : 'normal'}. A cor ${aviso.urgente ? 'vermelha' : 'verde'} indica a importância`);
+          avisoElement.setAttribute('data-step', index + 4); // Começa do passo 4
+          
+          const data = new Date(aviso.data);
+          const dataFormatada = data.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          
+          const resumo = aviso.mensagem.length > 150 ? 
+            aviso.mensagem.substring(0, 150) + '...' : 
+            aviso.mensagem;
+          
+          avisoElement.innerHTML = `
+            <div class="aviso-header ${aviso.urgente ? 'urgente' : 'normal'}">
+              <h5 class="aviso-titulo">${aviso.titulo}</h5>
+              <div class="aviso-data">
+                <i class="material-icons">access_time</i>
+                ${dataFormatada}
+              </div>
+            </div>
+            <div class="aviso-body">
+              <p class="aviso-resumo">${resumo}</p>
+            </div>
+            <div class="aviso-footer">
+              <span class="aviso-tag ${aviso.urgente ? 'urgente' : 'normal'}">
+                ${aviso.urgente ? 'URGENTE' : 'INFORMAÇÃO'}
+              </span>
+              <div class="aviso-autor">
+                <i class="material-icons">person</i>
+                ${aviso.autor || 'Administração Cotovias'}
+              </div>
+            </div>
+          `;
+          
+          // Adiciona evento de clique para abrir o modal
+          avisoElement.addEventListener('click', () => {
+            abrirModalAviso(aviso);
+            
+            // Inicia o tutorial do modal após um pequeno delay para garantir que está aberto
+            setTimeout(() => {
+              if (localStorage.getItem('tutorialCompleto') !== 'true') {
+                introJs().setOptions({
+                  steps: [{
+                    element: document.querySelector('#avisoModal'),
+                    intro: "Este é o modal de detalhes do aviso. Aqui você vê todas as informações completas. A cor do cabeçalho indica se é urgente (vermelho) ou normal (verde).",
+                    position: 'top'
+                  }],
+                  showStepNumbers: false,
+                  showBullets: false,
+                  exitOnOverlayClick: false,
+                  doneLabel: 'Entendi'
+                }).start();
+              }
+            }, 500);
+          });
+          
+          avisosContainer.appendChild(avisoElement);
+        });
+        
+        // Verifica se é a primeira vez do usuário e inicia o tutorial
+        if (localStorage.getItem('tutorialCompleto') !== 'true') {
+          setTimeout(() => {
+            iniciarTutorial();
+          }, 1000);
+        }
+      });
+      
+      // Função para abrir o modal com os detalhes do aviso
+      function abrirModalAviso(aviso) {
+        const modalHeader = document.getElementById('modalHeader');
+        const modalTitulo = document.getElementById('modalTitulo');
+        const modalConteudo = document.getElementById('modalConteudo');
+        const modalData = document.getElementById('modalData');
+        const modalAutor = document.getElementById('modalAutor');
+        
+        // Preenche os dados do modal
+        modalTitulo.textContent = aviso.titulo;
+        modalConteudo.innerHTML = formatarConteudo(aviso.mensagem);
+        
+        const data = new Date(aviso.data);
+        modalData.innerHTML = `
+          <i class="material-icons">access_time</i>
+          ${data.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
+        `;
+        
+        modalAutor.innerHTML = `
+          <i class="material-icons">person</i>
+          ${aviso.autor || 'Administração Cotovias'}
+        `;
+        
+        // Configura o estilo baseado se é urgente ou não
+        if (aviso.urgente) {
+          modalHeader.classList.remove('normal');
+          modalHeader.classList.add('urgente');
+        } else {
+          modalHeader.classList.remove('urgente');
+          modalHeader.classList.add('normal');
+        }
+        
+        // Abre o modal
+        modalInstance[0].open();
+      }
+      
+      // Função para iniciar o tutorial
+      function iniciarTutorial() {
+        introJs().setOptions({
+          nextLabel: 'Próximo',
+          prevLabel: 'Anterior',
+          skipLabel: 'Pular',
+          doneLabel: 'Concluir',
+          showProgress: true,
+          showBullets: false,
+          showStepNumbers: true,
+          keyboardNavigation: true,
+          exitOnOverlayClick: false,
+          disableInteraction: true
+        }).oncomplete(function() {
+          localStorage.setItem('tutorialCompleto', 'true');
+        }).onexit(function() {
+          localStorage.setItem('tutorialCompleto', 'true');
+        }).start();
+      }
+      
+      // Adiciona evento de clique no botão de ajuda
+      
+      
+      // Função para formatar o conteúdo mantendo quebras de linha e parágrafos
+      function formatarConteudo(texto) {
+        if (!texto) return '';
+        
+        // Substitui quebras de linha por tags <br>
+        texto = texto.replace(/\n/g, '<br>');
+        
+        // Substitui múltiplos <br> por fechamento e abertura de parágrafos
+        texto = texto.replace(/(<br>\s*){2,}/g, '</p><p>');
+        
+        // Envolve o texto em tags <p>
+        texto = `<p>${texto}</p>`;
+        
+        // Remove parágrafos vazios
+        texto = texto.replace(/<p><\/p>/g, '');
+        
+        return texto;
+      }
+    });
+  </script>
+</body>
+</html>

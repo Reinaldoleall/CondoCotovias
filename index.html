@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Menu Funcional</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#2c3e50">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+</head>
+<style>
+  /* Estilos Personalizados para Menu Funcional */
+:root {
+    --cor-primaria: #2c3e50;       /* Azul escuro */
+    --cor-secundaria: #3498db;     /* Azul principal */
+    --cor-sucesso: #27ae60;        /* Verde */
+    --cor-alerta: #f39c12;         /* Laranja */
+    --cor-erro: #e74c3c;           /* Vermelho */
+    --cor-fundo: #f8fafc;          /* Cinza muito claro */
+    --cor-texto: #2d3436;          /* Texto escuro */
+    --cor-texto-secundario: #636e72; /* Texto cinza */
+    --cor-borda: #dfe6e9;          /* Bordas claras */
+    --sombra-card: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --sombra-card-hover: 0 6px 12px rgba(0, 0, 0, 0.1);
+    --fonte-principal: 'Roboto', 'Segoe UI', sans-serif;
+}
+
+/* Reset e Base */
+body {
+    font-family: var(--fonte-principal);
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Container Principal */
+.drawer-container {
+    display: flex;
+    height: 100vh;
+    position: relative;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.overlay--visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Loading Spinner */
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--cor-secundaria);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Menu Lateral (Drawer) */
+.mdc-drawer {
+    width: 280px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    left: -280px;
+    top: 0;
+    z-index: 10;
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+}
+
+.mdc-drawer--open {
+    transform: translateX(280px);
+}
+
+.mdc-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.mdc-list-item {
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-left: 4px solid transparent;
+}
+
+.mdc-list-item:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.mdc-list-item__graphic {
+    margin-right: 32px;
+    color: var(--cor-texto-secundario);
+}
+
+.mdc-list-item[data-page="admin.html"] {
+    border-left-color: var(--cor-alerta);
+}
+
+/* Conteúdo Principal */
+.app-content {
+    flex: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-left: 0;
+    transition: margin-left 0.3s;
+}
+
+.top-app-bar {
+    height: 64px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 4;
+}
+
+.menu-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 12px;
+    margin-right: 16px;
+    color: var(--cor-texto);
+}
+
+.page-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.main-content {
+    flex: 1;
+    overflow: hidden;
+}
+
+.content-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: var(--cor-fundo);
+}
+
+/* Modal de Senha */
+.password-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 20;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.password-modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.password-modal-header {
+    background-color: var(--cor-primaria);
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.password-modal-header i {
+    font-size: 2rem;
+    margin-right: 12px;
+}
+
+.password-modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.password-modal-body {
+    padding: 20px;
+}
+
+.password-modal-body p {
+    margin-top: 0;
+    color: var(--cor-texto-secundario);
+}
+
+.password-input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--cor-borda);
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 20px 0;
+}
+
+.password-input-container i {
+    color: var(--cor-texto-secundario);
+    margin-right: 8px;
+}
+
+.password-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+}
+
+.password-error {
+    color: var(--cor-erro);
+    display: none;
+    align-items: center;
+    font-size: 0.875rem;
+    margin-top: 10px;
+}
+
+.password-error i {
+    margin-right: 6px;
+}
+
+.password-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 20px;
+    border-top: 1px solid var(--cor-borda);
+}
+
+.password-button {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.password-button i {
+    margin-right: 6px;
+}
+
+.password-button.cancel {
+    background-color: transparent;
+    color: var(--cor-texto-secundario);
+    margin-right: 8px;
+}
+
+.password-button.cancel:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.password-button.submit {
+    background-color: var(--cor-secundaria);
+    color: white;
+}
+
+.password-button.submit:hover {
+    background-color: #2980b9;
+}
+
+/* Botão de Ajuda */
+.help-button {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--cor-secundaria);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.3s;
+}
+
+.help-button:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+}
+
+/* Responsividade */
+@media (min-width: 1024px) {
+    .mdc-drawer {
+        position: relative;
+        left: 0;
+        transform: none;
+    }
+    
+    .app-content {
+        margin-left: 280px;
+    }
+    
+    .menu-button {
+        display: none;
+    }
+    
+    .overlay {
+        display: none;
+    }
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.password-modal-content {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Melhorias para o iframe */
+.content-frame {
+    background-color: white;
+    border: none;
+    display: block;
+}
+
+/* Ajustes para o Material Icons */
+.material-icons {
+    font-size: 24px;
+    vertical-align: middle;
+}
+</style>
+<body>
+    <div class="drawer-container">
+        <!-- Overlay para fechar o menu -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Loading spinner -->
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+        </div>
+
+        <!-- Modal de senha -->
+<!-- Substitua a seção do modal de senha por este código -->
+<div class="password-modal" id="passwordModal">
+    <div class="password-modal-content">
+        <div class="password-modal-header">
+            <i class="material-icons">admin_panel_settings</i>
+            <h2>Acesso Administrativo</h2>
+        </div>
+        
+        <div class="password-modal-body">
+            <p>Esta área é restrita a administradores autorizados. Por favor, autentique-se para continuar.</p>
+            
+            <div class="password-input-container">
+                <i class="material-icons">lock</i>
+                <input type="password" class="password-input" id="adminPassword" placeholder="Digite sua senha">
+            </div>
+            
+            <div class="password-error" id="passwordError">
+                <i class="material-icons">error</i>
+                <span>Senha incorreta. Tente novamente.</span>
+            </div>
+        </div>
+        
+        <div class="password-modal-footer">
+            <button class="password-button cancel" id="cancelPassword">
+                <i class="material-icons">close</i>
+                Cancelar
+            </button>
+            <button class="password-button submit" id="submitPassword">
+                <i class="material-icons">check</i>
+                Acessar
+            </button>
+        </div>
+    </div>
+</div>
+
+        <!-- Drawer/Menu Lateral -->
+<aside class="mdc-drawer" id="drawer">
+    <nav class="mdc-list">
+        <div class="mdc-list-item" data-page="aviso.html">
+            <i class="material-icons mdc-list-item__graphic">dashboard</i>
+            <span></span>Avisos
+        </div>
+        
+<div class="mdc-list-item" data-page="admin.html" id="adminMenuItem">
+    <i class="material-icons mdc-list-item__graphic">admin_panel_settings</i>
+    <span></span>Administração
+</div>
+        
+        <div class="mdc-list-item" data-page="login.html">
+            <i class="material-icons mdc-list-item__graphic">people</i>
+            <span></span>Usuários
+        </div>
+        
+        <div class="mdc-list-item" data-page="./interfone/index.html">
+            <i class="material-icons mdc-list-item__graphic">people</i>
+            <span></span>Interfone Virtual
+        </div>
+    </nav>
+</aside>
+
+        <!-- Conteúdo Principal -->
+        <div class="app-content">
+            <header class="top-app-bar">
+                <button class="menu-button" id="menuButton">
+                    <i class="material-icons">menu</i>
+                </button>
+                <h1 id="pageTitle"></h1>
+            </header>
+
+            <main class="main-content">
+                <iframe class="content-frame" id="contentFrame" src="aviso.html"></iframe>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Elementos do DOM
+        const menuButton = document.getElementById('menuButton');
+        const drawer = document.getElementById('drawer');
+        const overlay = document.getElementById('overlay');
+        const loading = document.getElementById('loading');
+        const contentFrame = document.getElementById('contentFrame');
+        const pageTitle = document.getElementById('pageTitle');
+        const passwordModal = document.getElementById('passwordModal');
+        const adminPassword = document.getElementById('adminPassword');
+        const submitPassword = document.getElementById('submitPassword');
+        const cancelPassword = document.getElementById('cancelPassword');
+        const passwordError = document.getElementById('passwordError');
+        const adminMenuItem = document.getElementById('adminMenuItem');
+        let menuOpen = false;
+
+        // Abre/fecha o menu
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            
+            if (menuOpen) {
+                drawer.classList.add('mdc-drawer--open');
+                overlay.classList.add('overlay--visible');
+            } else {
+                drawer.classList.remove('mdc-drawer--open');
+                overlay.classList.remove('overlay--visible');
+            }
+        }
+
+        // Carrega uma página no iframe
+        function loadPage(pageUrl, pageName) {
+            loading.style.display = 'block';
+            
+            contentFrame.onload = function() {
+                loading.style.display = 'none';
+            };
+            
+            contentFrame.src = pageUrl;
+            pageTitle.textContent = pageName;
+        }
+
+        // Event listeners
+        menuButton.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+
+        // Configura os itens do menu
+        document.querySelectorAll('.mdc-list-item').forEach(item => {
+            if (item.id !== 'adminMenuItem') {
+                item.addEventListener('click', () => {
+                    const pageUrl = item.getAttribute('data-page');
+                    const pageName = item.querySelector('span').textContent;
+                    
+                    loadPage(pageUrl, pageName);
+                    
+                    if (menuOpen) {
+                        toggleMenu();
+                    }
+                });
+            }
+        });
+
+        // Configura o item de administração para pedir senha
+        adminMenuItem.addEventListener('click', () => {
+            // Mostra o modal de senha
+            passwordModal.style.display = 'flex';
+            adminPassword.focus();
+            
+            if (menuOpen) {
+                toggleMenu();
+            }
+        });
+
+        // Configura o botão de enviar senha
+        submitPassword.addEventListener('click', () => {
+            const password = adminPassword.value;
+            
+            // Verifica a senha (Cotovias@2025)
+            if (password === 'Cotovias@2025') {
+                // Senha correta, carrega a página de admin
+                passwordModal.style.display = 'none';
+                passwordError.style.display = 'none';
+                adminPassword.value = '';
+                loadPage('admin.html', '');
+            } else {
+                // Senha incorreta
+                passwordError.style.display = 'block';
+                adminPassword.focus();
+            }
+        });
+
+        // Configura o botão de cancelar
+        cancelPassword.addEventListener('click', () => {
+            passwordModal.style.display = 'none';
+            passwordError.style.display = 'none';
+            adminPassword.value = '';
+        });
+
+        // Permite enviar com Enter
+        adminPassword.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitPassword.click();
+            }
+        });
+
+        // Fecha o menu ao redimensionar para desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024 && menuOpen) {
+                toggleMenu();
+            }
+        });
+        
+        contentFrame.onload = function() {
+    // Injeta CSS nos documentos carregados
+    const style = `
+        html, body {
+            margin: 0;
+            padding: 20px !important; /* Espaçamento interno aumentado */
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            box-sizing: border-box;
+        }
+        body {
+            padding: 20px !important;
+        }
+        * {
+            box-sizing: inherit;
+        }
+    `;
+    
+    try {
+        const doc = contentFrame.contentDocument || contentFrame.contentWindow.document;
+        const styleElement = doc.createElement('style');
+        styleElement.innerHTML = style;
+        doc.head.appendChild(styleElement);
+    } catch(e) {
+        console.log("Não foi possível injetar CSS no iframe");
+    }
+};
+        
+        // Adicione isto no final do seu script
+contentFrame.onload = function() {
+    // Injeta CSS nos documentos carregados
+    const style = `
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+        }
+        body {
+            padding: 0;
+        }
+    `;
+    
+    try {
+        const doc = contentFrame.contentDocument || contentFrame.contentWindow.document;
+        const styleElement = doc.createElement('style');
+        styleElement.innerHTML = style;
+        doc.head.appendChild(styleElement);
+    } catch(e) {
+        console.log("Não foi possível injetar CSS no iframe");
+    }
+};
+    </script>
+</body>
+</html>
