@@ -1,0 +1,49 @@
+body {
+    background-color: hsl(0deg, 0%, 98%);
+}
+
+/* Oculta todos os elementos, exceto o seletor de imagem e o botão "Copy" */
+.container > .row > .col-12:not(:first-child),
+.input-group,
+#image-url-errors,
+#reset,
+#base64-output-length,
+#base64-output-types,
+.file-input-preview,
+.preview-loading-indicator,
+.file-drop-area-text,
+#base64-output {
+    display: none !important;
+}
+
+/* Estilo para o seletor de imagem (ícone de seleção) */
+.file-drop-area {
+    background-color: hsl(0deg, 0%, 95%);
+    width: 50px; /* Tamanho reduzido para o ícone */
+    height: 50px; /* Tamanho reduzido para o ícone */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: 1px dashed hsl(0deg 0% 0% / 20%);
+    cursor: pointer;
+    position: relative;
+    transition: outline 0.1s;
+    border-radius: 0.375rem;
+    margin: 0 auto; /* Centraliza o ícone */
+}
+
+/* Ícone de seleção de imagem */
+.file-drop-area::before {
+    content: "";
+    background-image: url('icon-image.png'); /* Substitua pelo caminho do seu ícone */
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 24px; /* Tamanho do ícone */
+    height: 24px; /* Tamanho do ícone */
+}
+
+/* Estilo para o botão "Copy" */
+#copy {
+    display: block; /* Mantém o botão visível */
+    margin: 10px auto; /* Centraliza o botão */
+}

@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscar Usuários</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+    body {
+      background: #ece5dd;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+        
+    }
+    
+/* Substitua o estilo existente do delete-conversation por este: */
+.delete-conversation {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  color: red;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 18px;
+}
+
+body {
+  background-image: url('img/fundo01.jpg');
+  background-size: cover;      /* Faz a imagem cobrir toda a tela */
+  background-position: center; /* Centraliza a imagem */
+  background-repeat: no-repeat; /* Evita que a imagem se repita */
+}
+
+.conversation-card:hover .delete-conversation {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.delete-conversation:hover {
+  background-color: #ff4444;
+  color: white;
+}
+
+
+/* Modal de confirmação para deletar */
+.confirm-delete-modal {
+  max-width: 400px;
+}
+
+.confirm-delete-modal .modal-content {
+  padding: 24px;
+  text-align: center;
+}
+
+.confirm-delete-modal h4 {
+  color: #ff4444;
+  margin-bottom: 20px;
+}
+
+.confirm-delete-modal .modal-footer {
+  display: flex;
+  justify-content: center;
+  border-top: none;
+  padding: 0 24px 24px;
+}
+
+.confirm-delete-modal .btn {
+  margin: 0 10px;
+}
+
+.confirm-delete-modal .btn-delete {
+  background-color: #ff4444;
+}
+
+.confirm-delete-modal .btn-cancel {
+  background-color: #757575;
+}
+    
+    /* Estilo para o ícone de + no header */
+.header i.right {
+  cursor: pointer;
+}
+
+/* Estilo para o modal de criação de grupo */
+.modal {
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.modal-content h4 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #075e54;
+  margin-bottom: 20px;
+}
+
+.modal-content .input-field input {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  outline: none;
+}
+
+.modal-footer {
+  text-align: right;
+  padding: 10px 20px;
+}
+
+.modal-footer .btn-flat {
+  color: #128c7e;
+  font-weight: bold;
+}
+
+/* Estilo para a lista de usuários selecionados */
+.selected-users {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+}
+
+.selected-user {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background: #25d366;
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+}
+
+.selected-user i {
+  margin-left: 10px;
+  cursor: pointer;
+}
+    
+        /* Header fixo */
+        .header {
+            position: fixed;
+            top: 2;
+            width: 100%;
+            height: 60px;
+            background: white;
+            color: black;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+      
+
+.header i:first-child {
+    margin-right: auto; /* Empurra o ícone "chat" para a esquerda */
+}
+
+        .header i {
+            margin-left: 2px;
+            margin-top: 5px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+                #headerName {
+            flex-grow: 1;
+            text-align: center; /* Centraliza o nome do app */
+            font-size: 20px;
+            margin-left: 10px;
+            justify-content: center;
+        }
+                .right {
+            margin-left: auto;
+        }
+        
+        /* Campo de busca com ícone */
+        .search-container {
+            position: fixed;
+            top: 10px;
+            left: 15px;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+        
+        .search-container input {
+            border: none;
+            outline: none;
+            padding: 5px;
+            width: 10px;
+        }
+
+        .search-container i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+                /* Conteúdo rolando por baixo */
+        .content {
+            margin-top: 70px; /* Espaço para não ficar coberto pelo header */
+            padding: 15px;
+            height: 100vh;
+            overflow-y: auto;
+            background: #f4f4f4;
+        }
+        
+/* Estilo para a lista de conversas */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.conversation-card {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background 0.3s ease;
+  position: relative;
+}
+
+.conversation-card:hover {
+  background: #f1f1f1;
+}
+
+.new-message-count {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #ff4444;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* Estilo para o ícone de conversa */
+.conversation-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #25d366; /* Cor verde do WhatsApp */
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.conversation-icon i {
+  color: white;
+  font-size: 35px;
+}
+
+/* Estilo para os detalhes da conversa */
+.conversation-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.conversation-user {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.conversation-last-message {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+}
+/* Estilo para a lista de usuários encontrados */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+/* Estilo para cada item de usuário */
+.user-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.user-item:hover {
+  background: #f1f1f1;
+}
+
+/* Estilo para o ícone do usuário */
+.user-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #128c7e; /* Cor verde escura */
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.user-icon i {
+  color: white;
+  font-size: 35px;
+}
+
+/* Estilo para os detalhes do usuário */
+.user-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.user-status {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+}
+/* Estilo para o modal */
+.modal {
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.modal-content h4 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #075e54;
+  margin-bottom: 20px;
+}
+
+.modal-content p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.modal-content .input-field input {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  outline: none;
+}
+
+.modal-footer {
+  text-align: right;
+  padding: 10px 20px;
+}
+
+.modal-footer .btn-flat {
+  color: #128c7e;
+  font-weight: bold;
+}
+        .titulo {
+            font-family: 'Poppins', sans-serif; /* Fonte bonita */
+            font-size: 24px; /* Tamanho da fonte */
+            color: white; /* Cor do texto branca */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9); /* Sombra preta */
+            padding: 10px 20px; /* Espaçamento interno */
+            border: 10px solid white; /* Borda branca */
+            display: inline-block; /* Ajuste de tamanho ao conteúdo */
+            border-radius: 10px; /* Cantos arredondados */
+            background: linear-gradient(to right, #333, #555); /* Fundo degradê */
+        }
+        
+    
+  </style>
+</head>
+<body>
+  
+  <!-- Modal Structure -->
+  <div id="nameModal" class="modal">
+    <div class="modal-content">
+<h4>Bem-vindo ao Interfone Virtual!</h4>
+<p>Para começar, digite seu nome seguido do bloco e apartamento, utilizando o formato: Nome - BL01 AP123.</p>
+      <div class="input-field">
+        <input id="userNameInput" type="text" class="validate" placeholder="Seu nome">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Confirmar</a>
+    </div>
+  </div>
+
+  <!-- Header fixo -->
+  <div class="header">
+    <div class="search-container">
+      <i class="material-icons">search</i> 
+      <input id="searchUser" type="text" placeholder="Buscar...">
+    </div>
+    <i class="material-icons">chat</i> <!-- Ícone de chat -->
+    <span id="headerName">Interfone Virtual</span> <!-- Nome do app -->
+    <i id="groupIcon" class="material-icons right">group</i> <!-- Ícone de grupo -->
+    <i id="createGroupIcon" class="material-icons right">add</i> <!-- Ícone de + -->
+  </div>
+  <br><br><br>
+  
+  <!-- Modal para criar grupo -->
+  <div id="createGroupModal" class="modal">
+    <div class="modal-content">
+      <h4>Criar Novo Grupo</h4>
+      <div class="input-field">
+        <input id="groupName" type="text" placeholder="Nome do Grupo">
+      </div>
+      <div class="input-field">
+        <input id="searchGroupUsers" type="text" placeholder="Buscar usuários...">
+      </div>
+      <div id="groupUserList" class="user-list"></div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+      <a href="#!" id="createGroupButton" class="waves-effect waves-green btn-flat">Criar</a>
+    </div>
+    <!-- Lista de usuários selecionados -->
+    <div id="selectedUsers" class="selected-users"></div>
+  </div>
+
+  <!-- Modal para listar grupos -->
+  <div id="groupListModal" class="modal">
+    <div class="modal-content">
+      <h4>Grupos Criados</h4>
+      <div class="input-field">
+        <input id="searchGroup" type="text" placeholder="Buscar grupos...">
+      </div>
+      <div id="groupList" class="user-list"></div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+  </div>
+
+  <br>
+  <!-- Lista de usuários encontrados -->
+  <div id="userList" class="user-list"></div>
+  <div id="conversationCards" class="user-list"></div>
+  
+  <!-- Modal de confirmação para deletar conversa -->
+<div id="confirmDeleteModal" class="modal confirm-delete-modal">
+  <div class="modal-content">
+    <h4>Deletar Conversa</h4>
+    <p>Tem certeza que deseja deletar esta conversa? Esta ação não pode ser desfeita.</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close btn btn-cancel waves-effect">Cancelar</a>
+    <a href="#!" id="confirmDeleteBtn" class="btn btn-delete waves-effect">Deletar</a>
+  </div>
+</div>
+
+  <!-- Firebase e Materialize JS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp, doc, updateDoc, arrayUnion, getDoc, setDoc, onSnapshot, increment, deleteDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3eWDz_LzEZzhgkJzXqBK9HTMFizKdpzI",
+      authDomain: "uploadarquivos-e072a.firebaseapp.com",
+      projectId: "uploadarquivos-e072a",
+      storageBucket: "uploadarquivos-e072a.appspot.com",
+      messagingSenderId: "969790847480",
+      appId: "1:969790847480:web:4fd71df64836d88ee17e0d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const searchUser = document.getElementById('searchUser');
+    const userList = document.getElementById('userList');
+    const createGroupIcon = document.getElementById('createGroupIcon');
+    const createGroupModal = document.getElementById('createGroupModal');
+    const searchGroupUsers = document.getElementById('searchGroupUsers');
+    const groupUserList = document.getElementById('groupUserList');
+    const selectedUsers = document.getElementById('selectedUsers');
+    const createGroupButton = document.getElementById('createGroupButton');
+    const groupIcon = document.getElementById('groupIcon');
+    const groupListModal = document.getElementById('groupListModal');
+    const searchGroup = document.getElementById('searchGroup');
+    const groupList = document.getElementById('groupList');
+
+    let currentUser = localStorage.getItem('currentUser') || '';
+    let selectedUsersList = [];
+
+    // Definir nome do usuário
+    function setUserName() {
+      if (!currentUser) {
+        const name = prompt('Digite seu nome:');
+        if (name) {
+          currentUser = name;
+          localStorage.setItem('currentUser', name); // Salva o nome no localStorage
+          saveUser(name); // Salva o usuário no Firebase
+          document.getElementById('headerName').textContent = ` ${currentUser}`; // Atualiza o cabeçalho
+        } else {
+          setUserName(); // Repetir até que o usuário insira um nome
+        }
+      } else {
+        document.getElementById('headerName').textContent = ` ${currentUser}`; // Atualiza o cabeçalho se o nome já estiver definido
+      }
+    }
+
+    // Salvar usuário no Firebase
+    async function saveUser(name) {
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('name', '==', name));
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+        await addDoc(usersRef, { name: name }); // Adiciona o nome ao Firebase se não existir
+        console.log('Usuário salvo no Firebase:', name);
+      } else {
+        console.log('Usuário já existe no Firebase:', name);
+      }
+    }
+
+    // Buscar usuários
+    searchUser.addEventListener('input', async (e) => {
+      const searchTerm = e.target.value.trim();
+      if (searchTerm) {
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('name', '>=', searchTerm), where('name', '<=', searchTerm + '\uf8ff'));
+        const querySnapshot = await getDocs(q);
+        userList.innerHTML = ''; // Limpa a lista atual
+
+        querySnapshot.forEach((doc) => {
+          const user = doc.data();
+
+          // Cria o item de usuário
+          const userItem = document.createElement('div');
+          userItem.className = 'user-item';
+
+          // Adiciona o ícone do usuário
+          const icon = document.createElement('div');
+          icon.className = 'user-icon';
+          icon.innerHTML = '<i class="material-icons">person</i>';
+
+          // Adiciona os detalhes do usuário
+          const details = document.createElement('div');
+          details.className = 'user-details';
+          details.innerHTML = `
+            <span class="user-name">${user.name}</span>
+            <span class="user-status">Clique para iniciar conversa</span>
+          `;
+
+          // Monta o item de usuário
+          userItem.appendChild(icon);
+          userItem.appendChild(details);
+
+          // Adiciona o evento de clique para abrir a conversa
+          userItem.addEventListener('click', () => openChat(user.name));
+
+          // Adiciona o item à lista
+          userList.appendChild(userItem);
+        });
+      } else {
+        userList.innerHTML = ''; // Limpa a lista se a busca estiver vazia
+      }
+    });
+
+    // Abrir conversa com um usuário
+function openChat(userName) {
+  const chatId = [currentUser, userName].sort().join('_');
+  const chatRef = doc(db, 'chats', chatId);
+
+  // Zera o contador de mensagens não lidas
+  updateDoc(chatRef, { unreadCount: 0 });
+
+  localStorage.setItem('targetUser', userName); // Salva o usuário selecionado
+  window.location.href = 'chat.html'; // Redireciona para a página de conversa
+}
+    
+    // Função para enviar uma nova mensagem
+async function sendMessage(content, targetUser) {
+  const chatId = [currentUser, targetUser].sort().join('_');
+  const chatRef = doc(db, 'chats', chatId);
+  const chatSnapshot = await getDoc(chatRef);
+
+  // Verifica se o documento da conversa já existe
+  if (!chatSnapshot.exists()) {
+    await setDoc(chatRef, { 
+      users: [currentUser, targetUser], 
+      messages: [], 
+      unreadCount: 1 
+    }); // Cria o documento da conversa
+  } else {
+    // Atualiza o contador de mensagens não lidas apenas para o destinatário
+    await updateDoc(chatRef, {
+      messages: arrayUnion({
+        id: new Date().getTime().toString(),
+        content: content,
+        author: currentUser,
+        timestamp: new Date(),
+        comments: []
+      }),
+      unreadCount: increment(1) // Incrementa o contador de mensagens não lidas
+    });
+  }
+}
+
+async function saveConversationCard(targetUser, lastMessage, unreadCount) {
+  const chatId = [currentUser, targetUser].sort().join('_');
+
+  // Salvar no Firebase
+  const chatRef = doc(db, 'chats', chatId);
+  await setDoc(chatRef, {
+    users: [currentUser, targetUser],
+    lastMessage: lastMessage,
+    unreadCount: unreadCount,
+    timestamp: serverTimestamp(),
+  }, { merge: true }); // Usar merge para não sobrescrever dados existentes
+
+  // Salvar no localStorage
+  const savedConversations = JSON.parse(localStorage.getItem('conversations')) || [];
+  const existingConversationIndex = savedConversations.findIndex(conv => conv.targetUser === targetUser);
+
+  if (existingConversationIndex !== -1) {
+    // Atualizar conversa existente
+    savedConversations[existingConversationIndex].lastMessage = lastMessage;
+    savedConversations[existingConversationIndex].unreadCount = unreadCount;
+  } else {
+    // Adicionar nova conversa
+    savedConversations.push({ targetUser, lastMessage, unreadCount });
+  }
+
+  localStorage.setItem('conversations', JSON.stringify(savedConversations));
+}
+
+function loadConversationCards() {
+  // Carregar do localStorage
+  const savedConversations = JSON.parse(localStorage.getItem('conversations')) || [];
+  savedConversations.forEach(conv => {
+    addNewConversationCard(conv.targetUser, conv.lastMessage, conv.unreadCount);
+  });
+  loadConversationCards();
+  setUserName();
+  // Carregar do Firebase
+  listenForNewMessages();
+}
+
+// Chamar a função ao carregar a página
+document.addEventListener('DOMContentLoaded', () => {
+  loadConversationCards();
+});
+
+
+    // Função para renderizar os cards de conversa
+// Adicione esta função para deletar conversas
+async function deleteConversation(targetUser) {
+  const chatId = [currentUser, targetUser].sort().join('_');
+  
+  try {
+    // Deletar do Firebase
+    const chatRef = doc(db, 'chats', chatId);
+    await deleteDoc(chatRef);
+    
+    // Deletar do localStorage
+    const savedConversations = JSON.parse(localStorage.getItem('conversations')) || [];
+    const updatedConversations = savedConversations.filter(conv => conv.targetUser !== targetUser);
+    localStorage.setItem('conversations', JSON.stringify(updatedConversations));
+    
+    // Atualizar a interface
+    const conversationCards = document.getElementById('conversationCards');
+    const cardToRemove = Array.from(conversationCards.children).find(card =>
+      card.querySelector('.conversation-user').textContent === targetUser
+    );
+    
+    if (cardToRemove) {
+      cardToRemove.remove();
+    }
+    
+    M.toast({html: 'Conversa deletada com sucesso!', classes: 'rounded'});
+  } catch (error) {
+    console.error('Erro ao deletar conversa:', error);
+    M.toast({html: 'Erro ao deletar conversa', classes: 'rounded'});
+  }
+}
+
+// Modifique a função renderConversationCards para incluir o botão de deletar
+function renderConversationCards(conversations) {
+  const conversationCards = document.getElementById('conversationCards');
+  conversationCards.innerHTML = '';
+
+  conversations.forEach(conv => {
+    const card = document.createElement('div');
+    card.className = 'conversation-card';
+
+    const icon = document.createElement('div');
+    icon.className = 'conversation-icon';
+    icon.innerHTML = '<i class="material-icons">chat</i>';
+
+    const details = document.createElement('div');
+    details.className = 'conversation-details';
+    details.innerHTML = `
+      <span class="conversation-user">${conv.targetUser}</span>
+      <span class="conversation-last-message">${conv.lastMessage || 'Clique para continuar a conversa'}</span>
+    `;
+
+    // Adiciona o botão de deletar
+    const deleteBtn = document.createElement('i');
+    deleteBtn.className = 'material-icons delete-conversation';
+    deleteBtn.textContent = 'delete';
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Impede que o clique no ícone abra a conversa
+      openDeleteConfirmation(conv.targetUser);
+    });
+
+    if (conv.unreadCount > 0) {
+      const newMessageCount = document.createElement('div');
+      newMessageCount.className = 'new-message-count';
+      newMessageCount.textContent = conv.unreadCount;
+      card.appendChild(newMessageCount);
+    }
+
+    card.appendChild(icon);
+    card.appendChild(details);
+    card.appendChild(deleteBtn);
+
+    card.addEventListener('click', () => {
+      localStorage.setItem('targetUser', conv.targetUser);
+      window.location.href = 'chat.html';
+    });
+
+    conversationCards.appendChild(card);
+  });
+}
+
+// Função para abrir o modal de confirmação
+function openDeleteConfirmation(targetUser) {
+  const modal = document.getElementById('confirmDeleteModal');
+  const instance = M.Modal.init(modal, {
+    dismissible: true
+  });
+  
+  // Remove event listeners anteriores para evitar duplicação
+  const confirmBtn = document.getElementById('confirmDeleteBtn');
+  const newConfirmBtn = confirmBtn.cloneNode(true);
+  confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+  
+  // Adiciona o novo event listener
+  newConfirmBtn.addEventListener('click', () => {
+    deleteConversation(targetUser);
+    instance.close();
+  });
+  
+  instance.open();
+}
+
+// Não esqueça de adicionar a importação do deleteDoc no início do seu script
+// Adicione esta linha junto com as outras importações do Firebase:
+// import { deleteDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+// Função para adicionar um novo card de conversa
+function addNewConversationCard(targetUser, lastMessage, unreadCount) {
+  const conversationCards = document.getElementById('conversationCards');
+
+  // Verifica se o card já existe
+  const existingCard = Array.from(conversationCards.children).find(card =>
+    card.querySelector('.conversation-user').textContent === targetUser
+  );
+
+  if (existingCard) {
+    // Atualiza o card existente
+    const newMessageCount = existingCard.querySelector('.new-message-count');
+    if (newMessageCount) {
+      newMessageCount.textContent = unreadCount;
+    } else {
+      const newMessageCount = document.createElement('div');
+      newMessageCount.className = 'new-message-count';
+      newMessageCount.textContent = unreadCount;
+      existingCard.appendChild(newMessageCount);
+    }
+  } else {
+    // Cria um novo card de conversa
+    const card = document.createElement('div');
+    card.className = 'conversation-card';
+
+    const icon = document.createElement('div');
+    icon.className = 'conversation-icon';
+    icon.innerHTML = '<i class="material-icons">chat</i>';
+
+    const details = document.createElement('div');
+    details.className = 'conversation-details';
+    details.innerHTML = `
+      <span class="conversation-user">${targetUser}</span>
+      <span class="conversation-last-message">${lastMessage}</span>
+    `;
+
+    if (unreadCount > 0) {
+      const newMessageCount = document.createElement('div');
+      newMessageCount.className = 'new-message-count';
+      newMessageCount.textContent = unreadCount;
+      card.appendChild(newMessageCount);
+    }
+
+    card.appendChild(icon);
+    card.appendChild(details);
+
+    card.addEventListener('click', () => {
+      localStorage.setItem('targetUser', targetUser);
+      window.location.href = 'chat.html';
+    });
+
+    conversationCards.appendChild(card);
+  }
+}
+
+// Função para escutar novas mensagens
+function listenForNewMessages() {
+  const chatsRef = collection(db, 'chats');
+  const q = query(chatsRef, where('users', 'array-contains', currentUser));
+  onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === 'added' || change.type === 'modified') {
+        const chatData = change.doc.data();
+        const targetUser = chatData.users.find(user => user !== currentUser);
+        const lastMessage = chatData.messages[chatData.messages.length - 1]?.content || 'Clique para continuar a conversa';
+        const unreadCount = chatData.unreadCount || 0;
+
+        // Salvar no Firebase e no localStorage
+        saveConversationCard(targetUser, lastMessage, unreadCount);
+
+        // Renderizar o card atualizado
+        addNewConversationCard(targetUser, lastMessage, unreadCount);
+      }
+    });
+  });
+}
+
+    // Recupera as conversas salvas no localStorage
+    const savedConversations = JSON.parse(localStorage.getItem('conversations')) || [];
+
+    // Renderiza os cards de conversa
+    renderConversationCards(savedConversations);
+
+    // Inicializar
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+  // Verifica se o nome do usuário já está salvo no localStorage
+  const savedUser = localStorage.getItem('currentUser');
+
+  if (!savedUser) {
+    // Se o nome não estiver definido, abre o modal
+    const modal = document.getElementById('nameModal');
+    const instance = M.Modal.init(modal, {
+      dismissible: false, // Impede que o modal seja fechado clicando fora
+      onCloseEnd: () => {
+        const userName = document.getElementById('userNameInput').value.trim();
+        if (userName) {
+          currentUser = userName;
+          localStorage.setItem('currentUser', userName); // Salva o nome no localStorage
+          saveUser(userName); // Salva o usuário no Firebase
+          document.getElementById('headerName').textContent = ` ${currentUser}`; // Atualiza o cabeçalho
+        } else {
+          M.Modal.getInstance(modal).open(); // Reabre o modal se o nome estiver vazio
+        }
+        listenForNewMessages();
+      }
+    });
+
+    // Abre o modal automaticamente
+    instance.open();
+  } else {
+    // Se o nome já estiver definido, atualiza o cabeçalho
+    currentUser = savedUser;
+    document.getElementById('headerName').textContent = ` ${currentUser}`;
+  }
+
+  // Escuta novas mensagens em tempo real
+  listenForNewMessages();
+});
+
+async function markConversationAsRead(targetUser) {
+  const chatId = [currentUser, targetUser].sort().join('_');
+  const chatRef = doc(db, 'chats', chatId);
+
+  // Zerar o contador no Firebase
+  await updateDoc(chatRef, { unreadCount: 0 });
+
+  // Atualizar o localStorage
+  const savedConversations = JSON.parse(localStorage.getItem('conversations')) || [];
+  const existingConversationIndex = savedConversations.findIndex(conv => conv.targetUser === targetUser);
+
+  if (existingConversationIndex !== -1) {
+    savedConversations[existingConversationIndex].unreadCount = 0;
+    localStorage.setItem('conversations', JSON.stringify(savedConversations));
+  }
+
+  // Atualizar a interface
+  const conversationCards = document.getElementById('conversationCards');
+  const existingCard = Array.from(conversationCards.children).find(card =>
+    card.querySelector('.conversation-user').textContent === targetUser
+  );
+
+  if (existingCard) {
+    const newMessageCount = existingCard.querySelector('.new-message-count');
+    if (newMessageCount) {
+      newMessageCount.remove();
+    }
+  }
+}
+
+    // Abrir modal ao clicar no ícone de +
+    createGroupIcon.addEventListener('click', () => {
+      const instance = M.Modal.init(createGroupModal, {
+        dismissible: false,
+      });
+      instance.open();
+    });
+
+    // Abrir modal ao clicar no ícone de grupo
+    groupIcon.addEventListener('click', () => {
+      const instance = M.Modal.init(groupListModal, {
+        dismissible: false,
+      });
+      instance.open();
+      loadGroups();
+    });
+
+    // Buscar usuários para adicionar ao grupo
+    searchGroupUsers.addEventListener('input', async (e) => {
+      const searchTerm = e.target.value.trim();
+      if (searchTerm) {
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('name', '>=', searchTerm), where('name', '<=', searchTerm + '\uf8ff'));
+        const querySnapshot = await getDocs(q);
+        groupUserList.innerHTML = '';
+
+        querySnapshot.forEach((doc) => {
+          const user = doc.data();
+          const userItem = document.createElement('div');
+          userItem.className = 'user-item';
+          userItem.innerHTML = `
+            <div class="user-icon">
+              <i class="material-icons">person</i>
+            </div>
+            <div class="user-details">
+              <span class="user-name">${user.name}</span>
+              <span class="user-status">Clique para adicionar</span>
+            </div>
+          `;
+
+          userItem.addEventListener('click', () => addUserToGroup(user));
+          groupUserList.appendChild(userItem);
+        });
+      } else {
+        groupUserList.innerHTML = '';
+      }
+    });
+
+    // Adicionar usuário ao grupo
+    function addUserToGroup(user) {
+      if (!selectedUsersList.includes(user)) {
+        selectedUsersList.push(user);
+        updateSelectedUsersList();
+      }
+    }
+
+    // Atualizar lista de usuários selecionados
+    function updateSelectedUsersList() {
+      selectedUsers.innerHTML = '';
+      selectedUsersList.forEach((user, index) => {
+        const selectedUser = document.createElement('div');
+        selectedUser.className = 'selected-user';
+        selectedUser.innerHTML = `
+          ${user.name}
+          <i class="material-icons" onclick="removeUserFromGroup(${index})">close</i>
+        `;
+        selectedUsers.appendChild(selectedUser);
+      });
+    }
+
+    // Remover usuário do grupo
+    window.removeUserFromGroup = (index) => {
+      selectedUsersList.splice(index, 1);
+      updateSelectedUsersList();
+    };
+
+    // Criar grupo e redirecionar para a conversa
+    createGroupButton.addEventListener('click', async () => {
+  const groupName = document.getElementById('groupName').value.trim();
+  if (groupName && selectedUsersList.length > 0) {
+    const currentUser = localStorage.getItem('currentUser'); // Obtém o nome do usuário atual
+    if (!currentUser) {
+      alert('Erro: Nome do usuário atual não encontrado.');
+      return;
+    }
+
+    // Adiciona o nome do usuário atual à lista de membros
+    const users = selectedUsersList.map(user => user.name);
+    users.push(currentUser); // Adiciona o nome do usuário atual ao grupo
+
+    const groupData = {
+      name: groupName,
+      users: users, // Armazena os nomes dos usuários
+      createdAt: serverTimestamp(),
+    };
+
+    try {
+      // Salva o grupo no Firestore
+      const groupRef = await addDoc(collection(db, 'groups'), groupData);
+      console.log('Grupo criado com ID:', groupRef.id);
+
+      // Redireciona para a página de conversa do grupo
+      window.location.href = `group-chat.html?groupId=${groupRef.id}`;
+    } catch (error) {
+      console.error('Erro ao criar grupo:', error);
+      alert('Erro ao criar grupo. Tente novamente.');
+    }
+  } else {
+    alert('Por favor, insira um nome para o grupo e selecione pelo menos um usuário.');
+  }
+});
+
+    // Carregar grupos criados
+    async function loadGroups() {
+  const currentUser = localStorage.getItem('currentUser'); // Obtém o nome do usuário atual
+  if (!currentUser) {
+    alert('Erro: Nome do usuário atual não encontrado.');
+    return;
+  }
+
+  const groupsRef = collection(db, 'groups');
+  const querySnapshot = await getDocs(groupsRef);
+  groupList.innerHTML = '';
+
+  querySnapshot.forEach((doc) => {
+    const group = doc.data();
+    // Verifica se o usuário atual está na lista de membros do grupo
+    if (group.users.includes(currentUser)) {
+      const groupItem = document.createElement('div');
+      groupItem.className = 'user-item';
+      groupItem.innerHTML = `
+        <div class="user-icon">
+          <i class="material-icons">group</i>
+        </div>
+        <div class="user-details">
+          <span class="user-name">${group.name}</span>
+          <span class="user-status">Clique para abrir</span>
+        </div>
+      `;
+
+      groupItem.addEventListener('click', () => openGroupChat(doc.id));
+      groupList.appendChild(groupItem);
+    }
+  });
+}
+
+    // Abrir conversa de grupo
+    function openGroupChat(groupId) {
+      window.location.href = `group-chat.html?groupId=${groupId}`;
+    }
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</body>
+</html>

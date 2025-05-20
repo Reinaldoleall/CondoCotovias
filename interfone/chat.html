@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat com Contagem de Comentários</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+  body {
+    background-color: hsl(0deg, 0%, 98%);
+  }
+
+  /* Estilo para o seletor de imagem (área de drop) */
+  .file-drop-area {
+    background-color: hsl(0deg, 0%, 95%);
+    width: 300px; /* Largura fixa para o quadrado */
+    height: 300px; /* Altura fixa para o quadrado */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: 1px dashed hsl(0deg 0% 0% / 20%);
+    cursor: pointer;
+    transition: outline 0.1s;
+    border-radius: 0.375rem;
+    margin-bottom: 20px;
+    overflow: hidden; /* Garante que a imagem não ultrapasse o quadrado */
+  }
+
+  /* Estilo para o texto dentro da área de drop */
+  .file-drop-area-text {
+    text-align: center;
+    color: hsl(0deg, 0%, 50%);
+    font-size: 16px;
+  }
+
+  /* Estilo para a imagem de pré-visualização */
+  .file-input-preview {
+    max-width: 100%; /* Limita a largura da imagem ao tamanho do quadrado */
+    max-height: 100%; /* Limita a altura da imagem ao tamanho do quadrado */
+    object-fit: contain; /* Mantém a proporção da imagem */
+    display: none; /* Inicialmente oculto */
+  }
+
+  /* Estilo para o botão "Copy" */
+  #copy {
+    display: block;
+    margin-top: 20px;
+  }
+    body {
+      background: #ece5dd;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+        background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+  
+  /* Estilo base do botão */
+  .btn-with-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espaço entre o ícone e o texto */
+    padding: 12px 24px;
+    color: #fff;
+    background-color: #007bff; /* Cor primária do Bootstrap */
+    border: none;
+    border-radius: 100px; /* Bordas completamente arredondadas */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  /* Efeito hover */
+  .btn-with-icon:hover {
+    background-color: #0056b3; /* Cor mais escura no hover */
+  }
+
+  /* Ícone de imagem SVG (24x24 pixels) */
+  .btn-with-icon::before {
+    content: "";
+    display: inline-block;
+    width: 24px; /* Tamanho do ícone */
+    height: 24px; /* Tamanho do ícone */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+
+    
+        .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .settings-icon {
+      cursor: pointer;
+      margin-left: auto;
+    }
+    
+    .header {
+      background: #075e54;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .notes-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      background: #ece5dd;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+  background-image: url('img/fundo01.jpg');
+  background-size: cover;      /* Faz a imagem cobrir toda a tela */
+  background-position: center; /* Centraliza a imagem */
+  background-repeat: no-repeat; /* Evita que a imagem se repita */
+}
+    
+    .note-card {
+      max-width: 70%;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 5px 0;
+      display: inline-block;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    .note-right {
+      background: #dcf8c6;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+    .note-left {
+      background: #f3e5f5;
+      align-self: flex-start;
+    }
+    .note-timestamp {
+      font-size: 10px;
+      color: #666;
+      margin-top: 5px;
+      text-align: right;
+    }
+    .note-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 5px;
+      align-items: center;
+    }
+    .note-actions i {
+      cursor: pointer;
+      color: #666;
+      font-size: 16px;
+    }
+    .comment-count {
+      font-size: 12px;
+      color: #666;
+      margin-left: 5px;
+    }
+    .input-container {
+      background: white;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+    }
+    .input-field {
+      flex: 1;
+      margin-right: 10px;
+    }
+    .input-field input {
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      padding: 10px;
+      width: 100%;
+      outline: none;
+    }
+    .send-button {
+      background: #25d366;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+    }
+    .send-button i {
+      color: white;
+      font-size: 20px;
+    }
+    .modal {
+      max-height: 80%;
+    }
+    .comment-card {
+      max-width: 70%;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 10px;
+      position: relative;
+      word-wrap: break-word;
+    }
+    .comment-left {
+      background-color: #f1f1f1;
+      align-self: flex-start;
+      margin-right: auto;
+    }
+    .comment-right {
+      background-color: #dcf5c5;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+    .comment-content {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .comment-meta {
+      font-size: 12px;
+      color: #666;
+      text-align: right;
+    }
+    .comment-timestamp {
+      font-size: 10px;
+      color: #666;
+      margin-top: 5px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Modal -->
+
+
+  <!-- Header com o nome do usuário selecionado e ícone de configurações -->
+  <div class="header">
+    <span id="headerName">Conversa com <span id="targetUserName"></span></span>
+    <i class="material-icons settings-icon" onclick="openSettingsModal()">settings</i>
+  </div>
+
+  <!-- Container principal -->
+  <div class="container">
+    <!-- Lista de notas (mensagens) -->
+    <div id="notesList" class="notes-list"></div>
+
+    <!-- Campo de entrada de notas -->
+    <div class="input-container">
+      <div class="input-field">
+        <input id="noteInput" type="text" placeholder="Digite sua mensagem...">
+      </div>
+<div class="send-button" id="saveNote">
+        <i class="material-icons">send</i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Comentários -->
+  <div id="commentsModal" class="modal">
+    <div class="modal-content">
+      <h5>Comentários</h5>
+      <div id="popupCommentsList"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn blue waves-effect" onclick="addCommentToPopup()">Adicionar Comentário</button>
+      <button class="btn grey modal-close">Fechar</button>
+    </div>
+  </div>
+  
+    <!-- Modal de Configurações -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <h5>Configurações</h5>
+    <div>
+      <label>
+        <input type="checkbox" id="toggleDeleteOption" />
+        <span>Habilitar exclusão de mensagens</span>
+      </label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn grey modal-close">Fechar</button>
+  </div>
+</div>
+
+<!-- Modal para exibir o vídeo em tela cheia -->
+<div id="videoModal" class="modal">
+  <div class="modal-content">
+    <span id="closeVideoModal" class="modal-close" style="position: absolute; top: 0px; right: 0px; cursor: pointer; font-size: 24px; color: white;">&times;</span>
+    <iframe id="fullscreenVideo" width="100%" height="500" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- Modal para exibir a imagem em tela cheia -->
+<div id="imageModal" class="modal" style="background-color: rgba(0, 0, 0, 0.0);">
+  <div class="modal-content">
+    <span id="closeImageModal" class="modal-close" style="position: absolute; top: 0px; right: 0px; cursor: pointer; font-size: 24px; color: white;">&times;</span>
+    <img id="fullscreenImage" src="" alt="Imagem em tela cheia" style="max-width: 100%; max-height: 80vh; border-radius: 0px;">
+  </div>
+</div>
+
+  <!-- Firebase e Materialize JS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, doc, deleteDoc, updateDoc, arrayUnion, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3eWDz_LzEZzhgkJzXqBK9HTMFizKdpzI",
+      authDomain: "uploadarquivos-e072a.firebaseapp.com",
+      projectId: "uploadarquivos-e072a",
+      storageBucket: "uploadarquivos-e072a.appspot.com",
+      messagingSenderId: "969790847480",
+      appId: "1:969790847480:web:4fd71df64836d88ee17e0d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const saveNoteButton = document.getElementById('saveNote');
+    const notesList = document.getElementById('notesList');
+    const headerName = document.getElementById('headerName');
+    const targetUserName = document.getElementById('targetUserName');
+    const noteInput = document.getElementById('noteInput');
+
+    const currentUser = localStorage.getItem('currentUser'); // Usuário atual
+    const targetUser = localStorage.getItem('targetUser'); // Usuário selecionado
+    const videoModal = document.getElementById('videoModal');
+const fullscreenVideo = document.getElementById('fullscreenVideo');
+const closeVideoModal = document.getElementById('closeVideoModal');
+
+    let currentChatId = [currentUser, targetUser].sort().join('_'); // ID da conversa
+    let currentNoteId = ''; // ID da nota selecionada para comentários
+    let isDeleteEnabled = true;
+
+    // Verificar se o nome do usuário já está definido
+    if (!currentUser || !targetUser) {
+      alert('Nome do usuário ou usuário selecionado não definido. Redirecionando para a página inicial...');
+      window.location.href = 'index.html'; // Redirecionar para a página inicial
+    }
+
+    // Exibir nome do usuário selecionado
+    targetUserName.textContent = targetUser;
+
+    // Função para adicionar uma nova mensagem à lista
+function detectMediaLinks(content) {
+  // Regex para detectar imagens (base64, URLs comuns, etc.)
+  const imageRegex = /(data:image\/[^;]+;base64,[^"]+)|(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|bmp|svg))/i;
+
+  // Regex para detectar vídeos (MP4, WebM, Ogg, etc.)
+  const videoRegex = /(https?:\/\/.*\.(?:mp4|webm|ogg|mov|avi|mkv))/i;
+
+  // Regex para detectar links do YouTube
+  const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+
+  // Regex para detectar links do Instagram
+  const instagramRegex = /(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?:p|reel)\/([a-zA-Z0-9_-]+)/;
+
+  // Regex para detectar links genéricos (HTTP/HTTPS)
+  const linkRegex = /(https?:\/\/[^\s]+)/i;
+
+  // Verifica se o conteúdo é uma imagem
+  if (imageRegex.test(content)) {
+    const imageUrl = content.match(imageRegex)[0];
+    return { type: 'image', url: imageUrl };
+  }
+
+  // Verifica se o conteúdo é um vídeo
+  if (videoRegex.test(content)) {
+    const videoUrl = content.match(videoRegex)[0];
+    return { type: 'video', url: videoUrl };
+  }
+
+  // Verifica se o conteúdo é um link do YouTube
+  if (youtubeRegex.test(content)) {
+    const videoId = content.match(youtubeRegex)[1];
+    return { type: 'youtube', videoId: videoId };
+  }
+
+  // Verifica se o conteúdo é um link do Instagram
+  if (instagramRegex.test(content)) {
+    const postId = content.match(instagramRegex)[1];
+    return { type: 'instagram', postId: postId };
+  }
+
+  // Verifica se o conteúdo é um link genérico
+  if (linkRegex.test(content)) {
+    const linkUrl = content.match(linkRegex)[0];
+    return { type: 'link', url: linkUrl };
+  }
+
+  // Se não for nenhum dos tipos acima, retorna null
+  return null;
+}
+
+// Função para abrir o modal com o vídeo em tela cheia
+function openVideoModal(videoUrl) {
+  fullscreenVideo.src = videoUrl; // Define o vídeo no iframe
+  videoModal.style.display = 'flex'; // Exibe o modal
+}
+
+// Função para fechar o modal
+function closeVideoModalHandler() {
+  fullscreenVideo.src = ''; // Remove o vídeo do iframe
+  videoModal.style.display = 'none'; // Esconde o modal
+}
+
+// Evento para fechar o modal ao clicar no botão "X"
+closeVideoModal.addEventListener('click', closeVideoModalHandler);
+
+// Evento para fechar o modal ao clicar fora do vídeo
+window.addEventListener('click', (event) => {
+  if (event.target === videoModal) {
+    closeVideoModalHandler();
+  }
+});
+
+// Função para detectar pressionar e segurar (2 segundos)
+function setupLongPress(element, callback) {
+  let pressTimer;
+
+  element.addEventListener('mousedown', () => {
+    pressTimer = setTimeout(() => {
+      callback();
+    }, 2000); // 2 segundos
+  });
+
+  element.addEventListener('mouseup', () => {
+    clearTimeout(pressTimer);
+  });
+
+  element.addEventListener('mouseleave', () => {
+    clearTimeout(pressTimer);
+  });
+}
+
+function detectYouTubeLink(content) {
+  const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const match = content.match(youtubeRegex);
+  if (match) {
+    return { type: 'youtube', videoId: match[1] };
+  }
+  return null;
+}
+
+function addMessageToUI(message) {
+  const noteElement = document.createElement('div');
+  noteElement.className = `note-card ${message.author === currentUser ? 'note-right' : 'note-left'}`;
+  const timestamp = message.timestamp ? new Date(message.timestamp.toDate()).toLocaleTimeString() : 'Sem data';
+
+  // Verifica se a mensagem contém um link de mídia
+  const media = detectMediaLinks(message.content);
+  const youtubeLink = detectYouTubeLink(message.content);
+
+  let contentElement;
+  if (youtubeLink) {
+    // Exibe o vídeo do YouTube incorporado
+    contentElement = `
+      <iframe
+        width="100%"
+        height="200"
+        src="https://www.youtube.com/embed/${youtubeLink.videoId}"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        style="border-radius: 0px;"
+      ></iframe>
+    `;
+    
+  } else if (media) {
+    if (media.type === 'image') {
+  // Exibe a imagem diretamente no chat
+  contentElement = `
+    <div style="width: 100%; overflow: hidden; border-radius: 8px;">
+      <img
+        src="${media.url}"
+        alt="Imagem"
+        style="width: 100%; height: auto; display: block; border-radius: 8px; cursor: pointer;"
+        onclick="openImageModal('${media.url}')"
+      />
+    </div>
+  `;
+    } else if (media.type === 'video') {
+      contentElement = `
+<video
+  controls
+  src="${media.url}"
+  style="width: 90vw; height: 50vh; border-radius: 0px;"
+  onplay="openVideoModal('${media.url}')"
+></video>
+      `;
+      // Configura o pressionar e segurar para abrir o modal
+      setupLongPress(contentElement, () => openVideoModal(media.url));
+    }
+  } else {
+    contentElement = `<div>${message.content}</div>`;
+  }
+
+  noteElement.innerHTML = `
+    ${contentElement}
+    <div class="note-timestamp">${timestamp}</div>
+    <div class="note-actions">
+      <i class="material-icons" onclick="openPopup('${message.id}')">comment</i>
+      <span class="comment-count" id="comment-count-${message.id}">${message.comments ? message.comments.length : 0}</span>
+      ${message.author === currentUser ? `<i class="material-icons delete-icon" onclick="deleteNote('${message.id}')">delete</i>` : ''}
+    </div>
+  `;
+
+  notesList.appendChild(noteElement);
+  notesList.scrollTop = notesList.scrollHeight; // Rolagem automática para a última mensagem
+  updateDeleteIconVisibility(); // Atualizar visibilidade do ícone de deletar
+}
+
+    // Escutar mudanças em tempo real no documento da conversa
+    function listenForNewMessages() {
+      const chatRef = doc(db, 'chats', currentChatId);
+      onSnapshot(chatRef, (snapshot) => {
+        const data = snapshot.data();
+        if (data) {
+          const messages = data.messages || [];
+          isDeleteEnabled = data.isDeleteEnabled ?? true; // Atualizar estado local
+          toggleDeleteOption.checked = isDeleteEnabled;
+          notesList.innerHTML = ''; // Limpar a lista de mensagens
+          messages.forEach((message) => {
+            addMessageToUI(message); // Adicionar cada mensagem à UI
+          });
+          updateDeleteIconVisibility(); // Atualizar visibilidade dos ícones
+        }
+      });
+    }
+
+    // Abrir modal de comentários
+    window.openPopup = async (noteId) => {
+      currentNoteId = noteId;
+      document.getElementById('popupCommentsList').innerHTML = '';
+
+      const chatRef = doc(db, 'chats', currentChatId);
+      const chatSnapshot = await getDoc(chatRef);
+      const messages = chatSnapshot.data().messages || [];
+      const message = messages.find((msg) => msg.id === noteId);
+      const comments = message?.comments || [];
+
+      comments.forEach((comment) => {
+        const commentElement = document.createElement('div');
+        commentElement.className = `comment-card ${
+          comment.author === currentUser ? 'comment-right' : 'comment-left'
+        }`;
+
+        const timestamp = comment.timestamp
+          ? new Date(comment.timestamp.toDate()).toLocaleTimeString()
+          : 'Sem data';
+
+        commentElement.innerHTML = `
+          <div class="comment-content">${comment.content}</div>
+          <div class="comment-meta">
+            <span class="comment-author">${comment.author}</span>
+            <span class="comment-timestamp">${timestamp}</span>
+          </div>
+        `;
+
+        document.getElementById('popupCommentsList').appendChild(commentElement);
+      });
+
+      // Abrir modal
+      const modalInstance = M.Modal.getInstance(document.getElementById('commentsModal'));
+      modalInstance.open();
+    };
+    
+    // Salvar a conversa no localStorage
+function saveConversation(chatId, targetUser) {
+  let conversations = JSON.parse(localStorage.getItem('conversations')) || [];
+  if (!conversations.find(conv => conv.chatId === chatId)) {
+    conversations.push({ chatId, targetUser });
+    localStorage.setItem('conversations', JSON.stringify(conversations));
+  }
+}
+
+async function saveConversationToFirebase(chatId, targetUser) {
+  const conversationsRef = collection(db, 'conversations');
+  const q = query(conversationsRef, where('chatId', '==', chatId));
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+    await addDoc(conversationsRef, { chatId, targetUser });
+  }
+}
+
+async function loadConversationsFromFirebase() {
+  const conversationsRef = collection(db, 'conversations');
+  const querySnapshot = await getDocs(conversationsRef);
+  const conversations = [];
+
+  querySnapshot.forEach((doc) => {
+    conversations.push(doc.data());
+  });
+
+  renderConversationCards(conversations);
+}
+
+// Chamar esta função ao carregar a página
+loadConversationsFromFirebase();
+
+// Chamar esta função quando a conversa for iniciada
+saveConversation(currentChatId, targetUser);
+
+    // Adicionar comentário
+    window.addCommentToPopup = async () => {
+      const comment = prompt('Digite seu comentário:');
+      if (comment) {
+        const chatRef = doc(db, 'chats', currentChatId);
+        const chatSnapshot = await getDoc(chatRef);
+        const messages = chatSnapshot.data().messages || [];
+        const messageIndex = messages.findIndex((msg) => msg.id === currentNoteId);
+
+        if (messageIndex !== -1) {
+          messages[messageIndex].comments = messages[messageIndex].comments || [];
+          messages[messageIndex].comments.push({
+            content: comment,
+            author: currentUser,
+            timestamp: new Date()
+          });
+
+          await updateDoc(chatRef, { messages: messages });
+
+          // Atualizar a contagem de comentários
+          const commentCountElement = document.getElementById(`comment-count-${currentNoteId}`);
+          if (commentCountElement) {
+            commentCountElement.textContent = messages[messageIndex].comments.length;
+          }
+
+          openPopup(currentNoteId); // Atualiza o modal com o novo comentário
+        }
+      }
+    };
+    
+        // Função para abrir o modal de configurações
+    window.openSettingsModal = () => {
+      const modalInstance = M.Modal.getInstance(document.getElementById('settingsModal'));
+      modalInstance.open();
+    };
+
+    // Função para atualizar a visibilidade do ícone de exclusão
+    function updateDeleteIconVisibility() {
+     const deleteIcons = document.querySelectorAll('.note-actions .delete-icon');
+     deleteIcons.forEach((icon) => {
+       const noteCard = icon.closest('.note-card');
+       const isCurrentUserMessage = noteCard.classList.contains('note-right');
+       icon.style.display = isDeleteEnabled && isCurrentUserMessage ? 'inline-block' : 'none';
+     });
+   }
+    
+        // Função para atualizar o estado de isDeleteEnabled no Firebase
+    async function updateDeleteSettingInFirebase(isEnabled) {
+      const chatRef = doc(db, 'chats', currentChatId);
+      await updateDoc(chatRef, { isDeleteEnabled: isEnabled });
+    }
+    
+        // Função para carregar o estado de isDeleteEnabled do Firebase
+    async function loadDeleteSettingFromFirebase() {
+      const chatRef = doc(db, 'chats', currentChatId);
+      const chatSnapshot = await getDoc(chatRef);
+      if (chatSnapshot.exists()) {
+        isDeleteEnabled = chatSnapshot.data().isDeleteEnabled ?? true; // Valor padrão é true
+        toggleDeleteOption.checked = isDeleteEnabled;
+        updateDeleteIconVisibility();
+      }
+    }
+
+    // Evento para alterar a opção de exclusão
+    toggleDeleteOption.addEventListener('change', async (event) => {
+      isDeleteEnabled = event.target.checked;
+      await updateDeleteSettingInFirebase(isDeleteEnabled); // Atualizar no Firebase
+      updateDeleteIconVisibility();
+    });
+    
+    // Função para abrir o modal com a imagem em tela cheia
+window.openImageModal = (imageUrl) => {
+  const fullscreenImage = document.getElementById('fullscreenImage');
+  fullscreenImage.src = imageUrl;
+  const modalInstance = M.Modal.getInstance(document.getElementById('imageModal'));
+  modalInstance.open();
+};
+
+    // Deletar mensagem
+    window.deleteNote = async (noteId) => {
+     const chatRef = doc(db, 'chats', currentChatId);
+     const chatSnapshot = await getDoc(chatRef);
+     const messages = chatSnapshot.data().messages || [];
+     const messageToDelete = messages.find((msg) => msg.id === noteId);
+
+     if (messageToDelete && messageToDelete.author === currentUser) {
+       if (confirm('Tem certeza que deseja deletar esta mensagem?')) {
+         const updatedMessages = messages.filter((msg) => msg.id !== noteId);
+         await updateDoc(chatRef, { messages: updatedMessages });
+       }
+     } else {
+       alert('Você só pode apagar suas próprias mensagens.');
+     }
+   };
+
+    // Salvar nova mensagem
+    saveNoteButton.addEventListener('click', async () => {
+      const content = noteInput.value.trim();
+      if (content && currentUser && currentChatId) {
+        const chatRef = doc(db, 'chats', currentChatId);
+        const chatSnapshot = await getDoc(chatRef);
+
+        // Verificar se o documento da conversa já existe
+        if (!chatSnapshot.exists()) {
+          await setDoc(chatRef, { messages: [] }); // Criar o documento da conversa
+        }
+
+        const newMessage = {
+          id: new Date().getTime().toString(), // ID único
+          content: content,
+          author: currentUser,
+          timestamp: new Date(),
+          comments: []
+        };
+
+        await updateDoc(chatRef, {
+          messages: arrayUnion(newMessage) // Adicionar a nova mensagem
+        });
+
+        noteInput.value = ''; // Limpar o campo de entrada
+      } else {
+        alert('Digite uma mensagem!');
+      }
+    });
+    
+      $(document).ready(function() {
+      const fileInput = $('#file');
+      const fileDropArea = $('.file-drop-area');
+      const fileDropAreaText = $('.file-drop-area-text');
+      const fileInputPreview = $('.file-input-preview');
+      const base64Output = $('#base64-output');
+      const copyButton = $('#copy');
+
+      // Quando o usuário clica na área de drop, abre o seletor de arquivos
+      fileDropArea.on('click', function() {
+          fileInput.click();
+      });
+
+      // Quando o usuário seleciona um arquivo
+      fileInput.on('change', function(e) {
+          const file = e.target.files[0];
+          if (file) {
+              const reader = new FileReader();
+              reader.onload = function(event) {
+                  const base64 = event.target.result;
+                  base64Output.val(base64);
+
+                  // Exibe a imagem selecionada dentro do quadrado
+                  fileInputPreview.attr('src', base64);
+                  fileInputPreview.css('display', 'block'); // Mostra a imagem
+                  fileDropAreaText.css('display', 'none'); // Oculta o texto
+              };
+              reader.readAsDataURL(file);
+          }
+      });
+
+      // Copia o conteúdo do textarea para a área de transferência
+      copyButton.on('click', function() {
+          base64Output.select();
+          document.execCommand('copy');
+          alert('Base64 copiado para a área de transferência!');
+      });
+  });
+  
+  async function sendImageToFirebase(base64Image) {
+  const chatRef = doc(db, 'chats', currentChatId);
+  const chatSnapshot = await getDoc(chatRef);
+
+  if (!chatSnapshot.exists()) {
+    await setDoc(chatRef, { messages: [] });
+  }
+
+  const newMessage = {
+    id: new Date().getTime().toString(),
+    content: base64Image,
+    author: currentUser,
+    timestamp: new Date(),
+    comments: []
+  };
+
+  await updateDoc(chatRef, {
+    messages: arrayUnion(newMessage)
+  });
+
+  return newMessage.id; // Retorna o ID da mensagem para uso posterior
+}
+
+function saveImageLocally(messageId, base64Image) {
+  let localMessages = JSON.parse(localStorage.getItem('localMessages')) || [];
+  localMessages.push({ id: messageId, content: base64Image, author: currentUser, timestamp: new Date() });
+  localStorage.setItem('localMessages', JSON.stringify(localMessages));
+}
+
+async function deleteMessageFromFirebase(messageId) {
+  const chatRef = doc(db, 'chats', currentChatId);
+  const chatSnapshot = await getDoc(chatRef);
+  const messages = chatSnapshot.data().messages || [];
+  const updatedMessages = messages.filter(msg => msg.id !== messageId);
+
+  await updateDoc(chatRef, { messages: updatedMessages });
+}
+
+document.getElementById('saveNote').addEventListener('click', async () => {
+  const fileInput = document.getElementById('file');
+  const file = fileInput.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const base64Image = event.target.result;
+
+      try {
+        // Envia a imagem para o Firebase
+        const messageId = await sendImageToFirebase(base64Image);
+
+        // Salva a imagem localmente
+        saveImageLocally(messageId, base64Image);
+        console.log('Imagem salva localmente com sucesso!');
+
+        // Deleta a mensagem do Firebase
+        await deleteMessageFromFirebase(messageId);
+        console.log('Mensagem removida do Firebase com sucesso!');
+
+        // Limpa o campo de arquivo após o envio
+        fileInput.value = ''; // <--- AQUI
+
+        alert('Imagem enviada e salva localmente!');
+      } catch (error) {
+        console.error('Erro ao processar a imagem:', error);
+        alert('Ocorreu um erro ao processar a imagem. Tente novamente.');
+      }
+    };
+    reader.readAsDataURL(file);
+  } else {
+  }
+});
+
+// No final do arquivo js/chat.js
+function registerServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("../firebase-messaging-sw.js")
+        .then(registration => {
+          console.log("SW registrado:", registration.scope);
+        })
+        .catch(error => {
+          console.error("Falha no registro do SW:", error);
+        });
+    });
+  }
+}
+
+// Inicializar quando o DOM estiver pronto
+document.addEventListener("DOMContentLoaded", () => {
+  new ChatApp();
+  registerServiceWorker(); // Adicione esta linha
+});
+    
+    // Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+     listenForNewMessages(); // Iniciar escuta de novas mensagens
+     M.AutoInit(); // Inicializar Materialize (para o modal)
+
+     // Inicializar o estado do toggle
+     document.getElementById('toggleDeleteOption').checked = isDeleteEnabled;
+     updateDeleteIconVisibility();
+   });
+  </script>
+  
+  <script>
+  // Registrar Service Worker
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./firebase-messaging-sw.js")
+        .then(registration => {
+          console.log("Service Worker registrado:", registration.scope);
+        })
+        .catch(error => {
+          console.error("Falha ao registrar Service Worker:", error);
+        });
+    });
+  }
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script type="module" src="chat.js"></script>
+  <script src="notification-sw.js"></script>
+    <script src="sw-register.js"></script>
+</body>
+</html>
