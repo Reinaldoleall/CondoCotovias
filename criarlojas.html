@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Loja Virtual</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        :root {
+            --primary-color: #6200ee;
+            --primary-dark: #3700b3;
+            --primary-light: #bb86fc;
+            --secondary-color: #03dac6;
+            --background: #f5f5f5;
+            --surface: #ffffff;
+            --error: #b00020;
+            --on-primary: #ffffff;
+            --on-secondary: #000000;
+            --on-background: #000000;
+            --on-surface: #000000;
+            --on-error: #ffffff;
+            --text-primary: rgba(0, 0, 0, 0.87);
+            --text-secondary: rgba(0, 0, 0, 0.6);
+            --text-hint: rgba(0, 0, 0, 0.38);
+            --elevation-1: 0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12);
+            --elevation-2: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
+            --elevation-4: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            --elevation-8: 0 5px 5px -3px rgba(0,0,0,0.2), 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+        
+        h1 { font-size: 2.125rem; }
+        h2 { font-size: 1.5rem; }
+        h3 { font-size: 1.25rem; }
+        
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        
+        /* App Bar */
+        .app-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-color);
+            color: var(--on-primary);
+            padding: 0 16px;
+            height: 64px;
+            box-shadow: var(--elevation-4);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: var(--on-primary);
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 16px;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .menu-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        /* Navigation Drawer */
+        .nav-drawer {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: var(--surface);
+            box-shadow: var(--elevation-8);
+            z-index: 1001;
+            transition: left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-drawer.open {
+            left: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background-color: var(--primary-color);
+            color: var(--on-primary);
+            height: 64px;
+        }
+
+        .drawer-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            color: var(--on-primary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+        }
+
+        .close-drawer:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-items {
+            list-style: none;
+            padding: 8px 0;
+            margin: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .nav-items li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            margin: 0 8px;
+        }
+
+        .nav-items li a:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+
+        .nav-items li a.active {
+            background-color: rgba(98, 0, 238, 0.08);
+            color: var(--primary-color);
+        }
+
+        .nav-items li a.active i {
+            color: var(--primary-color);
+        }
+
+        .nav-items li a i {
+            margin-right: 32px;
+            color: var(--text-secondary);
+            width: 24px;
+            text-align: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        /* Cards */
+        .card {
+            background-color: var(--surface);
+            border-radius: 4px;
+            box-shadow: var(--elevation-1);
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: var(--elevation-2);
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.23);
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border 0.3s, box-shadow 0.3s;
+            background-color: var(--surface);
+            color: var(--text-primary);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 1px var(--primary-color);
+            outline: none;
+        }
+        
+        /* Buttons */
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--on-primary);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.0892857143em;
+            text-transform: uppercase;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+            box-shadow: var(--elevation-1);
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            box-shadow: var(--elevation-2);
+        }
+        
+        .btn:active {
+            box-shadow: var(--elevation-4);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .btn-outlined {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            box-shadow: none;
+        }
+        
+        .btn-outlined:hover {
+            background-color: rgba(98, 0, 238, 0.04);
+        }
+        
+        .btn-text {
+            background-color: transparent;
+            color: var(--primary-color);
+            box-shadow: none;
+            padding: 8px;
+        }
+        
+        .btn-text:hover {
+            background-color: rgba(98, 0, 238, 0.04);
+        }
+        
+        .btn-danger {
+            background-color: var(--error);
+        }
+        
+        .btn-danger:hover {
+            background-color: #8c001a;
+        }
+        
+        .btn-success {
+            background-color: #2e7d32;
+        }
+        
+        .btn-success:hover {
+            background-color: #1b5e20;
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-1 { margin-top: 8px; }
+        .mt-2 { margin-top: 16px; }
+        .mt-3 { margin-top: 24px; }
+        .mt-4 { margin-top: 32px; }
+        
+        .mb-1 { margin-bottom: 8px; }
+        .mb-2 { margin-bottom: 16px; }
+        .mb-3 { margin-bottom: 24px; }
+        .mb-4 { margin-bottom: 32px; }
+        
+        /* Grid System */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        /* Product Cards */
+        .product-card {
+            background-color: var(--surface);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: var(--elevation-1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--elevation-4);
+        }
+        
+        .product-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-color: #f5f5f5;
+        }
+        
+        .product-content {
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-title {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        .product-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 12px;
+            flex-grow: 1;
+        }
+        
+        .product-price {
+            font-weight: 500;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin: 8px 0;
+        }
+        
+        .product-category {
+            font-size: 0.75rem;
+            color: var(--text-hint);
+            margin-bottom: 12px;
+        }
+        
+        /* Store View */
+        .store-header {
+            text-align: center;
+            padding: 80px 0 40px;
+            margin-bottom: 24px;
+            background-color: var(--store-primary-color, var(--primary-color));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .store-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 24px;
+            background-color: var(--background);
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .store-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 16px;
+            border: 4px solid white;
+            box-shadow: var(--elevation-4);
+            background-color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+
+        
+        /* Alerts */
+        .alert {
+            padding: 16px;
+            margin-bottom: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .alert i {
+            margin-right: 12px;
+        }
+        
+        .alert-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .alert-danger {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        /* Login Page */
+        .login-card {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .login-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        
+        .login-header p {
+            color: var(--text-secondary);
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .container {
+                padding: 16px;
+                padding-top: 80px;
+            }
+            
+            .card {
+                padding: 16px;
+            }
+            
+            .login-card {
+                padding: 24px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+        
+        .ripple:active:after {
+            transform: scale(0, 0);
+            opacity: 0.3;
+            transition: 0s;
+        }
+        
+        /* Category Badges - Versão Atualizada */
+.category-badge {
+    display: inline-block;
+    
+    padding: 8px 16px;
+    border-radius: 4px; /* Cantos levemente arredondados (antes era 16px) */
+    margin-right: 8px;
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+    box-shadow: var(--elevation-1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.category-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-2);
+}
+
+.category-badge.active {
+    background-color: var(--primary-dark);
+    box-shadow: var(--elevation-4);
+}
+
+/* Efeito de ripple para os botões */
+.category-badge.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.category-badge.ripple:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform .5s, opacity 1s;
+}
+
+.category-badge.ripple:active:after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+}
+    </style>
+</head>
+<body>
+    <!-- App Bar -->
+    <header>
+        <div class="app-bar">
+            <button id="menu-toggle" class="menu-toggle ripple">
+                <i class="material-icons">menu</i>
+            </button>
+            <h1 class="app-title">Sistema de Loja Virtual</h1>
+        </div>
+        
+        <!-- Navigation Drawer -->
+        <div id="nav-drawer" class="nav-drawer">
+            <div class="drawer-header">
+                <h3>Minha Loja</h3>
+                <button class="close-drawer ripple">
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
+            <ul class="nav-items">
+
+                <li><a href="#" id="store-config-btn"><i class="material-icons">settings</i> Configurações</a></li>
+                <li><a href="#" id="categories-btn"><i class="material-icons">category</i> Categorias</a></li>
+                <li><a href="#" id="products-btn"><i class="material-icons">shopping_bag</i> Produtos</a></li>
+                <li><a href="#" id="logout-btn"><i class="material-icons">logout</i> Sair</a></li>
+            </ul>
+        </div>
+        <div id="overlay" class="overlay"></div>
+    </header>
+
+    <!-- Auth Container -->
+    <div id="auth-container" class="container">
+        <div class="login-card card">
+            <div class="login-header">
+                <h1>Sistema de Loja Virtual</h1>
+                <p>Crie e gerencie sua própria loja online</p>
+            </div>
+            
+            <div id="login-form">
+                <div class="form-group">
+                    <label for="login-email">E-mail</label>
+                    <input type="email" id="login-email" class="form-control" placeholder="Seu e-mail">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="Sua senha">
+                </div>
+                <button id="login-btn" class="btn btn-success ripple"><i class="material-icons">login</i> Entrar</button>
+                <button id="show-register-btn" class="btn btn-outlined ripple mt-2"><i class="material-icons">person_add</i> Criar conta</button>
+            </div>
+            
+            <div id="register-form" class="hidden">
+                <div class="form-group">
+                    <label for="register-email">E-mail</label>
+                    <input type="email" id="register-email" class="form-control" placeholder="Seu e-mail">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Senha</label>
+                    <input type="password" id="register-password" class="form-control" placeholder="Sua senha (mínimo 6 caracteres)">
+                </div>
+                <div class="form-group">
+                    <label for="register-password-confirm">Confirmar Senha</label>
+                    <input type="password" id="register-password-confirm" class="form-control" placeholder="Confirme sua senha">
+                </div>
+                <button id="register-btn" class="btn btn-success ripple"><i class="material-icons">how_to_reg</i> Cadastrar</button>
+                <button id="show-login-btn" class="btn btn-text ripple mt-2"><i class="material-icons">arrow_back</i> Já tenho conta</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- App Container -->
+    <div id="app-container" class="hidden">
+        <div class="container">
+            <!-- Store Config Tab -->
+            <div id="store-config" class="tab-content">
+                <h2>Configurações da Loja</h2>
+                <div class="card">
+                    <div class="form-group">
+                        <label for="store-name">Nome da Loja</label>
+                        <input type="text" id="store-name" class="form-control" placeholder="Ex: Minha Loja Online">
+                    </div>
+                    <div class="form-group">
+                        <label for="store-description">Descrição da Loja</label>
+                        <textarea id="store-description" rows="3" class="form-control" placeholder="Descreva sua loja"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="store-logo">URL do Logo</label>
+                        <input type="text" id="store-logo" class="form-control" placeholder="https://exemplo.com/logo.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label for="store-whatsapp">Número do WhatsApp (com DDD)</label>
+                        <input type="text" id="store-whatsapp" class="form-control" placeholder="Ex: 5511999999999">
+                    </div>
+                    <div class="form-group">
+                        <label for="store-address">Endereço</label>
+                        <input type="text" id="store-address" class="form-control" placeholder="Endereço da loja">
+                    </div>
+                    <div class="form-group">
+                        <label for="store-color">Cor Principal</label>
+                        <input type="color" id="store-color" class="form-control" value="#6200ee" style="height: 50px; width: 100%; padding: 5px;">
+                    </div>
+                    <button id="save-store-btn" class="btn btn-success ripple"><i class="material-icons">save</i> Salvar Configurações</button>
+                </div>
+            </div>
+            
+            <!-- Categories Tab -->
+            <div id="categories-config" class="tab-content">
+                <h2>Gerenciar Categorias</h2>
+                <div class="card">
+                    <div class="form-group">
+                        <label for="new-category-name">Nova Categoria</label>
+                        <input type="text" id="new-category-name" class="form-control" placeholder="Nome da categoria">
+                    </div>
+                    <button id="add-category-btn" class="btn btn-success ripple"><i class="material-icons">add</i> Adicionar Categoria</button>
+                </div>
+                
+                <div class="card">
+                    <h3>Suas Categorias</h3>
+                    <div id="categories-list" class="mt-2"></div>
+                </div>
+            </div>
+            
+            <!-- Products Tab -->
+            <div id="products-config" class="tab-content">
+                <h2>Gerenciar Produtos</h2>
+                <div class="card">
+                    <div class="form-group">
+                        <label for="product-name">Nome do Produto</label>
+                        <input type="text" id="product-name" class="form-control" placeholder="Nome do produto">
+                    </div>
+                    <div class="form-group">
+                        <label for="product-description">Descrição</label>
+                        <textarea id="product-description" rows="3" class="form-control" placeholder="Descrição do produto"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Preço (R$)</label>
+                        <input type="number" id="product-price" class="form-control" step="0.01" placeholder="Ex: 19.99">
+                    </div>
+                    <div class="form-group">
+                        <label for="product-image">URL da Imagem</label>
+                        <input type="text" id="product-image" class="form-control" placeholder="https://exemplo.com/produto.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label for="product-category">Categoria</label>
+                        <select id="product-category" class="form-control"></select>
+                    </div>
+                    <button id="add-product-btn" class="btn btn-success ripple"><i class="material-icons">add_shopping_cart</i> Adicionar Produto</button>
+                </div>
+                
+                <div class="card">
+                    <h3>Seus Produtos</h3>
+                    <div id="products-list" class="grid mt-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Store View Container -->
+    <div id="store-view-container" class="hidden">
+        <div class="app-bar">
+            <button id="store-menu-toggle" class="menu-toggle ripple">
+                <i class="material-icons">menu</i>
+            </button>
+            <h1 class="app-title" id="store-view-name"></h1>
+        </div>
+        
+        <div class="store-header" id="store-view-header">
+            <img src="" alt="Logo da Loja" class="store-logo" id="store-view-logo">
+            <h1 id="store-view-title"></h1>
+            <p id="store-view-desc"></p>
+        </div>
+        
+        <div class="container">
+            <div class="card">
+                <h2>Nossos Produtos</h2>
+                <div id="store-categories" class="mb-3"></div>
+                <div id="store-products" class="grid"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwTNcpr_r75HH0igBtNyEbKvfuLkVFHiU",
+            authDomain: "rifalidiane-fde3b.firebaseapp.com",
+            databaseURL: "https://rifalidiane-fde3b-default-rtdb.firebaseio.com",
+            projectId: "rifalidiane-fde3b",
+            storageBucket: "rifalidiane-fde3b.firebasestorage.app",
+            messagingSenderId: "649359518677",
+            appId: "1:649359518677:web:879b4ed9fa5150d24d2b5c"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        
+        // UI Elements
+        const authContainer = document.getElementById('auth-container');
+        const appContainer = document.getElementById('app-container');
+        const storeViewContainer = document.getElementById('store-view-container');
+        
+        // Auth Forms
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const showRegisterBtn = document.getElementById('show-register-btn');
+        const showLoginBtn = document.getElementById('show-login-btn');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        // Store Elements
+        const storeNameInput = document.getElementById('store-name');
+        const storeDescInput = document.getElementById('store-description');
+        const storeLogoInput = document.getElementById('store-logo');
+        const storeWhatsappInput = document.getElementById('store-whatsapp');
+        const storeAddressInput = document.getElementById('store-address');
+        const storeColorInput = document.getElementById('store-color');
+        const saveStoreBtn = document.getElementById('save-store-btn');
+        
+        // Category Elements
+        const newCategoryName = document.getElementById('new-category-name');
+        const addCategoryBtn = document.getElementById('add-category-btn');
+        const categoriesList = document.getElementById('categories-list');
+        
+        // Product Elements
+        const productNameInput = document.getElementById('product-name');
+        const productDescInput = document.getElementById('product-description');
+        const productPriceInput = document.getElementById('product-price');
+        const productImageInput = document.getElementById('product-image');
+        const productCategorySelect = document.getElementById('product-category');
+        const addProductBtn = document.getElementById('add-product-btn');
+        const productsList = document.getElementById('products-list');
+        
+        // Store View Elements
+        const storeViewName = document.getElementById('store-view-name');
+        const storeViewLogo = document.getElementById('store-view-logo');
+        const storeViewTitle = document.getElementById('store-view-title');
+        const storeViewDesc = document.getElementById('store-view-desc');
+        const storeViewHeader = document.getElementById('store-view-header');
+        const storeCategories = document.getElementById('store-categories');
+        const storeProducts = document.getElementById('store-products');
+        const storeMenuToggle = document.getElementById('store-menu-toggle');
+        const storeViewBtn = document.getElementById('store-view-btn');
+        const storeConfigBtn = document.getElementById('store-config-btn');
+        const categoriesBtn = document.getElementById('categories-btn');
+        const productsBtn = document.getElementById('products-btn');
+        
+        // Navigation Elements
+        const menuToggle = document.getElementById('menu-toggle');
+        const navDrawer = document.getElementById('nav-drawer');
+        const overlay = document.getElementById('overlay');
+        const closeDrawer = document.querySelector('.close-drawer');
+        
+        // Tabs
+        const tabContents = document.querySelectorAll('.tab-content');
+        const storeConfigTab = document.getElementById('store-config');
+        const categoriesConfigTab = document.getElementById('categories-config');
+        const productsConfigTab = document.getElementById('products-config');
+        
+        // Global Variables
+        let currentUser = null;
+        let storeData = null;
+        let categories = [];
+        let products = [];
+        
+        // Event Listeners
+        showRegisterBtn.addEventListener('click', () => {
+            loginForm.classList.add('hidden');
+            registerForm.classList.remove('hidden');
+        });
+        
+        showLoginBtn.addEventListener('click', () => {
+            registerForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        });
+        
+        loginBtn.addEventListener('click', loginUser);
+        registerBtn.addEventListener('click', registerUser);
+        logoutBtn.addEventListener('click', logoutUser);
+        saveStoreBtn.addEventListener('click', saveStoreData);
+        addCategoryBtn.addEventListener('click', addCategory);
+        addProductBtn.addEventListener('click', addProduct);
+        
+        // Navigation Drawer Control
+        menuToggle.addEventListener('click', () => {
+            navDrawer.classList.add('open');
+            overlay.classList.add('show');
+        });
+        
+        storeMenuToggle.addEventListener('click', () => {
+            navDrawer.classList.add('open');
+            overlay.classList.add('show');
+        });
+        
+        closeDrawer.addEventListener('click', () => {
+            navDrawer.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+        
+        overlay.addEventListener('click', () => {
+            navDrawer.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+        
+        // Navigation Items
+        document.querySelectorAll('.nav-items li a').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                navDrawer.classList.remove('open');
+                overlay.classList.remove('show');
+                
+                const targetId = e.target.closest('a').id;
+                if (targetId === 'store-view-btn') {
+                    showStoreView();
+                } else if (targetId === 'store-config-btn') {
+                    showTab('store-config');
+                } else if (targetId === 'categories-btn') {
+                    showTab('categories-config');
+                } else if (targetId === 'products-btn') {
+                    showTab('products-config');
+                } else if (targetId === 'logout-btn') {
+                    logoutUser();
+                }
+            });
+        });
+        
+        // Auth Functions
+        function loginUser() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    currentUser = userCredential.user;
+                    loadStoreData();
+                })
+                .catch((error) => {
+                    showAlert('error', error.message);
+                });
+        }
+        
+        function registerUser() {
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-password-confirm').value;
+            
+            if (password !== confirmPassword) {
+                showAlert('error', 'As senhas não coincidem!');
+                return;
+            }
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    currentUser = userCredential.user;
+                    initializeStoreData();
+                })
+                .catch((error) => {
+                    showAlert('error', error.message);
+                });
+        }
+        
+        function logoutUser() {
+            auth.signOut().then(() => {
+                currentUser = null;
+                storeData = null;
+                authContainer.classList.remove('hidden');
+                appContainer.classList.add('hidden');
+                storeViewContainer.classList.add('hidden');
+            });
+        }
+        
+        // Auth State Observer
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user;
+                authContainer.classList.add('hidden');
+                appContainer.classList.remove('hidden');
+                loadStoreData();
+            } else {
+                currentUser = null;
+                authContainer.classList.remove('hidden');
+                appContainer.classList.add('hidden');
+                storeViewContainer.classList.add('hidden');
+            }
+        });
+        
+        // Store Functions
+        function initializeStoreData() {
+            const storeRef = database.ref('stores/' + currentUser.uid);
+            
+            const defaultStoreData = {
+                name: 'Minha Loja',
+                description: 'Descrição da minha loja',
+                logo: 'https://via.placeholder.com/150',
+                whatsapp: '',
+                address: '',
+                color: '#6200ee',
+                categories: {},
+                products: {}
+            };
+            
+            storeRef.set(defaultStoreData)
+                .then(() => {
+                    loadStoreData();
+                })
+                .catch((error) => {
+                    showAlert('error', error.message);
+                });
+        }
+        
+        function loadStoreData() {
+            showTab('store-config');
+            const storeRef = database.ref('stores/' + currentUser.uid);
+            
+            storeRef.on('value', (snapshot) => {
+                storeData = snapshot.val();
+                
+                if (storeData) {
+                    // Fill store config form
+                    storeNameInput.value = storeData.name || '';
+                    storeDescInput.value = storeData.description || '';
+                    storeLogoInput.value = storeData.logo || '';
+                    storeWhatsappInput.value = storeData.whatsapp || '';
+                    storeAddressInput.value = storeData.address || '';
+                    storeColorInput.value = storeData.color || '#6200ee';
+                    
+                    // Load categories
+                    categories = storeData.categories ? Object.entries(storeData.categories).map(([id, name]) => ({ id, name })) : [];
+                    renderCategories();
+                    
+                    // Load products
+                    if (storeData.products) {
+                        products = Object.entries(storeData.products).map(([id, product]) => ({ id, ...product }));
+                        renderProducts();
+                    } else {
+                        products = [];
+                        productsList.innerHTML = '';
+                    }
+                    
+                    // Update store view if visible
+                    if (!storeViewContainer.classList.contains('hidden')) {
+                        renderStoreView();
+                    }
+                }
+            });
+        }
+        
+        function saveStoreData() {
+            const storeRef = database.ref('stores/' + currentUser.uid);
+            
+            const updatedData = {
+                name: storeNameInput.value,
+                description: storeDescInput.value,
+                logo: storeLogoInput.value,
+                whatsapp: storeWhatsappInput.value,
+                address: storeAddressInput.value,
+                color: storeColorInput.value,
+                categories: storeData.categories || {},
+                products: storeData.products || {}
+            };
+            
+            storeRef.set(updatedData)
+                .then(() => {
+                    showAlert('success', 'Configurações salvas com sucesso!');
+                })
+                .catch((error) => {
+                    showAlert('error', error.message);
+                });
+        }
+        
+        // Category Functions
+        function addCategory() {
+            const categoryName = newCategoryName.value.trim();
+            
+            if (!categoryName) {
+                showAlert('error', 'Por favor, digite um nome para a categoria');
+                return;
+            }
+            
+            const storeRef = database.ref('stores/' + currentUser.uid + '/categories');
+            const newCategoryRef = storeRef.push();
+            
+            newCategoryRef.set(categoryName)
+                .then(() => {
+                    newCategoryName.value = '';
+                    showAlert('success', 'Categoria adicionada com sucesso!');
+                })
+                .catch((error) => {
+                    showAlert('error', error.message);
+                });
+        }
+        
+        function renderCategories() {
+            // Clear list
+            categoriesList.innerHTML = '';
+            
+            // Fill category select for products
+            productCategorySelect.innerHTML = '';
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                productCategorySelect.appendChild(option);
+            });
+            
+            // Add "No category" as default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Sem categoria';
+            defaultOption.selected = true;
+            productCategorySelect.insertBefore(defaultOption, productCategorySelect.firstChild);
+            
+            // Render categories in list
+            categories.forEach(category => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'category-badge';
+                categoryElement.textContent = category.name;
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn btn-danger ripple';
+                deleteBtn.innerHTML = '<i class="material-icons">delete</i>';
+                deleteBtn.style.marginLeft = '8px';
+                deleteBtn.style.padding = '2px 8px';
+                deleteBtn.style.fontSize = '12px';
+                deleteBtn.addEventListener('click', () => deleteCategory(category.id));
+                
+                categoryElement.appendChild(deleteBtn);
+                categoriesList.appendChild(categoryElement);
+            });
+        }
+        
+        function deleteCategory(categoryId) {
+            if (!confirm('Tem certeza que deseja excluir esta categoria? Os produtos associados não serão excluídos, mas ficarão sem categoria.')) {
+                return;
+            }
+            
+            const categoryRef = database.ref('stores/' + currentUser.uid + '/categories/' + categoryId);
+            
+            categoryRef.remove()
+                .then(() => {
+                    showAlert('success', 'Categoria removida com sucesso!');
+                })
+                .catch((error) => {
+                    showAlert('error', error.message);
+                });
+        }
+        
+        // Product Functions
+        function addProduct() {
+            const name = productNameInput.value.trim();
+            const description = productDescInput.value.trim();
+            const price = parseFloat(productPriceInput.value);
+            const image = productImageInput.value.trim();
+            const category = productCategorySelect.value;
+            
+            if (!name || !description || isNaN(price) || price <= 0) {
+                showAlert('error', 'Por favor, preencha todos os campos obrigatórios (nome, descrição e preço válido)');
+                return;
+            }
+            
+            const productData = {
+                name,
+                description,
+                price,
+                image: image || 'https://via.placeholder.com/300',
+                category: category || null
+            };
+            
+            const storeRef = database.ref('stores/' + currentUser.uid + '/products');
+            const newProductRef = storeRef.push();
+            
+            newProductRef.set(productData)
+                .then(() => {
+                    // Clear form
+                    productNameInput.value = '';
+                    productDescInput.value = '';
+                    productPriceInput.value = '';
+                    productImageInput.value = '';
+                    productCategorySelect.value = '';
+                    
+                    showAlert('success', 'Produto adicionado com sucesso!');
+                })
+                .catch((error) => {
+                    showAlert('error', error.message);
+                });
+        }
+        
+        function renderProducts() {
+            productsList.innerHTML = '';
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                const productImage = document.createElement('div');
+                productImage.className = 'product-image';
+                productImage.style.backgroundImage = `url('${product.image}')`;
+                
+                const productContent = document.createElement('div');
+                productContent.className = 'product-content';
+                
+                const productName = document.createElement('h3');
+                productName.className = 'product-title';
+                productName.textContent = product.name;
+                
+                const productDesc = document.createElement('p');
+                productDesc.className = 'product-description';
+                productDesc.textContent = product.description;
+                
+                const productPrice = document.createElement('div');
+                productPrice.className = 'product-price';
+                productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
+                
+                const categoryName = categories.find(c => c.id === product.category)?.name || 'Sem categoria';
+                const productCategory = document.createElement('div');
+                productCategory.className = 'product-category';
+                productCategory.textContent = `Categoria: ${categoryName}`;
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn btn-danger ripple';
+                deleteBtn.innerHTML = '<i class="material-icons">delete</i> Excluir';
+                deleteBtn.style.marginTop = '12px';
+                deleteBtn.style.width = '100%';
+                deleteBtn.addEventListener('click', () => deleteProduct(product.id));
+                
+                productContent.appendChild(productName);
+                productContent.appendChild(productDesc);
+                productContent.appendChild(productPrice);
+                productContent.appendChild(productCategory);
+                productContent.appendChild(deleteBtn);
+                
+                productCard.appendChild(productImage);
+                productCard.appendChild(productContent);
+                
+                productsList.appendChild(productCard);
+            });
+        }
+        
+        function deleteProduct(productId) {
+            if (!confirm('Tem certeza que deseja excluir este produto?')) {
+                return;
+            }
+            
+            const productRef = database.ref('stores/' + currentUser.uid + '/products/' + productId);
+            
+            productRef.remove()
+                .then(() => {
+                    showAlert('success', 'Produto removido com sucesso!');
+                })
+                .catch((error) => {
+                    showAlert('error', error.message);
+                });
+        }
+        
+        // Store View Functions
+        function showStoreView() {
+            appContainer.classList.add('hidden');
+            storeViewContainer.classList.remove('hidden');
+            renderStoreView();
+        }
+        
+        function renderStoreView() {
+            if (!storeData) return;
+            
+            // Update header
+            storeViewName.textContent = storeData.name;
+            storeViewTitle.textContent = storeData.name;
+            storeViewDesc.textContent = storeData.description;
+            storeViewLogo.src = storeData.logo || 'https://via.placeholder.com/150';
+            storeViewHeader.style.setProperty('--store-primary-color', storeData.color || '#6200ee');
+            
+            // Render categories as filters
+            storeCategories.innerHTML = '';
+            
+            const allCategoriesBtn = document.createElement('button');
+            allCategoriesBtn.className = 'category-badge active';
+            allCategoriesBtn.textContent = 'Todos';
+            allCategoriesBtn.style.backgroundColor = storeData.color || '#6200ee';
+            allCategoriesBtn.addEventListener('click', () => {
+                document.querySelectorAll('.category-badge').forEach(btn => btn.classList.remove('active'));
+                allCategoriesBtn.classList.add('active');
+                filterProductsByCategory(null);
+            });
+            storeCategories.appendChild(allCategoriesBtn);
+            
+            categories.forEach(category => {
+                const categoryBtn = document.createElement('button');
+                categoryBtn.className = 'category-badge';
+                categoryBtn.textContent = category.name;
+                categoryBtn.style.backgroundColor = storeData.color || '#6200ee';
+                categoryBtn.addEventListener('click', () => {
+                    document.querySelectorAll('.category-badge').forEach(btn => btn.classList.remove('active'));
+                    categoryBtn.classList.add('active');
+                    filterProductsByCategory(category.id);
+                });
+                storeCategories.appendChild(categoryBtn);
+            });
+            
+            // Render products
+            filterProductsByCategory(null);
+        }
+        
+        function filterProductsByCategory(categoryId) {
+            storeProducts.innerHTML = '';
+            
+            const filteredProducts = categoryId 
+                ? products.filter(p => p.category === categoryId)
+                : products;
+            
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                const productImage = document.createElement('div');
+                productImage.className = 'product-image';
+                productImage.style.backgroundImage = `url('${product.image}')`;
+                
+                const productContent = document.createElement('div');
+                productContent.className = 'product-content';
+                
+                const productName = document.createElement('h3');
+                productName.className = 'product-title';
+                productName.textContent = product.name;
+                
+                const productDesc = document.createElement('p');
+                productDesc.className = 'product-description';
+                productDesc.textContent = product.description;
+                
+                const productPrice = document.createElement('div');
+                productPrice.className = 'product-price';
+                productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
+                
+                const buyBtn = document.createElement('button');
+                buyBtn.className = 'btn btn-success ripple';
+                buyBtn.innerHTML = '<i class="material-icons">shopping_cart</i> Comprar';
+                buyBtn.style.width = '100%';
+                buyBtn.style.marginTop = '12px';
+                buyBtn.addEventListener('click', () => sendWhatsAppMessage(product));
+                
+                productContent.appendChild(productName);
+                productContent.appendChild(productDesc);
+                productContent.appendChild(productPrice);
+                productContent.appendChild(buyBtn);
+                
+                productCard.appendChild(productImage);
+                productCard.appendChild(productContent);
+                
+                storeProducts.appendChild(productCard);
+            });
+        }
+        
+        function sendWhatsAppMessage(product) {
+            if (!storeData.whatsapp) {
+                alert('A loja não configurou um número de WhatsApp para contato.');
+                return;
+            }
+            
+            const message = `Olá, gostaria de comprar o produto: ${product.name}\n\nPreço: R$ ${product.price.toFixed(2)}\n\nDescrição: ${product.description}`;
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${storeData.whatsapp}?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+        
+        // Helper Functions
+        function showTab(tabId) {
+            // Hide all tabs
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Show only selected tab
+            const tabToShow = document.getElementById(tabId);
+            if (tabToShow) {
+                tabToShow.classList.add('active');
+            }
+            
+            // Update active menu item
+            document.querySelectorAll('.nav-items li a').forEach(item => {
+                item.classList.remove('active');
+                const itemTabId = item.id.replace('-btn', '');
+                if (itemTabId === tabId) {
+                    item.classList.add('active');
+                }
+            });
+        }
+        
+        function showAlert(type, message) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            
+            const icon = document.createElement('i');
+            icon.className = 'material-icons';
+            icon.textContent = type === 'success' ? 'check_circle' : 'error';
+            
+            const text = document.createElement('span');
+            text.textContent = message;
+            
+            alert.appendChild(icon);
+            alert.appendChild(text);
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(alert, container.firstChild);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+        
+        // Initialize ripple effect
+        document.querySelectorAll('.ripple').forEach(element => {
+            element.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple-effect';
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>
