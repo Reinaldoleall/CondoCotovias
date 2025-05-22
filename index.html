@@ -903,27 +903,7 @@ contentFrame.onload = function() {
     }
 };
 
-        // Adicione isso no seu script principal
-function preventZoom() {
-    document.addEventListener('gesturestart', function(e) {
-        e.preventDefault();
-    });
-    
-    document.addEventListener('touchmove', function(e) {
-        if(e.scale !== 1) e.preventDefault();
-    }, { passive: false });
-}
-
-window.onload = function() {
-    preventZoom();
-    
-    // Verifica se há zoom aplicado pelo navegador
-    setTimeout(function() {
-        if(window.visualViewport.scale !== 1) {
-            window.visualViewport.scale = 1;
-        }
-    }, 300);
-};
+        
     </script>
 </body>
 </html>
