@@ -11,6 +11,18 @@
 
 </head>
 <style>
+
+    html {
+    touch-action: pan-y;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
   /* Estilos Personalizados para Menu Funcional */
 :root {
     --cor-primaria: #2c3e50;       /* Azul escuro */
@@ -889,6 +901,28 @@ contentFrame.onload = function() {
     } catch(e) {
         console.log("Não foi possível injetar CSS no iframe");
     }
+};
+
+        // Adicione isso no seu script principal
+function preventZoom() {
+    document.addEventListener('gesturestart', function(e) {
+        e.preventDefault();
+    });
+    
+    document.addEventListener('touchmove', function(e) {
+        if(e.scale !== 1) e.preventDefault();
+    }, { passive: false });
+}
+
+window.onload = function() {
+    preventZoom();
+    
+    // Verifica se há zoom aplicado pelo navegador
+    setTimeout(function() {
+        if(window.visualViewport.scale !== 1) {
+            window.visualViewport.scale = 1;
+        }
+    }, 300);
 };
     </script>
 </body>
