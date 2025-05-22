@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Condominio Cotovias</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Funcional</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <meta name="theme-color" content="#2c3e50">
@@ -26,19 +26,6 @@
     --sombra-card-hover: 0 6px 12px rgba(0, 0, 0, 0.1);
     --fonte-principal: 'Roboto', 'Segoe UI', sans-serif;
 }
-html, body {
-  height: 100%;
-  overflow-y: auto;
-}
-     .container {
-    max-width: 100%;
-    padding: 10px;
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-  }
 
 /* Reset e Base */
 body {
@@ -464,6 +451,87 @@ body {
             <i class="material-icons mdc-list-item__graphic">people</i>
             <span></span>Interfone Virtual
         </div>
+                <div class="mdc-list-item" data-page="lojas.html">
+            <i class="material-icons mdc-list-item__graphic"></i>
+            <span></span><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lojas Disponíveis</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+</head>
+<style>
+  img {
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+</style>
+<body>
+    <div class="container">
+       __________________________<h1>Lojas</h1>
+        <div id="stores-list" class="stores-grid"></div>
+    </div>
+
+    <script>
+        // Configuração do Firebase (use a mesma do seu sistema)
+        const firebaseConfig = {
+  apiKey: "AIzaSyCwTNcpr_r75HH0igBtNyEbKvfuLkVFHiU",
+  authDomain: "rifalidiane-fde3b.firebaseapp.com",
+  databaseURL: "https://rifalidiane-fde3b-default-rtdb.firebaseio.com",
+  projectId: "rifalidiane-fde3b",
+  storageBucket: "rifalidiane-fde3b.firebasestorage.app",
+  messagingSenderId: "649359518677",
+  appId: "1:649359518677:web:879b4ed9fa5150d24d2b5c"
+};
+        
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Carrega todas as lojas
+        function loadStores() {
+            const storesRef = database.ref('stores');
+            
+            storesRef.on('value', (snapshot) => {
+                const stores = snapshot.val();
+                const storesList = document.getElementById('stores-list');
+                storesList.innerHTML = '';
+                
+                if (stores) {
+                    Object.entries(stores).forEach(([userId, storeData]) => {
+                        if (storeData.name) { // Verifica se é uma loja válida
+                            const storeCard = document.createElement('div');
+                            storeCard.className = 'store-card';
+                            
+                            storeCard.innerHTML = `
+                                <img src="${storeData.logo || 'https://via.placeholder.com/300'}" alt="${storeData.name}" class="store-logo">
+                                <div class="store-info">
+                                    <h3 class="store-name">${storeData.name}</h3>
+                                    <p class="store-description">${storeData.description || 'Loja virtual'}</p>
+                                    <a href="lojas.html?userId=${userId}" class="visit-btn"></a>
+                                    
+                                </div>
+                            `;
+                            
+                            storesList.appendChild(storeCard);
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Carrega as lojas quando a página é aberta
+        window.onload = loadStores;
+    </script>
+</body>
+</html>
+        </div>
     </nav>
 </aside>
 
@@ -481,6 +549,176 @@ body {
             </main>
         </div>
     </div>
+    
+    <!-- Adicione este código ANTES do fechamento do </body> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
+
+<script>
+// Adiciona o botão de ajuda dinamicamente
+
+
+// Estilos para o tutorial
+const style = document.createElement('style');
+style.textContent = `
+  .help-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    background-color: #6200ee;
+    color: white;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .help-button:hover {
+    background-color: #3700b3;
+    transform: scale(1.1);
+  }
+  
+  .introjs-tooltip {
+    max-width: 400px;
+    border-radius: 8px;
+  }
+  
+  .introjs-button {
+    color: white !important;
+    text-shadow: none !important;
+    background-color: #6200ee !important;
+    border: none !important;
+    border-radius: 4px !important;
+  }
+  
+  .introjs-button:hover {
+    background-color: #3700b3 !important;
+  }
+  
+  .introjs-skipbutton {
+    color: #757575 !important;
+  }
+  
+  .introjs-bullets ul li a {
+    background-color: #bb86fc !important;
+  }
+  
+  .introjs-bullets ul li a.active {
+    background-color: #6200ee !important;
+  }
+  
+  .introjs-helperNumberLayer {
+    background: #3700b3 !important;
+  }
+`;
+document.head.appendChild(style);
+
+// Configura os passos do tutorial
+const tutorialSteps = [
+  {
+    intro: '<h4>Abrir Menu Lateral</h4><p>Clique no botão para abrir o menu de navegação com todas as opções disponíveis.</p>',
+  },
+  {
+    element: document.getElementById('drawer'),
+intro: `
+  <h4>Menu de Navegação</h4>
+  <p>Este é o menu lateral com todas as seções disponíveis do sistema:</p>
+  <ul>
+    <li><strong>Avisos</strong>: Mensagens e comunicados importantes do condomínio.</li>
+    <li><strong></strong>: Área para lançamento de avisos e registro de encomendas para controle.</li>
+    <li><strong>Usuários</strong>: Seção onde porteiros registram as encomendas e condôminos acessam para retirada.</li>
+  </ul>
+`,
+position: 'right'
+  },
+  {
+    element: document.querySelector('.mdc-list-item[data-page="aviso.html"]'),
+    intro: '<h4>Seção de Avisos</h4><p>Clique aqui para acessar os avisos e notificações importantes do condominio.</p>',
+    position: 'right'
+  },
+  {
+    element: document.querySelector('.mdc-list-item[data-page="admin.html"]'),
+    intro: '<h4>Seção de Administração</h4><p></p><p class="text-warning">Atenção: Esta seção requer permissões especiais.</p>',
+    position: 'right'
+  },
+  {
+    element: document.querySelector('.mdc-list-item[data-page="login.html"]'),
+    intro: '<h4>Login e usuários</h4><p>Nesta seção você pode entrar ou se cadastrar no sistema, Aqui é onde você acompanha a chegada de sua encomenda.</p>',
+    position: 'right'
+  },
+  {
+    element: document.getElementById('contentFrame'),
+    intro: '<h4>Área de Conteúdo</h4><p>Aqui será exibido o conteúdo da seção selecionada no menu.</p><p>O sistema carrega cada seção dinamicamente sem recarregar a página inteira.</p>',
+    position: 'top'
+  },
+  {
+    element: document.getElementById('helpButton'),
+    intro: '<h4>Precisa de Ajuda?</h4><p>Você pode acessar o tutorial de cada pagina a qualquer momento clicando no botão de ajuda que fica na base do aplicativo.</p>',
+    position: 'left'
+  }
+];
+
+// Função para iniciar o tutorial
+function iniciarTutorial() {
+  // Abre o menu se estiver fechado
+  if (!document.getElementById('drawer').classList.contains('mdc-drawer--open')) {
+    document.getElementById('menuButton').click();
+  }
+
+  introJs().setOptions({
+    steps: tutorialSteps,
+    nextLabel: 'Próximo',
+    prevLabel: 'Anterior',
+    skipLabel: 'Pular',
+    doneLabel: 'Concluir',
+    showProgress: true,
+    showBullets: true,
+    exitOnOverlayClick: false,
+    disableInteraction: false,
+    tooltipClass: 'custom-tooltip',
+    doneCallback: function() {
+      // Fecha o menu ao finalizar o tutorial se estiver aberto
+      if (document.getElementById('drawer').classList.contains('mdc-drawer--open')) {
+        document.getElementById('menuButton').click();
+      }
+    }
+  }).start();
+}
+
+// Inicia o tutorial na primeira visita
+if (!localStorage.getItem('tutorialMenuVisto')) {
+  setTimeout(() => {
+    iniciarTutorial();
+    localStorage.setItem('tutorialMenuVisto', 'true');
+  }, 1000);
+}
+
+// Configura o botão de ajuda
+document.getElementById('helpButton').addEventListener('click', iniciarTutorial);
+
+// Monitora mudanças no iframe para atualizar o tutorial
+const observer = new MutationObserver(() => {
+  if (document.querySelector('.mdc-list-item') && !document.querySelector('[data-tutorial-init]')) {
+    document.querySelector('body').setAttribute('data-tutorial-init', 'true');
+    
+    // Se for a primeira visita e o tutorial ainda não apareceu
+    if (!localStorage.getItem('tutorialMenuVisto')) {
+      iniciarTutorial();
+    }
+  }
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
+</script>
 
     <script>
         // Elementos do DOM
