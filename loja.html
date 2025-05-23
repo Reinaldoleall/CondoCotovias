@@ -996,11 +996,6 @@
                     nameDiv.className = 'name';
                     nameDiv.innerHTML = highlightMatches(product.name, searchTerm);
                     
-                    const productName = document.createElement('h3');
-productName.className = 'product-title';
-productName.textContent = product.name;
-productOverlay.appendChild(productName);
-                    
                     const priceDiv = document.createElement('div');
                     priceDiv.className = 'price';
                     priceDiv.textContent = `R$ ${product.price ? product.price.toFixed(2) : '0,00'}`;
