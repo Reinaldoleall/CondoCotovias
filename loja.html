@@ -672,6 +672,102 @@
         box-shadow: var(--elevation-2);
     }
     
+    /* Search Bar */
+    .search-container {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    
+    .search-input {
+        width: 100%;
+        padding: 12px 16px 12px 48px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-sm);
+        font-size: 1rem;
+        transition: var(--transition);
+        background-color: var(--surface);
+        color: var(--text-primary);
+    }
+    
+    .search-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.2);
+        outline: none;
+    }
+    
+    .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-hint);
+    }
+    
+    .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--surface);
+        border-radius: var(--border-radius-sm);
+        box-shadow: var(--elevation-4);
+        z-index: 100;
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+    }
+    
+    .search-results.show {
+        display: block;
+    }
+    
+    .search-result-item {
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: var(--transition);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+    }
+    
+    .search-result-item:last-child {
+        border-bottom: none;
+    }
+    
+    .search-result-item:hover {
+        background-color: rgba(74, 107, 255, 0.05);
+    }
+    
+    .search-result-item img {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--border-radius-sm);
+        object-fit: cover;
+        margin-right: 12px;
+    }
+    
+    .search-result-item .info {
+        flex-grow: 1;
+    }
+    
+    .search-result-item .name {
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 2px;
+    }
+    
+    .search-result-item .price {
+        font-size: 0.875rem;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    /* Highlight */
+    .highlight {
+        background-color: rgba(255, 235, 59, 0.3);
+        padding: 2px 0;
+    }
+    
     /* Responsive Adjustments */
     @media (max-width: 992px) {
         .container {
@@ -849,6 +945,14 @@
         <div class="container">
             <div class="card">
                 <h2>Nossos Produtos</h2>
+                
+                <!-- Barra de pesquisa adicionada aqui -->
+                <div class="search-container">
+                    <i class="material-icons search-icon">search</i>
+                    <input type="text" class="search-input" id="product-search" placeholder="Pesquisar produtos...">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                
                 <div id="store-categories" class="mb-3"></div>
                 <div id="store-products" class="grid"></div>
             </div>
@@ -877,6 +981,8 @@
         
         // Variável global para armazenar os dados da loja
         let storeData = null;
+        // Variável para armazenar todos os produtos
+        let allProducts = [];
 
         // Carrega os dados da loja
         function loadStore() {
@@ -901,8 +1007,18 @@
                     
                     // Verifica se existem produtos
                     if (storeData.products) {
+                        // Converte os produtos para array e armazena
+                        allProducts = Object.entries(storeData.products).map(([id, product]) => ({ 
+                            id, 
+                            ...product,
+                            category: product.category ? product.category.toString() : null
+                        }));
+                        
                         renderCategories(storeData.categories || {});
-                        renderProducts(storeData.products);
+                        renderProducts(allProducts);
+                        
+                        // Configura a pesquisa
+                        setupSearch();
                     } else {
                         document.getElementById('store-products').innerHTML = '<p>Nenhum produto disponível no momento.</p>';
                     }
@@ -911,6 +1027,117 @@
                     window.location.href = 'index.html';
                 }
             });
+        }
+
+        // Configura a funcionalidade de pesquisa
+        function setupSearch() {
+            const searchInput = document.getElementById('product-search');
+            const searchResults = document.getElementById('search-results');
+            
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.trim().toLowerCase();
+                
+                if (searchTerm.length === 0) {
+                    searchResults.classList.remove('show');
+                    return;
+                }
+                
+                // Filtra os produtos
+                const filteredProducts = allProducts.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) || 
+                    (product.description && product.description.toLowerCase().includes(searchTerm))
+                );
+                
+                // Exibe os resultados
+                displaySearchResults(filteredProducts, searchTerm);
+            });
+            
+            // Fecha os resultados quando clicar fora
+            document.addEventListener('click', function(e) {
+                if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                    searchResults.classList.remove('show');
+                }
+            });
+        }
+        
+        // Exibe os resultados da pesquisa
+        function displaySearchResults(products, searchTerm) {
+            const searchResults = document.getElementById('search-results');
+            searchResults.innerHTML = '';
+            
+            if (products.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'search-result-item';
+                noResults.textContent = 'Nenhum produto encontrado';
+                searchResults.appendChild(noResults);
+            } else {
+                products.forEach(product => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'search-result-item';
+                    resultItem.addEventListener('click', () => {
+                        scrollToProduct(product.id);
+                    });
+                    
+                    // Imagem do produto
+                    const img = document.createElement('img');
+                    img.src = product.image || 'https://via.placeholder.com/150';
+                    img.alt = product.name;
+                    
+                    // Informações do produto
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'info';
+                    
+                    const nameDiv = document.createElement('div');
+                    nameDiv.className = 'name';
+                    nameDiv.innerHTML = highlightMatches(product.name, searchTerm);
+                    
+                    const priceDiv = document.createElement('div');
+                    priceDiv.className = 'price';
+                    priceDiv.textContent = `R$ ${product.price ? product.price.toFixed(2) : '0,00'}`;
+                    
+                    infoDiv.appendChild(nameDiv);
+                    infoDiv.appendChild(priceDiv);
+                    
+                    resultItem.appendChild(img);
+                    resultItem.appendChild(infoDiv);
+                    
+                    searchResults.appendChild(resultItem);
+                });
+            }
+            
+            searchResults.classList.add('show');
+        }
+        
+        // Destaca os termos correspondentes na pesquisa
+        function highlightMatches(text, searchTerm) {
+            if (!searchTerm) return text;
+            
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+        
+        // Rola a página até o produto selecionado
+        function scrollToProduct(productId) {
+            const productElement = document.querySelector(`.product-card[data-id="${productId}"]`);
+            if (productElement) {
+                // Fecha os resultados da pesquisa
+                document.getElementById('search-results').classList.remove('show');
+                
+                // Rola até o produto
+                productElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Adiciona um destaque temporário
+                productElement.style.boxShadow = '0 0 0 3px rgba(74, 107, 255, 0.5)';
+                productElement.style.transition = 'box-shadow 0.3s ease';
+                
+                setTimeout(() => {
+                    productElement.style.boxShadow = 'var(--elevation-4)';
+                    
+                    setTimeout(() => {
+                        productElement.style.boxShadow = '';
+                    }, 1000);
+                }, 1000);
+            }
         }
 
         // Renderiza as categorias
@@ -945,17 +1172,6 @@
 
         // Renderiza os produtos
         function renderProducts(products) {
-            const productsArray = Object.entries(products).map(([id, product]) => ({ 
-                id, 
-                ...product,
-                category: product.category ? product.category.toString() : null
-            }));
-            
-            renderProductsList(productsArray);
-        }
-
-        // Renderiza a lista de produtos
-        function renderProductsList(products) {
             const storeProducts = document.getElementById('store-products');
             storeProducts.innerHTML = '';
             
@@ -967,6 +1183,7 @@
             products.forEach(product => {
                 const productCard = document.createElement('div');
                 productCard.className = 'product-card';
+                productCard.setAttribute('data-id', product.id);
                 
                 const productImage = document.createElement('div');
                 productImage.className = 'product-image';
@@ -1010,15 +1227,9 @@
         function filterProductsByCategory(categoryId) {
             if (!storeData || !storeData.products) return;
             
-            const productsArray = Object.entries(storeData.products).map(([id, product]) => ({ 
-                id, 
-                ...product,
-                category: product.category ? product.category.toString() : null
-            }));
-            
             const filteredProducts = categoryId 
-                ? productsArray.filter(p => p.category === categoryId.toString())
-                : productsArray;
+                ? allProducts.filter(p => p.category === categoryId.toString())
+                : allProducts;
             
             renderProductsList(filteredProducts);
         }
