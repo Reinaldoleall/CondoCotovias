@@ -10,6 +10,77 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
+    
+    /* Product Cards - Versão Compacta */
+.product-card {
+    background-color: var(--surface);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: var(--elevation-1);
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Adicionado para posicionamento absoluto dos elementos */
+    aspect-ratio: 1/1; /* Mantém proporção quadrada */
+}
+
+.product-image {
+    height: 100%; /* Ocupa todo o espaço do card */
+    background-size: cover;
+    background-position: center;
+    background-color: #f5f5f5;
+    position: relative; /* Para posicionar os elementos filhos */
+}
+
+/* Conteúdo sobreposto na imagem */
+.product-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+    padding: 12px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.product-price {
+    font-weight: 500;
+    color: white;
+    font-size: 1.2rem;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Ajustes no botão de compra */
+.product-buy-btn {
+    background-color: var(--primary-color);
+    color: var(--on-primary);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+    width: 100%;
+    text-align: center;
+}
+
+.product-buy-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Remover elementos que não serão mais usados */
+.product-content {
+    display: none;
+}
+
+.product-title, .product-description, .product-category {
+    display: none;
+}
         :root {
             --primary-color: #6200ee;
             --primary-dark: #3700b3;
@@ -84,22 +155,6 @@
             transition: background-color 0.3s;
         }
 
-        .menu-toggle {
-            background: none;
-            border: none;
-            color: var(--on-primary);
-            font-size: 24px;
-            cursor: pointer;
-            margin-right: 16px;
-            padding: 8px;
-            border-radius: 50%;
-            transition: background-color 0.3s;
-        }
-
-        .menu-toggle:hover {
-            background-color: rgba(255, 255, 255, 0.08);
-        }
-
         .app-title {
             font-size: 1.25rem;
             font-weight: 500;
@@ -107,108 +162,69 @@
             flex-grow: 1;
         }
 
-        /* Navigation Drawer */
-        .nav-drawer {
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 280px;
-            height: 100vh;
+        /* Tabs Bar */
+        .tabs-bar {
+            display: flex;
             background-color: var(--surface);
-            box-shadow: var(--elevation-8);
-            z-index: 1001;
-            transition: left 0.3s ease;
-            display: flex;
-            flex-direction: column;
+            box-shadow: var(--elevation-2);
+            position: fixed;
+            top: 64px;
+            width: 100%;
+            z-index: 999;
+            overflow-x: auto;
         }
 
-        .nav-drawer.open {
+        .tab-button {
+            padding: 16px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            white-space: nowrap;
+            transition: color 0.3s;
+        }
+
+        .tab-button:hover {
+            color: var(--primary-color);
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
             left: 0;
-        }
-
-        .drawer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
+            right: 0;
+            height: 2px;
             background-color: var(--primary-color);
+        }
+
+        .tab-button i {
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .logout-btn {
+            margin-left: auto;
             color: var(--on-primary);
-            height: 64px;
-        }
-
-        .drawer-header h3 {
-            margin: 0;
-            font-size: 1.1rem;
-        }
-
-        .close-drawer {
             background: none;
             border: none;
-            color: var(--on-primary);
             cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-        }
-
-        .close-drawer:hover {
-            background-color: rgba(255, 255, 255, 0.08);
-        }
-
-        .nav-items {
-            list-style: none;
-            padding: 8px 0;
-            margin: 0;
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-
-        .nav-items li a {
+            padding: 8px 16px;
             display: flex;
             align-items: center;
-            padding: 12px 16px;
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: background-color 0.3s;
-            border-radius: 4px;
-            margin: 0 8px;
         }
 
-        .nav-items li a:hover {
-            background-color: rgba(0, 0, 0, 0.04);
-        }
-
-        .nav-items li a.active {
-            background-color: rgba(98, 0, 238, 0.08);
-            color: var(--primary-color);
-        }
-
-        .nav-items li a.active i {
-            color: var(--primary-color);
-        }
-
-        .nav-items li a i {
-            margin-right: 32px;
-            color: var(--text-secondary);
-            width: 24px;
-            text-align: center;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .overlay.show {
-            opacity: 1;
-            pointer-events: all;
+        .logout-btn i {
+            margin-right: 8px;
         }
         
         /* Cards */
@@ -457,8 +473,6 @@
             display: block;
         }
         
-
-        
         /* Alerts */
         .alert {
             padding: 16px;
@@ -513,7 +527,7 @@
             
             .container {
                 padding: 16px;
-                padding-top: 80px;
+                padding-top: 120px; /* Ajustado para acomodar a barra de abas */
             }
             
             .card {
@@ -522,6 +536,16 @@
             
             .login-card {
                 padding: 24px;
+            }
+
+            .tab-button {
+                padding: 12px 16px;
+                font-size: 0.75rem;
+            }
+
+            .tab-button i {
+                margin-right: 4px;
+                font-size: 18px;
             }
         }
         
@@ -622,29 +646,32 @@
     <!-- App Bar -->
     <header>
         <div class="app-bar">
-            <button id="menu-toggle" class="menu-toggle ripple">
-                <i class="material-icons">menu</i>
-            </button>
             <h1 class="app-title">Sistema de Loja Virtual</h1>
+            <button id="logout-btn" class="logout-btn ripple">
+                <i class="material-icons">logout</i>
+                <span class="logout-text">Sair</span>
+            </button>
         </div>
         
-        <!-- Navigation Drawer -->
-        <div id="nav-drawer" class="nav-drawer">
-            <div class="drawer-header">
-                <h3>Minha Loja</h3>
-                <button class="close-drawer ripple">
-                    <i class="material-icons">close</i>
-                </button>
-            </div>
-            <ul class="nav-items">
-
-                <li><a href="#" id="store-config-btn"><i class="material-icons">settings</i> Configurações</a></li>
-                <li><a href="#" id="categories-btn"><i class="material-icons">category</i> Categorias</a></li>
-                <li><a href="#" id="products-btn"><i class="material-icons">shopping_bag</i> Produtos</a></li>
-                <li><a href="#" id="logout-btn"><i class="material-icons">logout</i> Sair</a></li>
-            </ul>
+        <!-- Tabs Bar -->
+        <div id="tabs-bar" class="tabs-bar hidden">
+            <button id="store-config-btn" class="tab-button ripple">
+                <i class="material-icons">settings</i>
+                <span>Configurações</span>
+            </button>
+            <button id="categories-btn" class="tab-button ripple">
+                <i class="material-icons">category</i>
+                <span>Categorias</span>
+            </button>
+            <button id="products-btn" class="tab-button ripple">
+                <i class="material-icons">shopping_bag</i>
+                <span>Produtos</span>
+            </button>
+            <button id="store-view-btn" class="tab-button ripple">
+                <i class="material-icons">store</i>
+                <span>Visualizar Loja</span>
+            </button>
         </div>
-        <div id="overlay" class="overlay"></div>
     </header>
 
     <!-- Auth Container -->
@@ -777,10 +804,11 @@
     <!-- Store View Container -->
     <div id="store-view-container" class="hidden">
         <div class="app-bar">
-            <button id="store-menu-toggle" class="menu-toggle ripple">
-                <i class="material-icons">menu</i>
-            </button>
             <h1 class="app-title" id="store-view-name"></h1>
+            <button id="back-to-admin-btn" class="logout-btn ripple">
+                <i class="material-icons">arrow_back</i>
+                <span class="logout-text">Voltar</span>
+            </button>
         </div>
         
         <div class="store-header" id="store-view-header">
@@ -819,6 +847,7 @@
         const authContainer = document.getElementById('auth-container');
         const appContainer = document.getElementById('app-container');
         const storeViewContainer = document.getElementById('store-view-container');
+        const tabsBar = document.getElementById('tabs-bar');
         
         // Auth Forms
         const loginForm = document.getElementById('login-form');
@@ -828,6 +857,7 @@
         const loginBtn = document.getElementById('login-btn');
         const registerBtn = document.getElementById('register-btn');
         const logoutBtn = document.getElementById('logout-btn');
+        const backToAdminBtn = document.getElementById('back-to-admin-btn');
         
         // Store Elements
         const storeNameInput = document.getElementById('store-name');
@@ -860,17 +890,12 @@
         const storeViewHeader = document.getElementById('store-view-header');
         const storeCategories = document.getElementById('store-categories');
         const storeProducts = document.getElementById('store-products');
-        const storeMenuToggle = document.getElementById('store-menu-toggle');
         const storeViewBtn = document.getElementById('store-view-btn');
+        
+        // Tab Buttons
         const storeConfigBtn = document.getElementById('store-config-btn');
         const categoriesBtn = document.getElementById('categories-btn');
         const productsBtn = document.getElementById('products-btn');
-        
-        // Navigation Elements
-        const menuToggle = document.getElementById('menu-toggle');
-        const navDrawer = document.getElementById('nav-drawer');
-        const overlay = document.getElementById('overlay');
-        const closeDrawer = document.querySelector('.close-drawer');
         
         // Tabs
         const tabContents = document.querySelectorAll('.tab-content');
@@ -898,52 +923,16 @@
         loginBtn.addEventListener('click', loginUser);
         registerBtn.addEventListener('click', registerUser);
         logoutBtn.addEventListener('click', logoutUser);
+        backToAdminBtn.addEventListener('click', backToAdmin);
         saveStoreBtn.addEventListener('click', saveStoreData);
         addCategoryBtn.addEventListener('click', addCategory);
         addProductBtn.addEventListener('click', addProduct);
         
-        // Navigation Drawer Control
-        menuToggle.addEventListener('click', () => {
-            navDrawer.classList.add('open');
-            overlay.classList.add('show');
-        });
-        
-        storeMenuToggle.addEventListener('click', () => {
-            navDrawer.classList.add('open');
-            overlay.classList.add('show');
-        });
-        
-        closeDrawer.addEventListener('click', () => {
-            navDrawer.classList.remove('open');
-            overlay.classList.remove('show');
-        });
-        
-        overlay.addEventListener('click', () => {
-            navDrawer.classList.remove('open');
-            overlay.classList.remove('show');
-        });
-        
-        // Navigation Items
-        document.querySelectorAll('.nav-items li a').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                navDrawer.classList.remove('open');
-                overlay.classList.remove('show');
-                
-                const targetId = e.target.closest('a').id;
-                if (targetId === 'store-view-btn') {
-                    showStoreView();
-                } else if (targetId === 'store-config-btn') {
-                    showTab('store-config');
-                } else if (targetId === 'categories-btn') {
-                    showTab('categories-config');
-                } else if (targetId === 'products-btn') {
-                    showTab('products-config');
-                } else if (targetId === 'logout-btn') {
-                    logoutUser();
-                }
-            });
-        });
+        // Tab Navigation
+        storeConfigBtn.addEventListener('click', () => showTab('store-config'));
+        categoriesBtn.addEventListener('click', () => showTab('categories-config'));
+        productsBtn.addEventListener('click', () => showTab('products-config'));
+        storeViewBtn.addEventListener('click', showStoreView);
         
         // Auth Functions
         function loginUser() {
@@ -987,7 +976,15 @@
                 authContainer.classList.remove('hidden');
                 appContainer.classList.add('hidden');
                 storeViewContainer.classList.add('hidden');
+                tabsBar.classList.add('hidden');
             });
+        }
+        
+        function backToAdmin() {
+            storeViewContainer.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+            tabsBar.classList.remove('hidden');
+            showTab('store-config');
         }
         
         // Auth State Observer
@@ -996,12 +993,14 @@
                 currentUser = user;
                 authContainer.classList.add('hidden');
                 appContainer.classList.remove('hidden');
+                tabsBar.classList.remove('hidden');
                 loadStoreData();
             } else {
                 currentUser = null;
                 authContainer.classList.remove('hidden');
                 appContainer.classList.add('hidden');
                 storeViewContainer.classList.add('hidden');
+                tabsBar.classList.add('hidden');
             }
         });
         
@@ -1206,56 +1205,41 @@
                 });
         }
         
-        function renderProducts() {
-            productsList.innerHTML = '';
-            
-            products.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                
-                const productImage = document.createElement('div');
-                productImage.className = 'product-image';
-                productImage.style.backgroundImage = `url('${product.image}')`;
-                
-                const productContent = document.createElement('div');
-                productContent.className = 'product-content';
-                
-                const productName = document.createElement('h3');
-                productName.className = 'product-title';
-                productName.textContent = product.name;
-                
-                const productDesc = document.createElement('p');
-                productDesc.className = 'product-description';
-                productDesc.textContent = product.description;
-                
-                const productPrice = document.createElement('div');
-                productPrice.className = 'product-price';
-                productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
-                
-                const categoryName = categories.find(c => c.id === product.category)?.name || 'Sem categoria';
-                const productCategory = document.createElement('div');
-                productCategory.className = 'product-category';
-                productCategory.textContent = `Categoria: ${categoryName}`;
-                
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'btn btn-danger ripple';
-                deleteBtn.innerHTML = '<i class="material-icons">delete</i> Excluir';
-                deleteBtn.style.marginTop = '12px';
-                deleteBtn.style.width = '100%';
-                deleteBtn.addEventListener('click', () => deleteProduct(product.id));
-                
-                productContent.appendChild(productName);
-                productContent.appendChild(productDesc);
-                productContent.appendChild(productPrice);
-                productContent.appendChild(productCategory);
-                productContent.appendChild(deleteBtn);
-                
-                productCard.appendChild(productImage);
-                productCard.appendChild(productContent);
-                
-                productsList.appendChild(productCard);
-            });
-        }
+function renderProducts() {
+    productsList.innerHTML = '';
+    
+    products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        
+        const productImage = document.createElement('div');
+        productImage.className = 'product-image';
+        productImage.style.backgroundImage = `url('${product.image}')`;
+        
+        // Criar overlay com preço e botão
+        const productOverlay = document.createElement('div');
+        productOverlay.className = 'product-overlay';
+        
+        const productPrice = document.createElement('div');
+        productPrice.className = 'product-price';
+        productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
+        
+        const buyBtn = document.createElement('button');
+        buyBtn.className = 'product-buy-btn ripple';
+        buyBtn.innerHTML = '<i class="material-icons">shopping_cart</i> Comprar';
+        buyBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sendWhatsAppMessage(product);
+        });
+        
+        productOverlay.appendChild(productPrice);
+        productOverlay.appendChild(buyBtn);
+        productImage.appendChild(productOverlay);
+        
+        productCard.appendChild(productImage);
+        productsList.appendChild(productCard);
+    });
+}
         
         function deleteProduct(productId) {
             if (!confirm('Tem certeza que deseja excluir este produto?')) {
@@ -1276,6 +1260,7 @@
         // Store View Functions
         function showStoreView() {
             appContainer.classList.add('hidden');
+            tabsBar.classList.add('hidden');
             storeViewContainer.classList.remove('hidden');
             renderStoreView();
         }
@@ -1321,54 +1306,45 @@
             filterProductsByCategory(null);
         }
         
-        function filterProductsByCategory(categoryId) {
-            storeProducts.innerHTML = '';
-            
-            const filteredProducts = categoryId 
-                ? products.filter(p => p.category === categoryId)
-                : products;
-            
-            filteredProducts.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                
-                const productImage = document.createElement('div');
-                productImage.className = 'product-image';
-                productImage.style.backgroundImage = `url('${product.image}')`;
-                
-                const productContent = document.createElement('div');
-                productContent.className = 'product-content';
-                
-                const productName = document.createElement('h3');
-                productName.className = 'product-title';
-                productName.textContent = product.name;
-                
-                const productDesc = document.createElement('p');
-                productDesc.className = 'product-description';
-                productDesc.textContent = product.description;
-                
-                const productPrice = document.createElement('div');
-                productPrice.className = 'product-price';
-                productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
-                
-                const buyBtn = document.createElement('button');
-                buyBtn.className = 'btn btn-success ripple';
-                buyBtn.innerHTML = '<i class="material-icons">shopping_cart</i> Comprar';
-                buyBtn.style.width = '100%';
-                buyBtn.style.marginTop = '12px';
-                buyBtn.addEventListener('click', () => sendWhatsAppMessage(product));
-                
-                productContent.appendChild(productName);
-                productContent.appendChild(productDesc);
-                productContent.appendChild(productPrice);
-                productContent.appendChild(buyBtn);
-                
-                productCard.appendChild(productImage);
-                productCard.appendChild(productContent);
-                
-                storeProducts.appendChild(productCard);
-            });
-        }
+function filterProductsByCategory(categoryId) {
+    storeProducts.innerHTML = '';
+    
+    const filteredProducts = categoryId 
+        ? products.filter(p => p.category === categoryId)
+        : products;
+    
+    filteredProducts.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        
+        const productImage = document.createElement('div');
+        productImage.className = 'product-image';
+        productImage.style.backgroundImage = `url('${product.image}')`;
+        
+        // Criar overlay com preço e botão
+        const productOverlay = document.createElement('div');
+        productOverlay.className = 'product-overlay';
+        
+        const productPrice = document.createElement('div');
+        productPrice.className = 'product-price';
+        productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
+        
+        const buyBtn = document.createElement('button');
+        buyBtn.className = 'product-buy-btn ripple';
+        buyBtn.innerHTML = '<i class="material-icons">shopping_cart</i> Comprar';
+        buyBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sendWhatsAppMessage(product);
+        });
+        
+        productOverlay.appendChild(productPrice);
+        productOverlay.appendChild(buyBtn);
+        productImage.appendChild(productOverlay);
+        
+        productCard.appendChild(productImage);
+        storeProducts.appendChild(productCard);
+    });
+}
         
         function sendWhatsAppMessage(product) {
             if (!storeData.whatsapp) {
@@ -1394,12 +1370,11 @@
                 tabToShow.classList.add('active');
             }
             
-            // Update active menu item
-            document.querySelectorAll('.nav-items li a').forEach(item => {
-                item.classList.remove('active');
-                const itemTabId = item.id.replace('-btn', '');
-                if (itemTabId === tabId) {
-                    item.classList.add('active');
+            // Update active tab button
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.id === `${tabId}-btn`) {
+                    button.classList.add('active');
                 }
             });
         }
