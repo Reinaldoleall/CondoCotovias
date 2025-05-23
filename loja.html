@@ -20,6 +20,13 @@
     aspect-ratio: 1/1; /* Mantém proporção quadrada */
     display: flex;
 }
+.product-title {
+    display: block;
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
 
 .product-card:hover {
     transform: translateY(-4px);
@@ -988,6 +995,11 @@
                     const nameDiv = document.createElement('div');
                     nameDiv.className = 'name';
                     nameDiv.innerHTML = highlightMatches(product.name, searchTerm);
+                    
+                    const productName = document.createElement('h3');
+productName.className = 'product-title';
+productName.textContent = product.name;
+productOverlay.appendChild(productName);
                     
                     const priceDiv = document.createElement('div');
                     priceDiv.className = 'price';
