@@ -951,6 +951,31 @@ contentFrame.onload = function() {
 
         
     </script>
+      <script>
+// Função para esconder a barra de navegação
+function hideAddressBar() {
+  if (window.innerHeight < window.outerHeight) {
+    document.body.style.height = window.outerHeight + 'px';
+  }
+  
+  setTimeout(function() {
+    window.scrollTo(0, 1);
+  }, 100);
+}
+
+// Executa quando a página carrega e quando muda de orientação
+window.addEventListener('load', function() {
+  hideAddressBar();
+  setTimeout(hideAddressBar, 1000); // Segunda chamada para garantir
+});
+
+window.addEventListener('orientationchange', hideAddressBar);
+
+// Força o redimensionamento para alguns dispositivos iOS
+window.addEventListener('resize', function() {
+  setTimeout(hideAddressBar, 300);
+});
+</script>
 </div>
 </body>
 </html>
