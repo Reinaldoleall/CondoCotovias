@@ -12,60 +12,43 @@
 </head>
 <style>
     /* Adicione isso ao seu estilo existente */
+/* Configurações de bloqueio de zoom sem afetar a barra de navegação */
 html {
   touch-action: pan-y;
   -ms-touch-action: pan-y;
-  overflow: hidden;
-  position: fixed;
   width: 100%;
   height: 100%;
 }
 
 body {
-  position: absolute;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  overscroll-behavior-y: contain;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
-/* Bloqueia zoom em todos os elementos */
+/* Bloqueio de zoom em elementos */
 * {
-  max-width: 100%;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
   -webkit-user-zoom: none;
   user-zoom: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+  max-width: 100%;
 }
 
-/* Desabilita o gesto de pinça no iOS */
-body {
-  overscroll-behavior-y: contain;
-}
-/* Adicione isso ao seu estilo existente */
-html, body {
-  height: auto;
-  min-height: 100vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-    .tela-fixa {
+/* Mantenha o resto do seu CSS original abaixo */
+.tela-fixa {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-}
-
-body {
-    width: 100%;
-    min-height: 100vh;
-    overscroll-behavior-y: contain;
-    touch-action: manipulation;
 }
 
 .content-frame {
