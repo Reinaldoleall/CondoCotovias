@@ -11,6 +11,24 @@
 
 </head>
 <style>
+    /* Esconde a barra de navegação no Chrome para Android */
+@media screen and (max-width: 767px) {
+  body {
+    height: 100vh;
+    height: -webkit-fill-available;
+    overflow: hidden;
+  }
+  
+  html {
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .tela-fixa {
+    height: 100vh;
+    height: -webkit-fill-available;
+  }
+}
     /* Adicione isso ao seu estilo existente */
 /* Configurações de bloqueio de zoom sem afetar a barra de navegação */
 html {
