@@ -56,10 +56,13 @@ body {
 }
 
 /* Container Principal - Ajustado para Materialize */
-.container {
-    width: 100%;
-    padding: 0 15px;
+ .container {
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 20px;
+    padding-top: 80px;
+    min-height: calc(100vh - 64px - 56px); /* Altura mínima */
+    overflow-y: auto; /* Permite scroll */
 }
 
 @media (min-width: 600px) {
