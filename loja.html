@@ -1050,16 +1050,20 @@
             const storeCategories = document.getElementById('store-categories');
             storeCategories.innerHTML = '';
             
-            // Botão "Todos"
-            const allCategoriesBtn = document.createElement('button');
-            allCategoriesBtn.className = 'category-badge active ripple';
-            allCategoriesBtn.textContent = 'Todos';
-            allCategoriesBtn.addEventListener('click', () => {
-                document.querySelectorAll('.category-badge').forEach(btn => btn.classList.remove('active'));
-                allCategoriesBtn.classList.add('active');
-                filterProductsByCategory(null);
-            });
-            storeCategories.appendChild(allCategoriesBtn);
+    // Botão "Todos"
+    const allCategoriesBtn = document.createElement('button');
+    allCategoriesBtn.className = 'category-badge active ripple';
+    allCategoriesBtn.textContent = 'Todos';
+    allCategoriesBtn.addEventListener('click', () => {
+        document.querySelectorAll('.category-badge').forEach(btn => btn.classList.remove('active'));
+        allCategoriesBtn.classList.add('active');
+        filterProductsByCategory(null);
+    });
+    storeCategories.appendChild(allCategoriesBtn);
+    
+    if (Object.keys(categories).length === 0) {
+        return;
+    }
             
             // Botões para cada categoria
             Object.entries(categories).forEach(([id, name]) => {
@@ -1079,6 +1083,11 @@
         function renderProducts(products) {
     const storeProducts = document.getElementById('store-products');
     storeProducts.innerHTML = '';
+    
+        if (products.length === 0) {
+        storeProducts.innerHTML = '<p class="text-center">Nenhum produto encontrado nesta categoria.</p>';
+        return;
+    }
     
     products.forEach(product => {
         const productCard = document.createElement('div');
@@ -1115,15 +1124,16 @@
 }
 
         // Filtra produtos por categoria
-        function filterProductsByCategory(categoryId) {
-            if (!storeData || !storeData.products) return;
-            
-            const filteredProducts = categoryId 
-                ? allProducts.filter(p => p.category === categoryId.toString())
-                : allProducts;
-            
-            renderProductsList(filteredProducts);
-        }
+// Filtra produtos por categoria
+function filterProductsByCategory(categoryId) {
+    if (!allProducts.length) return;
+    
+    const filteredProducts = categoryId 
+        ? allProducts.filter(p => p.category === categoryId.toString())
+        : allProducts;
+    
+    renderProducts(filteredProducts); // Chama a função correta
+}
 
         // Envia mensagem pelo WhatsApp
         function sendWhatsAppMessage(product) {
