@@ -11,6 +11,18 @@
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
          <style>
          
+         .product-name {
+    display: block;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+         
                  /* Estilos do carrinho */
         .cart-container {
             position: fixed;
@@ -1336,7 +1348,7 @@ function setupHeaderLogoEffect() {
     window.addEventListener('scroll', function() {
         const currentScroll = window.pageYOffset;
         
-        if (currentScroll > headerHeight * 0.5) { // Aparece quando 80% do header sair da tela
+        if (currentScroll > headerHeight * 0.1) { // Aparece quando 80% do header sair da tela
             if (!isLogoVisible) {
                 headerLogo.classList.add('visible');
                 mainLogo.classList.add('hidden');
@@ -1538,47 +1550,55 @@ function scrollToProduct(productId) {
         }
 
         // Renderiza os produtos
-        function renderProducts(products) {
-            const storeProducts = document.getElementById('store-products');
-            storeProducts.innerHTML = '';
-            
-            if (products.length === 0) {
-                storeProducts.innerHTML = '<p class="text-center">Nenhum produto encontrado nesta categoria.</p>';
-                return;
-            }
-            
-            products.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.setAttribute('data-id', product.id);
-                
-                const productImage = document.createElement('div');
-                productImage.className = 'product-image';
-                productImage.style.backgroundImage = `url('${product.image || 'https://via.placeholder.com/300'}')`;
-                
-                const productOverlay = document.createElement('div');
-                productOverlay.className = 'product-overlay';
-                
-                const productPrice = document.createElement('div');
-                productPrice.className = 'product-price';
-                productPrice.textContent = `R$ ${product.price?.toFixed(2) || '0,00'}`;
-                
-                const buyBtn = document.createElement('button');
-                buyBtn.className = 'product-buy-btn ripple';
-                buyBtn.innerHTML = '<i class="material-icons">shopping_cart</i> Comprar';
-                buyBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    addToCart(product);
-                });
-                
-                productOverlay.appendChild(productPrice);
-                productOverlay.appendChild(buyBtn);
-                productImage.appendChild(productOverlay);
-                
-                productCard.appendChild(productImage);
-                storeProducts.appendChild(productCard);
-            });
-        }
+function renderProducts(products) {
+    const storeProducts = document.getElementById('store-products');
+    storeProducts.innerHTML = '';
+    
+    if (products.length === 0) {
+        storeProducts.innerHTML = '<p class="text-center">Nenhum produto encontrado nesta categoria.</p>';
+        return;
+    }
+    
+    products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        productCard.setAttribute('data-id', product.id);
+        
+        const productImage = document.createElement('div');
+        productImage.className = 'product-image';
+        productImage.style.backgroundImage = `url('${product.image || 'https://via.placeholder.com/300'}')`;
+        
+        const productOverlay = document.createElement('div');
+        productOverlay.className = 'product-overlay';
+        
+        // Adiciona o nome do produto
+        const productName = document.createElement('div');
+        productName.className = 'product-name';
+        productName.textContent = product.name;
+        
+        const productPrice = document.createElement('div');
+        productPrice.className = 'product-price';
+        productPrice.textContent = `R$ ${product.price?.toFixed(2) || '0,00'}`;
+        
+        const buyBtn = document.createElement('button');
+        buyBtn.className = 'product-buy-btn ripple';
+        buyBtn.innerHTML = '<i class="material-icons">shopping_cart</i> Comprar';
+        buyBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            addToCart(product);
+        });
+        
+        // Adiciona os elementos na ordem correta
+        productOverlay.appendChild(productName);  // Nome primeiro
+        productOverlay.appendChild(productPrice); // Preço depois
+        productOverlay.appendChild(buyBtn);      // Botão por último
+        
+        productImage.appendChild(productOverlay);
+        
+        productCard.appendChild(productImage);
+        storeProducts.appendChild(productCard);
+    });
+}
 
         // Filtra produtos por categoria
 // Filtra produtos por categoria
