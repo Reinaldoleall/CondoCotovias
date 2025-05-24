@@ -9,6 +9,14 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
          <style>
+         
+         /* Adicione ao seu CSS existente */
+.no-products-message {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+    grid-column: 1 / -1;
+}
     /* Estilos para os produtos compactos */
 .product-card {
     background-color: var(--surface);
@@ -1022,28 +1030,38 @@
         }
         
         // Rola a página até o produto selecionado
-        function scrollToProduct(productId) {
-            const productElement = document.querySelector(`.product-card[data-id="${productId}"]`);
-            if (productElement) {
-                // Fecha os resultados da pesquisa
-                document.getElementById('search-results').classList.remove('show');
-                
-                // Rola até o produto
-                productElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
-                // Adiciona um destaque temporário
-                productElement.style.boxShadow = '0 0 0 3px rgba(74, 107, 255, 0.5)';
-                productElement.style.transition = 'box-shadow 0.3s ease';
+// Rola a página até o produto selecionado
+function scrollToProduct(productId) {
+    // Fecha os resultados da pesquisa
+    document.getElementById('search-results').classList.remove('show');
+    
+    // Limpa o campo de busca
+    document.getElementById('product-search').value = '';
+    
+    // Mostra todos os produtos novamente
+    renderProducts(allProducts);
+    
+    // Aguarda um breve momento para o DOM atualizar
+    setTimeout(() => {
+        const productElement = document.querySelector(`.product-card[data-id="${productId}"]`);
+        if (productElement) {
+            // Rola até o produto
+            productElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Adiciona um destaque temporário
+            productElement.style.boxShadow = '0 0 0 3px rgba(74, 107, 255, 0.5)';
+            productElement.style.transition = 'box-shadow 0.3s ease';
+            
+            setTimeout(() => {
+                productElement.style.boxShadow = 'var(--elevation-4)';
                 
                 setTimeout(() => {
-                    productElement.style.boxShadow = 'var(--elevation-4)';
-                    
-                    setTimeout(() => {
-                        productElement.style.boxShadow = '';
-                    }, 1000);
+                    productElement.style.boxShadow = '';
                 }, 1000);
-            }
+            }, 1000);
         }
+    }, 100);
+}
 
         // Renderiza as categorias
         function renderCategories(categories) {
