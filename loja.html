@@ -541,12 +541,14 @@
             min-height: 100vh;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            padding-top: 80px;
-        }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-top: 80px;
+    min-height: calc(100vh - 64px - 56px); /* Altura mínima */
+    overflow-y: auto; /* Permite scroll */
+}
         
         /* Typography */
         h1, h2, h3, h4, h5, h6 {
