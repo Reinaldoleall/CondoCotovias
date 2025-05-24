@@ -535,20 +535,22 @@ body {
 </head>
 <style>
   img {
-  width: 120px;
+  width: 150px;
   height: auto;
-  object-fit: contain;
-  display: block;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            border-radius: 10px;
+  border-radius: 10px;
+  grid-template-columns: repeat(3, 1fr); /* Duas colunas */
+  gap: 0px; /* Espaço entre os itens */
+  padding: 0px;
+margin-bottom: 3px; /* Espaço abaixo de cada loja */
 }
 </style>
 <body>
     <div class="container">
-       ____________________<h1>Estabelecimentos</h1>
+       __________________________<h1>Estabelecimentos</h1>__________________________
+       <br><br>
         <div id="stores-list" class="stores-grid"></div>
     </div>
-
     <script>
         // Configuração do Firebase (use a mesma do seu sistema)
         const firebaseConfig = {
@@ -584,7 +586,7 @@ body {
                                 <img src="${storeData.logo || 'https://via.placeholder.com/300'}" alt="${storeData.name}" class="store-logo">
                                 <div class="store-info">
                                     <h3 class="store-name">${storeData.name}</h3>
-                                    <p class="store-description">${storeData.description || 'Loja virtual'}</p>
+<br>
                                     <a href="lojas.html?userId=${userId}" class="visit-btn"></a>
                                     
                                 </div>
