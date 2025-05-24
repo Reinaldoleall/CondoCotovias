@@ -24,6 +24,20 @@
     aspect-ratio: 1/1; /* Mantém proporção quadrada */
 }
 
+/* Adicionar ao seu CSS existente */
+.product-buy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.product-overlay {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
 .product-image {
     height: 100%; /* Ocupa todo o espaço do card */
     background-size: cover;
@@ -671,6 +685,10 @@
                 <i class="material-icons">store</i>
                 <span>Visualizar Loja</span>
             </button>
+          <button id="store-view-btn" class="tab-button ripple" onclick="window.open('https://postimages.org/', '_blank')">
+    <i class="material-icons">image</i>
+    <span>imagem URL</span>
+</button>
         </div>
     </header>
 
@@ -1216,7 +1234,7 @@ function renderProducts() {
         productImage.className = 'product-image';
         productImage.style.backgroundImage = `url('${product.image}')`;
         
-        // Criar overlay com preço e botão
+        // Criar overlay com preço e botões de ação
         const productOverlay = document.createElement('div');
         productOverlay.className = 'product-overlay';
         
@@ -1224,38 +1242,119 @@ function renderProducts() {
         productPrice.className = 'product-price';
         productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
         
-        const buyBtn = document.createElement('button');
-        buyBtn.className = 'product-buy-btn ripple';
-        buyBtn.innerHTML = '<i class="material-icons">shopping_cart</i> Comprar';
-        buyBtn.addEventListener('click', (e) => {
+        // Container para botões de ação
+        const actionButtons = document.createElement('div');
+        actionButtons.style.display = 'flex';
+        actionButtons.style.gap = '8px';
+        actionButtons.style.width = '100%';
+        
+        // Botão Editar
+        const editBtn = document.createElement('button');
+        editBtn.className = 'product-buy-btn ripple';
+        editBtn.innerHTML = '<i class="material-icons">edit</i>';
+        editBtn.style.flex = '1';
+        editBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            sendWhatsAppMessage(product);
+            editProduct(product);
         });
         
+        // Botão Excluir
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'product-buy-btn ripple';
+        deleteBtn.innerHTML = '<i class="material-icons">delete</i>';
+        deleteBtn.style.flex = '1';
+        deleteBtn.style.backgroundColor = '#b00020';
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            deleteProduct(product.id);
+        });
+        
+        actionButtons.appendChild(editBtn);
+        actionButtons.appendChild(deleteBtn);
+        
         productOverlay.appendChild(productPrice);
-        productOverlay.appendChild(buyBtn);
+        productOverlay.appendChild(actionButtons);
         productImage.appendChild(productOverlay);
         
         productCard.appendChild(productImage);
         productsList.appendChild(productCard);
     });
 }
+
+function editProduct(product) {
+    // Preencher o formulário com os dados do produto
+    productNameInput.value = product.name;
+    productDescInput.value = product.description;
+    productPriceInput.value = product.price;
+    productImageInput.value = product.image;
+    productCategorySelect.value = product.category || '';
+    
+    // Alterar o botão de adicionar para salvar edição
+    addProductBtn.innerHTML = '<i class="material-icons">save</i> Salvar Alterações';
+    addProductBtn.onclick = function() {
+        saveEditedProduct(product.id);
+    };
+    
+    // Rolagem suave até o formulário
+    document.getElementById('products-config').scrollIntoView({ behavior: 'smooth' });
+}
+
+function saveEditedProduct(productId) {
+    const name = productNameInput.value.trim();
+    const description = productDescInput.value.trim();
+    const price = parseFloat(productPriceInput.value);
+    const image = productImageInput.value.trim();
+    const category = productCategorySelect.value;
+    
+    if (!name || !description || isNaN(price) || price <= 0) {
+        showAlert('error', 'Por favor, preencha todos os campos obrigatórios (nome, descrição e preço válido)');
+        return;
+    }
+    
+    const productData = {
+        name,
+        description,
+        price,
+        image: image || 'https://via.placeholder.com/300',
+        category: category || null
+    };
+    
+    const productRef = database.ref('stores/' + currentUser.uid + '/products/' + productId);
+    
+    productRef.update(productData)
+        .then(() => {
+            // Resetar o formulário e o botão
+            productNameInput.value = '';
+            productDescInput.value = '';
+            productPriceInput.value = '';
+            productImageInput.value = '';
+            productCategorySelect.value = '';
+            
+            addProductBtn.innerHTML = '<i class="material-icons">add_shopping_cart</i> Adicionar Produto';
+            addProductBtn.onclick = addProduct;
+            
+            showAlert('success', 'Produto atualizado com sucesso!');
+        })
+        .catch((error) => {
+            showAlert('error', error.message);
+        });
+}
         
-        function deleteProduct(productId) {
-            if (!confirm('Tem certeza que deseja excluir este produto?')) {
-                return;
-            }
-            
-            const productRef = database.ref('stores/' + currentUser.uid + '/products/' + productId);
-            
-            productRef.remove()
-                .then(() => {
-                    showAlert('success', 'Produto removido com sucesso!');
-                })
-                .catch((error) => {
-                    showAlert('error', error.message);
-                });
-        }
+function deleteProduct(productId) {
+    if (!confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
+        return;
+    }
+    
+    const productRef = database.ref('stores/' + currentUser.uid + '/products/' + productId);
+    
+    productRef.remove()
+        .then(() => {
+            showAlert('success', 'Produto removido com sucesso!');
+        })
+        .catch((error) => {
+            showAlert('error', error.message);
+        });
+}
         
         // Store View Functions
         function showStoreView() {
