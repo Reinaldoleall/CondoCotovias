@@ -17,6 +17,70 @@
     color: var(--text-secondary);
     grid-column: 1 / -1;
 }
+
+/* Adicione ao seu CSS existente */
+.app-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centraliza os itens */
+    position: relative; /* Para posicionar o logo absolutamente */
+}
+
+    .app-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        height: 64px; /* Altura fixa para o header */
+        transition: all 0.3s ease;
+    }
+    
+    .store-logo-header {
+        width: 50px; /* Aumentei o tamanho */
+        height: 50px; /* Aumentei o tamanho */
+        border-radius: 6px; /* Cantos mais arredondados */
+        object-fit: cover;
+        border: 2px solid white;
+        position: absolute;
+        left: 50%; /* Centraliza horizontalmente */
+        transform: translateX(-50%) translateY(-10px); /* Ajuste fino de posição */
+        transition: all 0.3s ease;
+        opacity: 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .store-logo-header.visible {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0); /* Posição final centralizada */
+    }
+    
+    .app-title {
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Quando o logo está visível, ajustamos o título */
+    .store-logo-header.visible + .app-title {
+        transform: translateX(25px); /* Empurra o título para a direita */
+    }
+    
+    .store-header {
+        transition: transform 0.3s ease;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .main-logo {
+        transition: all 0.3s ease;
+        width: 120px;
+        height: 120px;
+    }
+    
+    .main-logo.hidden {
+        opacity: 0;
+        transform: scale(0.8);
+    }
     /* Estilos para os produtos compactos */
 .product-card {
     background-color: var(--surface);
@@ -846,11 +910,12 @@
 <body>
     <div id="store-view-container">
         <div class="app-bar">
+            <img src="" alt="Logo da Loja" class="store-logo-header" id="store-view-logo-header">
             <h1 class="app-title" id="store-view-name"></h1>
         </div>
         
         <div class="store-header" id="store-view-header">
-            <img src="" alt="Logo da Loja" class="store-logo" id="store-view-logo">
+            <img src="" alt="Logo da Loja" class="store-logo main-logo" id="store-view-logo">
             <h1 id="store-view-title"></h1>
             <p id="store-view-desc"></p>
         </div>
@@ -912,10 +977,15 @@
                 
                 if (storeData) {
                     // Atualiza o cabeçalho da loja
+                    const logoUrl = storeData.logo || 'https://via.placeholder.com/150';
                     document.getElementById('store-view-name').textContent = storeData.name;
                     document.getElementById('store-view-title').textContent = storeData.name;
                     document.getElementById('store-view-desc').textContent = storeData.description || '';
-                    document.getElementById('store-view-logo').src = storeData.logo || 'https://via.placeholder.com/150';
+                    
+                    // Sincroniza ambos os logos
+                    document.getElementById('store-view-logo').src = logoUrl;
+                    document.getElementById('store-view-logo-header').src = logoUrl;
+                    
                     document.getElementById('store-view-header').style.setProperty('--store-primary-color', storeData.color || '#6200ee');
                     
                     // Verifica se existem produtos
@@ -940,7 +1010,39 @@
                     window.location.href = 'index.html';
                 }
             });
+            
+            
+            // Configura o efeito
+            setupHeaderLogoEffect();
         }
+        
+        // Adicione esta função no seu script
+function setupHeaderLogoEffect() {
+    const storeHeader = document.querySelector('.store-header');
+    const mainLogo = document.getElementById('store-view-logo');
+    const headerLogo = document.getElementById('store-view-logo-header');
+    const headerHeight = storeHeader.offsetHeight;
+    
+    let isLogoVisible = false;
+    
+    window.addEventListener('scroll', function() {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > headerHeight * 0.5) { // Aparece quando 80% do header sair da tela
+            if (!isLogoVisible) {
+                headerLogo.classList.add('visible');
+                mainLogo.classList.add('hidden');
+                isLogoVisible = true;
+            }
+        } else {
+            if (isLogoVisible) {
+                headerLogo.classList.remove('visible');
+                mainLogo.classList.remove('hidden');
+                isLogoVisible = false;
+            }
+        }
+    });
+}
 
         // Configura a funcionalidade de pesquisa
         function setupSearch() {
