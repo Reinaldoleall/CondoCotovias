@@ -72,6 +72,8 @@
         }
 
         .app-title {
+          z-index: 1000;
+          box-shadow: 0 0px 0px rgba(0,0,0,0.9);
             font-size: 1.25rem;
             font-weight: 500;
             margin: 0;
@@ -103,8 +105,8 @@
         }
         
         .store-logo {
-            width: 120px;
-            height: 120px;
+            width: 100%;
+            height: 100%;
             border-radius: 12px;
             object-fit: cover;
             margin-bottom: 16px;
@@ -120,11 +122,11 @@
         }
         
         .store-logo-header {
-            width: 50px;
+            width: 100%;
             height: 50px;
             border-radius: 6px;
             object-fit: cover;
-            border: 2px solid white;
+            
             position: absolute;
             left: 50%;
             transform: translateX(-50%) translateY(-10px);
@@ -619,6 +621,7 @@
         </nav>
         
         <div class="store-header" id="store-view-header">
+<br> <br> <br><br> <br> <br>
             <img src="" alt="Logo da Loja" class="store-logo main-logo" id="store-view-logo">
             <h1 id="store-view-title"></h1>
             <p id="store-view-desc"></p>
