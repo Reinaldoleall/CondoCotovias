@@ -10,255 +10,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
-
-        /* Estilos do Botão Flutuante do Carrinho */
-.cart-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-}
-
-.cart-button {
-    background-color: var(--primary-color);
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--elevation-4);
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.3s, background-color 0.3s;
-}
-
-.cart-button:hover {
-    background-color: var(--primary-dark);
-    transform: scale(1.1);
-}
-
-.cart-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: var(--error);
-    color: white;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-/* Painel do Carrinho */
-.cart-panel {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 90%;
-    max-width: 400px;
-    max-height: 70vh;
-    background-color: var(--surface);
-    border-radius: 8px;
-    box-shadow: var(--elevation-8);
-    padding: 16px;
-    display: none;
-    flex-direction: column;
-    z-index: 1000;
-    overflow-y: auto;
-    animation: fadeIn 0.3s ease;
-}
-
-.cart-panel.show {
-    display: flex;
-}
-
-/* Itens do Carrinho */
-.cart-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-
-.cart-item-image {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-right: 12px;
-}
-
-.cart-item-info {
-    flex: 1;
-}
-
-.cart-item-name {
-    font-weight: 500;
-    margin-bottom: 4px;
-}
-
-.cart-item-price {
-    color: var(--primary-color);
-    font-weight: 500;
-}
-
-.cart-item-actions {
-    display: flex;
-    align-items: center;
-}
-
-.cart-item-actions button {
-    background: none;
-    border: none;
-    color: var(--primary-color);
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0 8px;
-    transition: color 0.2s;
-}
-
-.cart-item-actions button:hover {
-    color: var(--primary-dark);
-}
-
-.cart-item-quantity {
-    margin: 0 8px;
-    min-width: 20px;
-    text-align: center;
-}
-
-/* Total e Ações do Carrinho */
-.cart-total {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(0,0,0,0.1);
-    font-weight: 500;
-    font-size: 1.1rem;
-    display: flex;
-    justify-content: space-between;
-}
-
-.cart-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-}
-
-.cart-actions button {
-    flex: 1;
-    padding: 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-#clear-cart {
-    background-color: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-}
-
-#clear-cart:hover {
-    background-color: rgba(0,0,0,0.05);
-}
-
-#checkout {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-}
-
-#checkout:hover {
-    background-color: var(--primary-dark);
-}
-
-/* Resumo do Carrinho */
-.cart-summary {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    z-index: 2000;
-    max-width: 90%;
-    max-height: 90vh;
-    overflow: auto;
-}
-
-.cart-summary.show {
-    display: block;
-}
-
-#send-whatsapp {
-    background-color: #25D366;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 4px;
-    margin-top: 20px;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#send-whatsapp:hover {
-    background-color: #128C7E;
-}
-
-#close-summary {
-    background-color: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 12px;
-    border-radius: 4px;
-    margin-top: 10px;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#close-summary:hover {
-    background-color: rgba(0,0,0,0.05);
-}
-
-/* Overlay */
-.overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 1500;
-}
-
-.overlay.show {
-    display: block;
-}
-
-/* Animação */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
         :root {
             --primary-color: #6200ee;
             --primary-dark: #3700b3;
@@ -1024,7 +775,10 @@
     <div class="cart-summary" id="cart-summary">
         <h2>Resumo do Pedido</h2>
         <div id="summary-content"></div>
-        <button class="btn" id="send-whatsapp">Enviar pelo WhatsApp</button>
+       <!-- Substitua o botão existente no cart-summary por este: -->
+<button class="btn" id="send-whatsapp" onclick="sendCartToWhatsApp()">
+    <i class="material-icons">whatsapp</i> Enviar pelo WhatsApp
+</button>
         <button class="btn btn-outlined" id="close-summary">Fechar</button>
     </div>
     <div class="product-modal" id="product-modal">
@@ -1629,35 +1383,67 @@ function addToCart(product) {
             cartSummary.classList.add('show');
         }
         
-        function sendCartToWhatsApp() {
-            if (!storeData || !storeData.whatsapp) {
-                alert('Esta loja não configurou um número de WhatsApp para contato.');
-                return;
-            }
-            
-            let message = `*Pedido da Loja ${storeData.name}*\n\n`;
-            let total = 0;
-            
-            cart.forEach(item => {
-                const product = allProducts.find(p => p.id === item.id);
-                const itemTotal = product.price * item.quantity;
-                total += itemTotal;
-                
-                message += `✔ ${product.name} - ${item.quantity}x - R$ ${itemTotal.toFixed(2)}\n`;
-            });
-            
-            message += `\n*Total: R$ ${total.toFixed(2)}*`;
-            
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/${storeData.whatsapp}?text=${encodedMessage}`, '_blank');
-            
-            // Fecha o resumo e limpa o carrinho
-            document.getElementById('overlay').classList.remove('show');
-            document.getElementById('cart-summary').classList.remove('show');
-            cart = [];
-            updateCart();
-            document.getElementById('cart-panel').classList.remove('show');
+function sendCartToWhatsApp() {
+    if (!storeData || !storeData.whatsapp) {
+        alert('Esta loja não configurou um número de WhatsApp para contato.');
+        return;
+    }
+    
+    let message = `*Pedido da Loja ${storeData.name}*\n\n`;
+    let total = 0;
+    
+    cart.forEach(item => {
+        const product = allProducts.find(p => p.id === item.id);
+        const itemTotal = product.price * item.quantity;
+        total += itemTotal;
+        
+        message += `✔ ${product.name} - ${item.quantity}x - R$ ${itemTotal.toFixed(2)}\n`;
+    });
+    
+    message += `\n*Total: R$ ${total.toFixed(2)}*`;
+    
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${storeData.whatsapp}?text=${encodedMessage}`;
+    
+    // Tentativa de abrir no navegador externo
+    try {
+        // Para Android WebView
+        if (window.Android && window.Android.openExternalBrowser) {
+            window.Android.openExternalBrowser(whatsappUrl);
+        } 
+        // Para iOS WKWebView
+        else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.openExternalBrowser) {
+            window.webkit.messageHandlers.openExternalBrowser.postMessage(whatsappUrl);
         }
+        // Para navegadores normais ou WebViews sem suporte ao método acima
+        else {
+            // Cria um link temporário e dispara o clique
+            const link = document.createElement('a');
+            link.href = whatsappUrl;
+            link.target = '_system'; // Tenta forçar abertura externa em alguns WebViews
+            link.rel = 'noopener noreferrer';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Fallback: abre em nova aba se o _system não funcionar
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+            }, 500);
+        }
+    } catch (e) {
+        console.error('Erro ao abrir WhatsApp:', e);
+        // Fallback final
+        window.open(whatsappUrl, '_blank');
+    }
+    
+    // Fecha o resumo e limpa o carrinho
+    document.getElementById('overlay').classList.remove('show');
+    document.getElementById('cart-summary').classList.remove('show');
+    cart = [];
+    updateCart();
+    document.getElementById('cart-panel').classList.remove('show');
+}
 
         // Carrega a loja quando a página é aberta
         window.onload = loadStore;
