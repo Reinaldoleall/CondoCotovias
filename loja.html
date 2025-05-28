@@ -775,10 +775,7 @@
     <div class="cart-summary" id="cart-summary">
         <h2>Resumo do Pedido</h2>
         <div id="summary-content"></div>
-       <!-- Substitua o botão existente no cart-summary por este: -->
-<button class="btn" id="send-whatsapp" onclick="sendCartToWhatsApp()">
-    <i class="material-icons">whatsapp</i> Enviar pelo WhatsApp
-</button>
+        <button class="btn" id="send-whatsapp">Enviar pelo WhatsApp</button>
         <button class="btn btn-outlined" id="close-summary">Fechar</button>
     </div>
     <div class="product-modal" id="product-modal">
@@ -1383,67 +1380,35 @@ function addToCart(product) {
             cartSummary.classList.add('show');
         }
         
-function sendCartToWhatsApp() {
-    if (!storeData || !storeData.whatsapp) {
-        alert('Esta loja não configurou um número de WhatsApp para contato.');
-        return;
-    }
-    
-    let message = `*Pedido da Loja ${storeData.name}*\n\n`;
-    let total = 0;
-    
-    cart.forEach(item => {
-        const product = allProducts.find(p => p.id === item.id);
-        const itemTotal = product.price * item.quantity;
-        total += itemTotal;
-        
-        message += `✔ ${product.name} - ${item.quantity}x - R$ ${itemTotal.toFixed(2)}\n`;
-    });
-    
-    message += `\n*Total: R$ ${total.toFixed(2)}*`;
-    
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${storeData.whatsapp}?text=${encodedMessage}`;
-    
-    // Tentativa de abrir no navegador externo
-    try {
-        // Para Android WebView
-        if (window.Android && window.Android.openExternalBrowser) {
-            window.Android.openExternalBrowser(whatsappUrl);
-        } 
-        // Para iOS WKWebView
-        else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.openExternalBrowser) {
-            window.webkit.messageHandlers.openExternalBrowser.postMessage(whatsappUrl);
-        }
-        // Para navegadores normais ou WebViews sem suporte ao método acima
-        else {
-            // Cria um link temporário e dispara o clique
-            const link = document.createElement('a');
-            link.href = whatsappUrl;
-            link.target = '_system'; // Tenta forçar abertura externa em alguns WebViews
-            link.rel = 'noopener noreferrer';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        function sendCartToWhatsApp() {
+            if (!storeData || !storeData.whatsapp) {
+                alert('Esta loja não configurou um número de WhatsApp para contato.');
+                return;
+            }
             
-            // Fallback: abre em nova aba se o _system não funcionar
-            setTimeout(() => {
-                window.open(whatsappUrl, '_blank');
-            }, 500);
+            let message = `*Pedido da Loja ${storeData.name}*\n\n`;
+            let total = 0;
+            
+            cart.forEach(item => {
+                const product = allProducts.find(p => p.id === item.id);
+                const itemTotal = product.price * item.quantity;
+                total += itemTotal;
+                
+                message += `✔ ${product.name} - ${item.quantity}x - R$ ${itemTotal.toFixed(2)}\n`;
+            });
+            
+            message += `\n*Total: R$ ${total.toFixed(2)}*`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${storeData.whatsapp}?text=${encodedMessage}`, '_blank');
+            
+            // Fecha o resumo e limpa o carrinho
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('cart-summary').classList.remove('show');
+            cart = [];
+            updateCart();
+            document.getElementById('cart-panel').classList.remove('show');
         }
-    } catch (e) {
-        console.error('Erro ao abrir WhatsApp:', e);
-        // Fallback final
-        window.open(whatsappUrl, '_blank');
-    }
-    
-    // Fecha o resumo e limpa o carrinho
-    document.getElementById('overlay').classList.remove('show');
-    document.getElementById('cart-summary').classList.remove('show');
-    cart = [];
-    updateCart();
-    document.getElementById('cart-panel').classList.remove('show');
-}
 
         // Carrega a loja quando a página é aberta
         window.onload = loadStore;
