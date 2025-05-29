@@ -11,6 +11,28 @@
 
 </head>
 <style>
+/* Estilo para o modal de login de lojas */
+.input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--cor-borda);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.input-container i {
+    margin-right: 10px;
+    color: var(--cor-texto-secundario);
+}
+
+#storeUsername, #storePassword
+{
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+}
     /* Esconde a barra de navegação no Chrome para Android */
 @media screen and (max-width: 767px) {
   body {
@@ -560,10 +582,10 @@ body {
         
         
         
-                <div class="mdc-list-item" data-page="criarlojas.html">
-            <i class="material-icons mdc-list-item__graphic">local_mall</i>
-            <span></span>Crie sua loja
-        </div>
+<div class="mdc-list-item" id="createStoreBtn">
+    <i class="material-icons mdc-list-item__graphic">local_mall</i>
+    <span>Crie sua loja</span>
+</div>
                 <div class="mdc-list-item" data-page="lojas.html">
             <i class="material-icons mdc-list-item__graphic"></i>
             <span></span>
@@ -861,6 +883,113 @@ window.addEventListener('orientationchange', hideAddressBar);
 // Força o redimensionamento para alguns dispositivos iOS
 window.addEventListener('resize', function() {
   setTimeout(hideAddressBar, 300);
+});
+
+// Lista de usuários autorizados (você pode editar esta lista)
+const authorizedUsers = [
+    { username: "reinaldoleal.la@gmail.com", password: "R3inald0", name: "Administrador" },
+    { username: "loja1", password: "12e4567890", name: "Proprietário da Loja 1" },
+    // Adicione mais usuários conforme necessário
+];
+
+// Modal de login para criação de lojas
+const storeLoginModal = `
+<div class="password-modal" id="storeLoginModal">
+    <div class="password-modal-content">
+        <div class="password-modal-header">
+            <i class="material-icons">store</i>
+            <h2>Acesso à Criação de Lojas</h2>
+        </div>
+        
+        <div class="password-modal-body">
+            <div class="input-container">
+                <i class="material-icons">person</i>
+                <input type="text" id="storeUsername" placeholder="Usuário">
+            </div>
+            
+            <div class="password-input-container">
+                <i class="material-icons">lock</i>
+                <input type="password" id="storePassword" placeholder="Senha">
+            </div>
+            
+            <div class="password-error" id="storeLoginError" style="display: none;">
+                <i class="material-icons">error</i>
+                <span>Usuário ou senha incorretos</span>
+            </div>
+        </div>
+        
+        <div class="password-modal-footer">
+            <button class="password-button cancel" id="cancelStoreLogin">
+                Cancelar
+            </button>
+            <button class="password-button submit" id="submitStoreLogin">
+                Acessar
+            </button>
+        </div>
+    </div>
+</div>
+`;
+
+// Adiciona o modal ao body
+document.body.insertAdjacentHTML('beforeend', storeLoginModal);
+
+// Elementos do modal
+const storeModal = document.getElementById('storeLoginModal');
+const storeUsername = document.getElementById('storeUsername');
+const storePassword = document.getElementById('storePassword');
+const storeLoginError = document.getElementById('storeLoginError');
+const cancelStoreLogin = document.getElementById('cancelStoreLogin');
+const submitStoreLogin = document.getElementById('submitStoreLogin');
+
+// Configura o botão de criar loja
+document.getElementById('createStoreBtn').addEventListener('click', () => {
+    storeModal.style.display = 'flex';
+    storeUsername.focus();
+});
+
+// Função para verificar login
+function checkStoreLogin(username, password) {
+    return authorizedUsers.find(user => 
+        user.username === username && user.password === password
+    );
+}
+
+// Configura o botão de login
+submitStoreLogin.addEventListener('click', () => {
+    const username = storeUsername.value.trim();
+    const password = storePassword.value;
+    
+    const user = checkStoreLogin(username, password);
+    
+    if (user) {
+        // Login válido
+        storeModal.style.display = 'none';
+        storeLoginError.style.display = 'none';
+        storeUsername.value = '';
+        storePassword.value = '';
+        
+        // Carrega a página de criação de lojas
+        loadPage('criarlojas.html', 'Crie sua loja');
+    } else {
+        // Login inválido
+        storeLoginError.style.display = 'block';
+        storePassword.focus();
+    }
+});
+
+// Configura o botão de cancelar
+cancelStoreLogin.addEventListener('click', () => {
+    storeModal.style.display = 'none';
+    storeLoginError.style.display = 'none';
+    storeUsername.value = '';
+    storePassword.value = '';
+});
+
+// Permite enviar com Enter
+storePassword.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        submitStoreLogin.click();
+    }
 });
 </script>
 </div>
