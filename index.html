@@ -11,6 +11,20 @@
 
 </head>
 <style>
+/* Estilo para a checkbox "Lembrar de mim" */
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--cor-secundaria);
+    cursor: pointer;
+}
+
+label[for="rememberMe"] {
+    font-size: 0.9rem;
+    color: var(--cor-texto-secundario);
+    cursor: pointer;
+    user-select: none;
+}
 /* Estilo para o modal de login de lojas */
 .input-container {
     display: flex;
@@ -902,6 +916,10 @@ const storeLoginModal = `
         </div>
         
         <div class="password-modal-body">
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                <input type="checkbox" id="rememberMe" checked style="margin-right: 10px;">
+                <label for="rememberMe">Lembrar de mim</label>
+            </div>
             <div class="input-container">
                 <i class="material-icons">person</i>
                 <input type="text" id="storeUsername" placeholder="Usuário">
@@ -955,27 +973,98 @@ function checkStoreLogin(username, password) {
 }
 
 // Configura o botão de login
+// Adicione estas funções para gerenciar a sessão
+function saveSession(username) {
+    localStorage.setItem('storeLoggedIn', 'true');
+    localStorage.setItem('storeUsername', username);
+}
+
+function clearSession() {
+    localStorage.removeItem('storeLoggedIn');
+    localStorage.removeItem('storeUsername');
+}
+
+function checkSavedSession() {
+    const isLoggedIn = localStorage.getItem('storeLoggedIn') === 'true';
+    const username = localStorage.getItem('storeUsername');
+    
+    if (isLoggedIn && username) {
+        // Verifica se o usuário ainda está na lista de autorizados
+        const userExists = authorizedUsers.some(user => user.username === username);
+        if (userExists) {
+            return true;
+        } else {
+            clearSession();
+            return false;
+        }
+    }
+    return false;
+}
+
+// Modifique a função de login
 submitStoreLogin.addEventListener('click', () => {
+    const rememberMe = document.getElementById('rememberMe').checked;
     const username = storeUsername.value.trim();
     const password = storePassword.value;
     
     const user = checkStoreLogin(username, password);
     
     if (user) {
-        // Login válido
+      
+              if (rememberMe) {
+            saveSession(username);
+        }
+        // Salva a sessão
+        saveSession(username);
+        
+        // Fecha o modal e redireciona
         storeModal.style.display = 'none';
         storeLoginError.style.display = 'none';
         storeUsername.value = '';
         storePassword.value = '';
         
-        // Carrega a página de criação de lojas
         loadPage('criarlojas.html', 'Crie sua loja');
     } else {
-        // Login inválido
         storeLoginError.style.display = 'block';
         storePassword.focus();
     }
 });
+
+// Adicione esta verificação quando a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+    if (checkSavedSession() && window.location.href.includes('criarlojas.html')) {
+        // Se já estiver logado e na página de criação de lojas, permite o acesso
+        return;
+    }
+    
+    // Se tentar acessar a página diretamente sem estar logado
+    if (window.location.href.includes('criarlojas.html') && !checkSavedSession()) {
+        window.location.href = 'index.html'; // Ou sua página principal
+    }
+});
+
+// Adicione um botão de logout (opcional)
+function setupLogoutButton() {
+    const logoutBtn = document.createElement('button');
+    logoutBtn.innerHTML = '<i class="material-icons">logout</i> Sair';
+    logoutBtn.style.position = 'fixed';
+    logoutBtn.style.bottom = '20px';
+    logoutBtn.style.left = '20px';
+    logoutBtn.style.zIndex = '1000';
+    logoutBtn.classList.add('password-button', 'cancel');
+    
+    logoutBtn.addEventListener('click', () => {
+        clearSession();
+        window.location.href = 'index.html'; // Ou sua página principal
+    });
+    
+    document.body.appendChild(logoutBtn);
+}
+
+// Chame esta função quando entrar na página de criação de lojas
+if (window.location.href.includes('criarlojas.html')) {
+    setupLogoutButton();
+}
 
 // Configura o botão de cancelar
 cancelStoreLogin.addEventListener('click', () => {
