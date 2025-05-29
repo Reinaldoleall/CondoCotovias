@@ -2,535 +2,560 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>Condomínio Cotovias</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <meta name="theme-color" content="#2c3e50">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        /* Estilo para a checkbox "Lembrar de mim" */
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--cor-secundaria);
+            cursor: pointer;
+        }
 
+        label[for="rememberMe"] {
+            font-size: 0.9rem;
+            color: var(--cor-texto-secundario);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Estilo para o modal de login de lojas */
+        .login-input-container {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--cor-borda);
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+
+        .login-input-container:focus-within {
+            border-color: var(--cor-secundaria);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .login-input-container i {
+            margin-right: 12px;
+            color: var(--cor-texto-secundario);
+            font-size: 20px;
+        }
+
+        .login-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            font-family: var(--fonte-principal);
+            color: var(--cor-texto);
+            background: transparent;
+        }
+
+        .login-input::placeholder {
+            color: #95a5a6;
+            opacity: 1;
+        }
+
+        /* Ajustes específicos para o modal de lojas */
+        #storeLoginModal .password-modal-content {
+            max-width: 380px;
+            width: 90%;
+        }
+
+        #storeLoginModal .password-modal-header {
+            border-radius: 8px 8px 0 0;
+            padding: 24px;
+        }
+
+        #storeLoginModal .password-modal-body {
+            padding: 24px;
+        }
+
+        #storeLoginModal .password-modal-footer {
+            padding: 16px 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Esconde a barra de navegação no Chrome para Android */
+        @media screen and (max-width: 767px) {
+            body {
+                height: 100vh;
+                height: -webkit-fill-available;
+                overflow: hidden;
+            }
+            
+            html {
+                height: 100%;
+                overflow: hidden;
+            }
+            
+            .tela-fixa {
+                height: 100vh;
+                height: -webkit-fill-available;
+            }
+        }
+
+        /* Configurações de bloqueio de zoom e barra de navegação */
+        html {
+            touch-action: pan-y;
+            -ms-touch-action: pan-y;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            height: -webkit-fill-available;
+            -webkit-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            overscroll-behavior-y: contain;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: fixed;
+            overflow: hidden;
+        }
+
+        .tela-fixa {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            height: -webkit-fill-available;
+            overflow: hidden;
+        }
+
+        /* Bloqueio de zoom em elementos */
+        * {
+            -webkit-user-zoom: none;
+            user-zoom: none;
+            -webkit-text-size-adjust: none;
+            text-size-adjust: none;
+            max-width: 100%;
+        }
+
+        .content-frame {
+            -webkit-overflow-scrolling: touch;
+            overflow: auto;
+            overscroll-behavior-y: contain;
+        }
+
+        /* Esconde a barra de rolagem no WebView */
+        ::-webkit-scrollbar {
+            display: none;
+            width: 0 !important;
+            height: 0 !important;
+            -webkit-appearance: none;
+            background: transparent;
+        }
+
+        /* Remove o zoom e toques indesejados */
+        * {
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-text-size-adjust: none;
+            text-size-adjust: none;
+        }
+
+        /* Garante que o iframe ocupe todo o espaço */
+        .main-content {
+            position: relative;
+            height: calc(100vh - 64px);
+        }
+
+        .content-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Variáveis de Cores e Fontes */
+        :root {
+            --cor-primaria: #2c3e50;
+            --cor-secundaria: #3498db;
+            --cor-sucesso: #27ae60;
+            --cor-alerta: #f39c12;
+            --cor-erro: #e74c3c;
+            --cor-fundo: #f8fafc;
+            --cor-texto: #2d3436;
+            --cor-texto-secundario: #636e72;
+            --cor-borda: #dfe6e9;
+            --sombra-card: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --sombra-card-hover: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --fonte-principal: 'Roboto', 'Segoe UI', sans-serif;
+        }
+
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--fonte-principal);
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Estrutura Principal */
+        .drawer-container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 5;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease;
+        }
+
+        .overlay--visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Menu Lateral */
+        .mdc-drawer {
+            width: 280px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            left: -280px;
+            top: 0;
+            z-index: 10;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mdc-drawer--open {
+            transform: translateX(280px);
+        }
+
+        .mdc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mdc-list-item {
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .mdc-list-item:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .mdc-list-item[data-page="admin.html"] {
+            border-left-color: var(--cor-alerta);
+        }
+
+        .mdc-list-item__graphic {
+            margin-right: 24px;
+            color: var(--cor-texto-secundario);
+        }
+
+        /* Conteúdo da Aplicação */
+        .app-content {
+            flex: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+            padding-top: 0;
+        }
+
+        .main-content {
+            height: 100vh;
+            padding-top: 0;
+        }
+
+        .content-frame {
+            height: 100vh;
+            padding-top: 0;
+            margin-top: 0;
+        }
+
+        /* Barra superior */
+        .top-app-bar {
+            height: 64px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 4;
+        }
+
+        .menu-button {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+            color: var(--cor-texto);
+            transition: all 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background: white;
+            transform: scale(1.05);
+        }
+
+        .menu-button {
+            left: 85%;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0px;
+            margin-right: 16px;
+            color: var(--cor-texto);
+        }
+
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        /* Modal de Senha */
+        .password-modal {
+            position: fixed;
+            top: 0; left: 0;
+            right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 20;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .password-modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .password-modal-header {
+            background-color: var(--cor-primaria);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-modal-header i {
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .password-modal-body {
+            padding: 20px;
+        }
+
+        .password-input-container {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--cor-borda);
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .password-input-container i {
+            margin-right: 10px;
+            color: var(--cor-texto-secundario);
+        }
+
+        .password-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .password-error {
+            display: none;
+            color: var(--cor-erro);
+            margin-top: 10px;
+            font-size: 0.875rem;
+        }
+
+        .password-error i {
+            margin-right: 6px;
+        }
+
+        .password-modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--cor-borda);
+            text-align: right;
+        }
+
+        .password-button {
+            font-size: 0.875rem;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .password-button.cancel {
+            background-color: transparent;
+            color: var(--cor-texto-secundario);
+            margin-right: 8px;
+        }
+
+        .password-button.cancel:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .password-button.submit {
+            background-color: var(--cor-secundaria);
+            color: white;
+        }
+
+        .password-button.submit:hover {
+            background-color: #2980b9;
+        }
+
+        /* Botão de Ajuda */
+        .help-button {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background-color: var(--cor-secundaria);
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 100;
+            transition: 0.3s;
+        }
+
+        .help-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        /* Spinner */
+        .loading {
+            position: fixed;
+            top: 0; left: 0;
+            right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--cor-secundaria);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Ícones */
+        .material-icons {
+            font-size: 24px;
+            vertical-align: middle;
+        }
+
+        /* Animações */
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsividade */
+        @media (min-width: 1024px) {
+            .mdc-drawer {
+                position: relative;
+                left: 0;
+                transform: none;
+            }
+
+            .app-content {
+                margin-left: 280px;
+            }
+
+            .menu-button, .overlay {
+                display: none;
+            }
+        }
+
+        /* Estilo para a lista de lojas */
+        img {
+            width: 150px;
+            height: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0px;
+            padding: 0px;
+            margin-bottom: 3px;
+        }
+    </style>
 </head>
-<style>
-/* Estilo para a checkbox "Lembrar de mim" */
-input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--cor-secundaria);
-    cursor: pointer;
-}
-
-label[for="rememberMe"] {
-    font-size: 0.9rem;
-    color: var(--cor-texto-secundario);
-    cursor: pointer;
-    user-select: none;
-}
-/* Estilo para o modal de login de lojas */
-.input-container {
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--cor-borda);
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 15px;
-}
-
-.input-container i {
-    margin-right: 10px;
-    color: var(--cor-texto-secundario);
-}
-
-#storeUsername, #storePassword
-{
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 1rem;
-}
-    /* Esconde a barra de navegação no Chrome para Android */
-@media screen and (max-width: 767px) {
-  body {
-    height: 100vh;
-    height: -webkit-fill-available;
-    overflow: hidden;
-  }
-  
-  html {
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  .tela-fixa {
-    height: 100vh;
-    height: -webkit-fill-available;
-  }
-}
-    /* Adicione isso ao seu estilo existente */
-/* Configurações de bloqueio de zoom sem afetar a barra de navegação */
-/* Configurações de bloqueio de zoom e barra de navegação */
-html {
-  touch-action: pan-y;
-  -ms-touch-action: pan-y;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
-  width: 100%;
-  height: 100vh;
-  height: -webkit-fill-available;
-  -webkit-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-  overscroll-behavior-y: contain;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  position: fixed;
-  overflow: hidden;
-}
-
-.tela-fixa {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  height: -webkit-fill-available;
-  overflow: hidden;
-}
-
-/* Bloqueio de zoom em elementos */
-* {
-  -webkit-user-zoom: none;
-  user-zoom: none;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
-  max-width: 100%;
-}
-
-/* Restante do seu CSS permanece igual */
-
-.content-frame {
-    -webkit-overflow-scrolling: touch;
-    overflow: auto;
-    overscroll-behavior-y: contain;
-}
-
-/* Esconde a barra de rolagem no WebView */
-::-webkit-scrollbar {
-    display: none;
-    width: 0 !important;
-    height: 0 !important;
-    -webkit-appearance: none;
-    background: transparent;
-}
-
-/* Remove o zoom e toques indesejados */
-* {
-    touch-action: manipulation;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-text-size-adjust: none;
-    text-size-adjust: none;
-}
-
-/* Garante que o iframe ocupe todo o espaço */
-.main-content {
-    position: relative;
-    height: calc(100vh - 64px); /* altura total menos a barra superior */
-}
-
-.content-frame {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-    
-  /* Variáveis de Cores e Fontes */
-  :root {
-    --cor-primaria: #2c3e50;
-    --cor-secundaria: #3498db;
-    --cor-sucesso: #27ae60;
-    --cor-alerta: #f39c12;
-    --cor-erro: #e74c3c;
-    --cor-fundo: #f8fafc;
-    --cor-texto: #2d3436;
-    --cor-texto-secundario: #636e72;
-    --cor-borda: #dfe6e9;
-    --sombra-card: 0 4px 6px rgba(0, 0, 0, 0.05);
-    --sombra-card-hover: 0 6px 12px rgba(0, 0, 0, 0.1);
-    --fonte-principal: 'Roboto', 'Segoe UI', sans-serif;
-  }
-
-  /* Reset */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    font-family: var(--fonte-principal);
-    background-color: var(--cor-fundo);
-    color: var(--cor-texto);
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  /* Estrutura Principal */
-  .drawer-container {
-    display: flex;
-    height: 100vh;
-    position: relative;
-  }
-
-  .overlay {
-    position: fixed;
-    top: 0; left: 0;
-    right: 0; bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 5;
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.3s ease;
-  }
-
-  .overlay--visible {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  /* Menu Lateral */
-  .mdc-drawer {
-    width: 280px;
-    height: 100vh;
-    background-color: white;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-    position: fixed;
-    left: -280px;
-    top: 0;
-    z-index: 10;
-    transition: transform 0.3s ease;
-    overflow-y: auto;
-  }
-
-  .mdc-drawer--open {
-    transform: translateX(280px);
-  }
-
-  .mdc-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .mdc-list-item {
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: background 0.3s;
-    border-left: 4px solid transparent;
-  }
-
-  .mdc-list-item:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-
-  .mdc-list-item[data-page="admin.html"] {
-    border-left-color: var(--cor-alerta);
-  }
-
-  .mdc-list-item__graphic {
-    margin-right: 24px;
-    color: var(--cor-texto-secundario);
-  }
-
-  /* Conteúdo da Aplicação */
-  .app-content {
-    flex: 1;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    margin-left: 0;
-    transition: margin-left 0.3s ease;
-  }
-  
-  .app-content {
-    flex: 1;
-    height: 100vh;
-    margin-left: 0;
-    transition: margin-left 0.3s ease;
-    padding-top: 0; /* Remove qualquer padding superior */
-}
-
-.main-content {
-    height: 100vh; /* Ocupa toda a altura */
-    padding-top: 0;
-}
-
-.content-frame {
-    height: 100vh;
-    padding-top: 0;
-    margin-top: 0;
-}
-
-/* Remova ou substitua este bloco */
-.top-app-bar {
-    height: 64px;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 4;
-}
-
-.menu-button {
-    position: fixed;
-    top: 16px;
-    left: 16px;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    border: none;
-    cursor: pointer;
-    color: var(--cor-texto);
-    transition: all 0.3s ease;
-}
-
-.menu-button:hover {
-    background: white;
-    transform: scale(1.05);
-}
-  .menu-button {
-    left: 85%;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0px;
-    margin-right: 16px;
-    color: var(--cor-texto);
-  }
-
-  .page-title {
-    font-size: 1.25rem;
-    font-weight: 500;
-  }
-
-  .main-content {
-    flex: 1;
-    overflow: hidden;
-  }
-
-  .content-frame {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background-color: white;
-    display: block;
-  }
-
-  /* Modal de Senha */
-  .password-modal {
-    position: fixed;
-    top: 0; left: 0;
-    right: 0; bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 20;
-    display: none;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .password-modal-content {
-    background: white;
-    border-radius: 8px;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    animation: slideIn 0.3s ease-out;
-  }
-
-  .password-modal-header {
-    background-color: var(--cor-primaria);
-    color: white;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-  }
-
-  .password-modal-header i {
-    font-size: 2rem;
-    margin-right: 10px;
-  }
-
-  .password-modal-body {
-    padding: 20px;
-  }
-
-  .password-input-container {
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--cor-borda);
-    border-radius: 4px;
-    padding: 10px;
-    margin-top: 20px;
-  }
-
-  .password-input-container i {
-    margin-right: 10px;
-    color: var(--cor-texto-secundario);
-  }
-
-  .password-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 1rem;
-  }
-
-  .password-error {
-    display: none;
-    color: var(--cor-erro);
-    margin-top: 10px;
-    font-size: 0.875rem;
-  }
-
-  .password-error i {
-    margin-right: 6px;
-  }
-
-  .password-modal-footer {
-    padding: 16px 20px;
-    border-top: 1px solid var(--cor-borda);
-    text-align: right;
-  }
-
-  .password-button {
-    font-size: 0.875rem;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-
-  .password-button.cancel {
-    background-color: transparent;
-    color: var(--cor-texto-secundario);
-    margin-right: 8px;
-  }
-
-  .password-button.cancel:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-
-  .password-button.submit {
-    background-color: var(--cor-secundaria);
-    color: white;
-  }
-
-  .password-button.submit:hover {
-    background-color: #2980b9;
-  }
-
-  /* Botão de Ajuda */
-  .help-button {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 56px;
-    height: 56px;
-    background-color: var(--cor-secundaria);
-    border-radius: 50%;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    cursor: pointer;
-    z-index: 100;
-    transition: 0.3s;
-  }
-
-  .help-button:hover {
-    background-color: #2980b9;
-    transform: scale(1.05);
-  }
-
-  /* Spinner */
-  .loading {
-    position: fixed;
-    top: 0; left: 0;
-    right: 0; bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-
-  .loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid var(--cor-secundaria);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  /* Ícones */
-  .material-icons {
-    font-size: 24px;
-    vertical-align: middle;
-  }
-
-  /* Animações */
-  @keyframes slideIn {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  /* Responsividade */
-  @media (min-width: 1024px) {
-    .mdc-drawer {
-      position: relative;
-      left: 0;
-      transform: none;
-    }
-
-    .app-content {
-      margin-left: 280px;
-    }
-
-    .menu-button, .overlay {
-      display: none;
-    }
-  }
-</style>
 <body>
-  <div class="tela-fixa">
-    <!-- conteúdo aqui -->
-  
+<div class="tela-fixa">
     <div class="drawer-container">
         <!-- Overlay para fechar o menu -->
         <div class="overlay" id="overlay"></div>
@@ -540,547 +565,411 @@ body {
             <div class="loading-spinner"></div>
         </div>
 
-        <!-- Modal de senha -->
-<!-- Substitua a seção do modal de senha por este código -->
-<div class="password-modal" id="passwordModal">
-    <div class="password-modal-content">
-        <div class="password-modal-header">
-            <i class="material-icons">admin_panel_settings</i>
-            <h2>Acesso Administrativo</h2>
-        </div>
-        
-        <div class="password-modal-body">
-            <p>Esta área é restrita a administradores autorizados. Por favor, autentique-se para continuar.</p>
-            
-            <div class="password-input-container">
-                <i class="material-icons">lock</i>
-                <input type="password" class="password-input" id="adminPassword" placeholder="Digite sua senha">
+        <!-- Modal de senha administrativa -->
+        <div class="password-modal" id="passwordModal">
+            <div class="password-modal-content">
+                <div class="password-modal-header">
+                    <i class="material-icons">admin_panel_settings</i>
+                    <h2>Acesso Administrativo</h2>
+                </div>
+                
+                <div class="password-modal-body">
+                    <p>Esta área é restrita a administradores autorizados. Por favor, autentique-se para continuar.</p>
+                    
+                    <div class="password-input-container">
+                        <i class="material-icons">lock</i>
+                        <input type="password" class="password-input" id="adminPassword" placeholder="Digite sua senha">
+                    </div>
+                    
+                    <div class="password-error" id="passwordError">
+                        <i class="material-icons">error</i>
+                        <span>Senha incorreta. Tente novamente.</span>
+                    </div>
+                </div>
+                
+                <div class="password-modal-footer">
+                    <button class="password-button cancel" id="cancelPassword">
+                        <i class="material-icons">close</i>
+                        Cancelar
+                    </button>
+                    <button class="password-button submit" id="submitPassword">
+                        <i class="material-icons">check</i>
+                        Acessar
+                    </button>
+                </div>
             </div>
-            
-            <div class="password-error" id="passwordError">
-                <i class="material-icons">error</i>
-                <span>Senha incorreta. Tente novamente.</span>
-            </div>
         </div>
-        
-        <div class="password-modal-footer">
-            <button class="password-button cancel" id="cancelPassword">
-                <i class="material-icons">close</i>
-                Cancelar
-            </button>
-            <button class="password-button submit" id="submitPassword">
-                <i class="material-icons">check</i>
-                Acessar
-            </button>
-        </div>
-    </div>
-</div>
 
         <!-- Drawer/Menu Lateral -->
-<aside class="mdc-drawer" id="drawer">
-    <nav class="mdc-list">
-        <div class="mdc-list-item" data-page="aviso.html">
-            <i class="material-icons mdc-list-item__graphic">dashboard</i>
-            <span></span>Avisos
-        </div>
-        
-<div class="mdc-list-item" data-page="admin.html" id="adminMenuItem">
-    <i class="material-icons mdc-list-item__graphic">admin_panel_settings</i>
-    <span></span>Administração
-</div>
-        
-        <div class="mdc-list-item" data-page="login.html">
-            <i class="material-icons mdc-list-item__graphic">people</i>
-            <span></span>Usuários
-        </div>
-        
-        
-        
-<div class="mdc-list-item" id="createStoreBtn">
-    <i class="material-icons mdc-list-item__graphic">local_mall</i>
-    <span>Crie sua loja</span>
-</div>
-                <div class="mdc-list-item" data-page="lojas.html">
-            <i class="material-icons mdc-list-item__graphic"></i>
-            <span></span>
-                    <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-</head>
-<style>
-  img {
-  width: 150px;
-  height: auto;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  border-radius: 10px;
-  grid-template-columns: repeat(3, 1fr); /* Duas colunas */
-  gap: 0px; /* Espaço entre os itens */
-  padding: 0px;
-margin-bottom: 3px; /* Espaço abaixo de cada loja */
-}
-</style>
-<body>
-    <div class="container">
-       __________________________<h1>Estabelecimentos</h1>__________________________
-       <br><br>
-        <div id="stores-list" class="stores-grid"></div>
-    </div>
-    <script>
-        // Configuração do Firebase (use a mesma do seu sistema)
-        const firebaseConfig = {
-  apiKey: "AIzaSyCwTNcpr_r75HH0igBtNyEbKvfuLkVFHiU",
-  authDomain: "rifalidiane-fde3b.firebaseapp.com",
-  databaseURL: "https://rifalidiane-fde3b-default-rtdb.firebaseio.com",
-  projectId: "rifalidiane-fde3b",
-  storageBucket: "rifalidiane-fde3b.firebasestorage.app",
-  messagingSenderId: "649359518677",
-  appId: "1:649359518677:web:879b4ed9fa5150d24d2b5c"
-};
-        
-        // Inicializa o Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        
-        // Carrega todas as lojas
-        function loadStores() {
-            const storesRef = database.ref('stores');
-            
-            storesRef.on('value', (snapshot) => {
-                const stores = snapshot.val();
-                const storesList = document.getElementById('stores-list');
-                storesList.innerHTML = '';
+        <aside class="mdc-drawer" id="drawer">
+            <nav class="mdc-list">
+                <div class="mdc-list-item" data-page="aviso.html">
+                    <i class="material-icons mdc-list-item__graphic">dashboard</i>
+                    <span>Avisos</span>
+                </div>
                 
-                if (stores) {
-                    Object.entries(stores).forEach(([userId, storeData]) => {
-                        if (storeData.name) { // Verifica se é uma loja válida
-                            const storeCard = document.createElement('div');
-                            storeCard.className = 'store-card';
-                            
-                            storeCard.innerHTML = `
-                                <img src="${storeData.logo || 'https://via.placeholder.com/300'}" alt="${storeData.name}" class="store-logo">
-                                <div class="store-info">
-                                    <h3 class="store-name">${storeData.name}</h3>
-<br>
-                                    <a href="lojas.html?userId=${userId}" class="visit-btn"></a>
-                                    
-                                </div>
-                            `;
-                            
-                            storesList.appendChild(storeCard);
-                        }
-                    });
-                }
-            });
-        }
-        
-        // Carrega as lojas quando a página é aberta
-        window.onload = loadStores;
-    </script>
-</body>
-</html>
-        </div>
-    </nav>
-</aside>
+                <div class="mdc-list-item" data-page="admin.html" id="adminMenuItem">
+                    <i class="material-icons mdc-list-item__graphic">admin_panel_settings</i>
+                    <span>Administração</span>
+                </div>
+                
+                <div class="mdc-list-item" data-page="login.html">
+                    <i class="material-icons mdc-list-item__graphic">people</i>
+                    <span>Usuários</span>
+                </div>
+                
+                <div class="mdc-list-item" id="createStoreBtn">
+                    <i class="material-icons mdc-list-item__graphic">local_mall</i>
+                    <span>Crie sua loja</span>
+                </div>
+                
+                <div class="mdc-list-item" data-page="lojas.html">
+                    <i class="material-icons mdc-list-item__graphic">store</i>
+                    <span>Lojas</span>
+                </div>
+            </nav>
+        </aside>
 
         <!-- Conteúdo Principal -->
         <div class="app-content">
-
-                <button class="menu-button" id="menuButton">
-                    <i class="material-icons">menu</i>
-                </button>
-                <h1 id="pageTitle"></h1>
-            
+            <button class="menu-button" id="menuButton">
+                <i class="material-icons">menu</i>
+            </button>
+            <h1 id="pageTitle"></h1>
 
             <main class="main-content">
                 <iframe class="content-frame" id="contentFrame" src="aviso.html"></iframe>
             </main>
         </div>
     </div>
-    
-    <!-- Adicione este código ANTES do fechamento do </body> -->
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
 
-    <script>
-        // Elementos do DOM
-        const menuButton = document.getElementById('menuButton');
-        const drawer = document.getElementById('drawer');
-        const overlay = document.getElementById('overlay');
-        const loading = document.getElementById('loading');
-        const contentFrame = document.getElementById('contentFrame');
-        const pageTitle = document.getElementById('pageTitle');
-        const passwordModal = document.getElementById('passwordModal');
-        const adminPassword = document.getElementById('adminPassword');
-        const submitPassword = document.getElementById('submitPassword');
-        const cancelPassword = document.getElementById('cancelPassword');
-        const passwordError = document.getElementById('passwordError');
-        const adminMenuItem = document.getElementById('adminMenuItem');
-        let menuOpen = false;
+<script>
+    // Elementos do DOM
+    const menuButton = document.getElementById('menuButton');
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('overlay');
+    const loading = document.getElementById('loading');
+    const contentFrame = document.getElementById('contentFrame');
+    const pageTitle = document.getElementById('pageTitle');
+    const passwordModal = document.getElementById('passwordModal');
+    const adminPassword = document.getElementById('adminPassword');
+    const submitPassword = document.getElementById('submitPassword');
+    const cancelPassword = document.getElementById('cancelPassword');
+    const passwordError = document.getElementById('passwordError');
+    const adminMenuItem = document.getElementById('adminMenuItem');
+    let menuOpen = false;
 
-        // Abre/fecha o menu
-        function toggleMenu() {
-            menuOpen = !menuOpen;
-            
-            if (menuOpen) {
-                drawer.classList.add('mdc-drawer--open');
-                overlay.classList.add('overlay--visible');
-            } else {
-                drawer.classList.remove('mdc-drawer--open');
-                overlay.classList.remove('overlay--visible');
-            }
+    // Lista de usuários autorizados
+    const authorizedUsers = [
+        { username: "reinaldoleal.la@gmail.com", password: "R3inald0", name: "Administrador" },
+        { username: "loja1", password: "1234567890", name: "Proprietário da Loja 1" }
+    ];
+
+    // Funções de gerenciamento de sessão
+    function saveSession(username, remember) {
+        if (remember) {
+            localStorage.setItem('storeLoggedIn', 'true');
+            localStorage.setItem('storeUsername', username);
+        } else {
+            sessionStorage.setItem('storeLoggedIn', 'true');
+            sessionStorage.setItem('storeUsername', username);
         }
+    }
 
-function loadPage(pageUrl, pageName) {
-    loading.style.display = 'block';
-    document.title = pageName || 'Aplicativo'; // Atualiza o título da aba/janela
-    
-    contentFrame.onload = function() {
-        loading.style.display = 'none';
-    };
-    
-    contentFrame.src = pageUrl;
-}
+    function clearSession() {
+        localStorage.removeItem('storeLoggedIn');
+        localStorage.removeItem('storeUsername');
+        sessionStorage.removeItem('storeLoggedIn');
+        sessionStorage.removeItem('storeUsername');
+    }
 
-        // Event listeners
-        menuButton.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
+    function checkSavedSession() {
+        // Verifica primeiro sessionStorage (para sessão temporária)
+        let isLoggedIn = sessionStorage.getItem('storeLoggedIn') === 'true';
+        let username = sessionStorage.getItem('storeUsername');
+        
+        // Se não encontrou, verifica localStorage (para sessão persistente)
+        if (!isLoggedIn) {
+            isLoggedIn = localStorage.getItem('storeLoggedIn') === 'true';
+            username = localStorage.getItem('storeUsername');
+        }
+        
+        if (isLoggedIn && username) {
+            return authorizedUsers.some(user => user.username === username);
+        }
+        return false;
+    }
 
-        // Configura os itens do menu
-        document.querySelectorAll('.mdc-list-item').forEach(item => {
-            if (item.id !== 'adminMenuItem') {
-                item.addEventListener('click', () => {
-                    const pageUrl = item.getAttribute('data-page');
-                    const pageName = item.querySelector('span').textContent;
-                    
-                    loadPage(pageUrl, pageName);
-                    
-                    if (menuOpen) {
-                        toggleMenu();
-                    }
-                });
-            }
-        });
+    function getCurrentUser() {
+        if (checkSavedSession()) {
+            return sessionStorage.getItem('storeUsername') || localStorage.getItem('storeUsername');
+        }
+        return null;
+    }
 
-        // Configura o item de administração para pedir senha
-        adminMenuItem.addEventListener('click', () => {
-            // Mostra o modal de senha
-            passwordModal.style.display = 'flex';
-            adminPassword.focus();
+    // Modal de login para criação de lojas
+    const storeLoginModal = `
+    <div class="password-modal" id="storeLoginModal">
+        <div class="password-modal-content">
+            <div class="password-modal-header">
+                <i class="material-icons">store</i>
+                <h2>Acesso à Criação de Lojas</h2>
+            </div>
             
-            if (menuOpen) {
-                toggleMenu();
-            }
-        });
-
-        // Configura o botão de enviar senha
-        submitPassword.addEventListener('click', () => {
-            const password = adminPassword.value;
+            <div class="password-modal-body">
+                <div class="login-input-container">
+                    <i class="material-icons">person_outline</i>
+                    <input type="text" id="storeUsername" class="login-input" placeholder="Digite seu usuário" autocomplete="username">
+                </div>
+                
+                <div class="login-input-container">
+                    <i class="material-icons">lock_outline</i>
+                    <input type="password" id="storePassword" class="login-input" placeholder="Digite sua senha" autocomplete="current-password">
+                </div>
+                
+                <div style="display: flex; align-items: center; margin: 15px 0;">
+                    <input type="checkbox" id="rememberMe" checked style="margin-right: 10px;">
+                    <label for="rememberMe">Lembrar de mim</label>
+                </div>
+                
+                <div class="password-error" id="storeLoginError" style="display: none;">
+                    <i class="material-icons">error_outline</i>
+                    <span>Credenciais inválidas. Tente novamente.</span>
+                </div>
+            </div>
             
-            // Verifica a senha (Cotovias@2025)
-            if (password === 'Cotovias@2025') {
-                // Senha correta, carrega a página de admin
-                passwordModal.style.display = 'none';
-                passwordError.style.display = 'none';
-                adminPassword.value = '';
-                loadPage('admin.html', '');
-            } else {
-                // Senha incorreta
-                passwordError.style.display = 'block';
-                adminPassword.focus();
-            }
-        });
+            <div class="password-modal-footer">
+                <button class="password-button cancel" id="cancelStoreLogin">
+                    <i class="material-icons">close</i> Cancelar
+                </button>
+                <button class="password-button submit" id="submitStoreLogin">
+                    <i class="material-icons">check</i> Acessar
+                </button>
+            </div>
+        </div>
+    </div>
+    `;
 
-        // Configura o botão de cancelar
-        cancelPassword.addEventListener('click', () => {
+    // Adiciona o modal ao body
+    document.body.insertAdjacentHTML('beforeend', storeLoginModal);
+
+    // Elementos do modal de lojas
+    const storeModal = document.getElementById('storeLoginModal');
+    const storeUsername = document.getElementById('storeUsername');
+    const storePassword = document.getElementById('storePassword');
+    const storeLoginError = document.getElementById('storeLoginError');
+    const cancelStoreLogin = document.getElementById('cancelStoreLogin');
+    const submitStoreLogin = document.getElementById('submitStoreLogin');
+    const rememberMe = document.getElementById('rememberMe');
+
+    // Abre/fecha o menu
+    function toggleMenu() {
+        menuOpen = !menuOpen;
+        
+        if (menuOpen) {
+            drawer.classList.add('mdc-drawer--open');
+            overlay.classList.add('overlay--visible');
+        } else {
+            drawer.classList.remove('mdc-drawer--open');
+            overlay.classList.remove('overlay--visible');
+        }
+    }
+
+    function loadPage(pageUrl, pageName) {
+        loading.style.display = 'block';
+        document.title = pageName || 'Aplicativo';
+        
+        contentFrame.onload = function() {
+            loading.style.display = 'none';
+            
+            // Se for a página de criação de lojas, configura o botão de logout
+            if (pageUrl.includes('criarlojas.html') && checkSavedSession()) {
+                setupLogoutButton();
+            }
+        };
+        
+        contentFrame.src = pageUrl;
+    }
+
+    // Event listeners
+    menuButton.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+
+    // Configura os itens do menu
+    document.querySelectorAll('.mdc-list-item').forEach(item => {
+        if (item.id !== 'adminMenuItem' && item.id !== 'createStoreBtn') {
+            item.addEventListener('click', () => {
+                const pageUrl = item.getAttribute('data-page');
+                const pageName = item.querySelector('span').textContent;
+                
+                loadPage(pageUrl, pageName);
+                
+                if (menuOpen) {
+                    toggleMenu();
+                }
+            });
+        }
+    });
+
+    // Configura o item de administração para pedir senha
+    adminMenuItem.addEventListener('click', () => {
+        passwordModal.style.display = 'flex';
+        adminPassword.focus();
+        
+        if (menuOpen) {
+            toggleMenu();
+        }
+    });
+
+    // Configura o botão de enviar senha administrativa
+    submitPassword.addEventListener('click', () => {
+        const password = adminPassword.value;
+        
+        if (password === 'Cotovias@2025') {
             passwordModal.style.display = 'none';
             passwordError.style.display = 'none';
             adminPassword.value = '';
-        });
-
-        // Permite enviar com Enter
-        adminPassword.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                submitPassword.click();
-            }
-        });
-
-        // Fecha o menu ao redimensionar para desktop
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 1024 && menuOpen) {
-                toggleMenu();
-            }
-        });
-        
-        contentFrame.onload = function() {
-    // Injeta CSS nos documentos carregados
-    const style = `
-        html, body {
-            margin: 0;
-            padding: 20px !important; /* Espaçamento interno aumentado */
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            box-sizing: border-box;
-        }
-        body {
-            padding: 20px !important;
-        }
-        * {
-            box-sizing: inherit;
-        }
-    `;
-    
-    try {
-        const doc = contentFrame.contentDocument || contentFrame.contentWindow.document;
-        const styleElement = doc.createElement('style');
-        styleElement.innerHTML = style;
-        doc.head.appendChild(styleElement);
-    } catch(e) {
-        console.log("Não foi possível injetar CSS no iframe");
-    }
-};
-        
-        // Adicione isto no final do seu script
-contentFrame.onload = function() {
-    // Injeta CSS nos documentos carregados
-    const style = `
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-        }
-        body {
-            padding: 0;
-        }
-    `;
-    
-    try {
-        const doc = contentFrame.contentDocument || contentFrame.contentWindow.document;
-        const styleElement = doc.createElement('style');
-        styleElement.innerHTML = style;
-        doc.head.appendChild(styleElement);
-    } catch(e) {
-        console.log("Não foi possível injetar CSS no iframe");
-    }
-};
-
-        
-    </script>
-      <script>
-// Função para esconder a barra de navegação
-function hideAddressBar() {
-  if (window.innerHeight < window.outerHeight) {
-    document.body.style.height = window.outerHeight + 'px';
-  }
-  
-  setTimeout(function() {
-    window.scrollTo(0, 1);
-  }, 100);
-}
-
-// Executa quando a página carrega e quando muda de orientação
-window.addEventListener('load', function() {
-  hideAddressBar();
-  setTimeout(hideAddressBar, 1000); // Segunda chamada para garantir
-});
-
-window.addEventListener('orientationchange', hideAddressBar);
-
-// Força o redimensionamento para alguns dispositivos iOS
-window.addEventListener('resize', function() {
-  setTimeout(hideAddressBar, 300);
-});
-
-// Lista de usuários autorizados (você pode editar esta lista)
-const authorizedUsers = [
-    { username: "reinaldoleal.la@gmail.com", password: "R3inald0", name: "Administrador" },
-    { username: "loja1", password: "12e4567890", name: "Proprietário da Loja 1" },
-    // Adicione mais usuários conforme necessário
-];
-
-// Modal de login para criação de lojas
-const storeLoginModal = `
-<div class="password-modal" id="storeLoginModal">
-    <div class="password-modal-content">
-        <div class="password-modal-header">
-            <i class="material-icons">store</i>
-            <h2>Acesso à Criação de Lojas</h2>
-        </div>
-        
-        <div class="password-modal-body">
-                    <div style="display: flex; align-items: center; margin: 15px 0;">
-                <input type="checkbox" id="rememberMe" checked style="margin-right: 10px;">
-                <label for="rememberMe">Lembrar de mim</label>
-            </div>
-            <div class="input-container">
-                <i class="material-icons">person</i>
-                <input type="text" id="storeUsername" placeholder="Usuário">
-            </div>
-            
-            <div class="password-input-container">
-                <i class="material-icons">lock</i>
-                <input type="password" id="storePassword" placeholder="Senha">
-            </div>
-            
-            <div class="password-error" id="storeLoginError" style="display: none;">
-                <i class="material-icons">error</i>
-                <span>Usuário ou senha incorretos</span>
-            </div>
-        </div>
-        
-        <div class="password-modal-footer">
-            <button class="password-button cancel" id="cancelStoreLogin">
-                Cancelar
-            </button>
-            <button class="password-button submit" id="submitStoreLogin">
-                Acessar
-            </button>
-        </div>
-    </div>
-</div>
-`;
-
-// Adiciona o modal ao body
-document.body.insertAdjacentHTML('beforeend', storeLoginModal);
-
-// Elementos do modal
-const storeModal = document.getElementById('storeLoginModal');
-const storeUsername = document.getElementById('storeUsername');
-const storePassword = document.getElementById('storePassword');
-const storeLoginError = document.getElementById('storeLoginError');
-const cancelStoreLogin = document.getElementById('cancelStoreLogin');
-const submitStoreLogin = document.getElementById('submitStoreLogin');
-
-// Configura o botão de criar loja
-document.getElementById('createStoreBtn').addEventListener('click', () => {
-    storeModal.style.display = 'flex';
-    storeUsername.focus();
-});
-
-// Função para verificar login
-function checkStoreLogin(username, password) {
-    return authorizedUsers.find(user => 
-        user.username === username && user.password === password
-    );
-}
-
-// Configura o botão de login
-// Adicione estas funções para gerenciar a sessão
-function saveSession(username) {
-    localStorage.setItem('storeLoggedIn', 'true');
-    localStorage.setItem('storeUsername', username);
-}
-
-function clearSession() {
-    localStorage.removeItem('storeLoggedIn');
-    localStorage.removeItem('storeUsername');
-}
-
-function checkSavedSession() {
-    const isLoggedIn = localStorage.getItem('storeLoggedIn') === 'true';
-    const username = localStorage.getItem('storeUsername');
-    
-    if (isLoggedIn && username) {
-        // Verifica se o usuário ainda está na lista de autorizados
-        const userExists = authorizedUsers.some(user => user.username === username);
-        if (userExists) {
-            return true;
+            loadPage('admin.html', 'Administração');
         } else {
-            clearSession();
-            return false;
+            passwordError.style.display = 'block';
+            adminPassword.focus();
         }
-    }
-    return false;
-}
+    });
 
-// Modifique a função de login
-submitStoreLogin.addEventListener('click', () => {
-    const rememberMe = document.getElementById('rememberMe').checked;
-    const username = storeUsername.value.trim();
-    const password = storePassword.value;
-    
-    const user = checkStoreLogin(username, password);
-    
-    if (user) {
-      
-              if (rememberMe) {
-            saveSession(username);
+    // Configura o botão de cancelar senha administrativa
+    cancelPassword.addEventListener('click', () => {
+        passwordModal.style.display = 'none';
+        passwordError.style.display = 'none';
+        adminPassword.value = '';
+    });
+
+    // Permite enviar com Enter na senha administrativa
+    adminPassword.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            submitPassword.click();
         }
-        // Salva a sessão
-        saveSession(username);
+    });
+
+    // Verificação inicial ao carregar a página
+    document.addEventListener('DOMContentLoaded', () => {
+        // Se estiver na página de criação de lojas e não logado, redireciona
+        if (window.location.href.includes('criarlojas.html') && !checkSavedSession()) {
+            window.location.href = 'aviso.html';
+        }
+    });
+
+    // Configura o botão de criar loja
+    document.getElementById('createStoreBtn').addEventListener('click', () => {
+        if (checkSavedSession()) {
+            loadPage('criarlojas.html', 'Crie sua loja');
+        } else {
+            storeModal.style.display = 'flex';
+            storeUsername.focus();
+        }
+    });
+
+    // Função para verificar login
+    function checkStoreLogin(username, password) {
+        return authorizedUsers.find(user => 
+            user.username === username && user.password === password
+        );
+    }
+
+    // Configura o botão de login das lojas
+    submitStoreLogin.addEventListener('click', () => {
+        const username = storeUsername.value.trim();
+        const password = storePassword.value;
+        const remember = rememberMe.checked;
         
-        // Fecha o modal e redireciona
+        const user = checkStoreLogin(username, password);
+        
+        if (user) {
+            saveSession(username, remember);
+            
+            storeModal.style.display = 'none';
+            storeLoginError.style.display = 'none';
+            storeUsername.value = '';
+            storePassword.value = '';
+            
+            loadPage('criarlojas.html', 'Crie sua loja');
+        } else {
+            storeLoginError.style.display = 'block';
+            storePassword.focus();
+        }
+    });
+
+    // Configura o botão de cancelar login das lojas
+    cancelStoreLogin.addEventListener('click', () => {
         storeModal.style.display = 'none';
         storeLoginError.style.display = 'none';
         storeUsername.value = '';
         storePassword.value = '';
+    });
+
+    // Permite enviar com Enter no login das lojas
+    storePassword.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            submitStoreLogin.click();
+        }
+    });
+
+    // Configura o botão de logout
+    function setupLogoutButton() {
+        // Remove qualquer botão de logout existente
+        const existingBtn = document.getElementById('logoutBtn');
+        if (existingBtn) existingBtn.remove();
         
-        loadPage('criarlojas.html', 'Crie sua loja');
-    } else {
-        storeLoginError.style.display = 'block';
-        storePassword.focus();
+        const logoutBtn = document.createElement('button');
+        logoutBtn.id = 'logoutBtn';
+        logoutBtn.innerHTML = '<i class="material-icons">logout</i> Sair';
+        logoutBtn.style.position = 'fixed';
+        logoutBtn.style.bottom = '20px';
+        logoutBtn.style.left = '20px';
+        logoutBtn.style.zIndex = '1000';
+        logoutBtn.classList.add('password-button', 'cancel');
+        
+        logoutBtn.addEventListener('click', () => {
+            clearSession();
+            if (window.location.href.includes('criarlojas.html')) {
+                window.location.href = 'aviso.html';
+            }
+        });
+        
+        document.body.appendChild(logoutBtn);
     }
-});
 
-// Adicione esta verificação quando a página carregar
-document.addEventListener('DOMContentLoaded', () => {
-    if (checkSavedSession() && window.location.href.includes('criarlojas.html')) {
-        // Se já estiver logado e na página de criação de lojas, permite o acesso
-        return;
-    }
-    
-    // Se tentar acessar a página diretamente sem estar logado
-    if (window.location.href.includes('criarlojas.html') && !checkSavedSession()) {
-        window.location.href = 'index.html'; // Ou sua página principal
-    }
-});
-
-// Adicione um botão de logout (opcional)
-function setupLogoutButton() {
-    const logoutBtn = document.createElement('button');
-    logoutBtn.innerHTML = '<i class="material-icons">logout</i> Sair';
-    logoutBtn.style.position = 'fixed';
-    logoutBtn.style.bottom = '20px';
-    logoutBtn.style.left = '20px';
-    logoutBtn.style.zIndex = '1000';
-    logoutBtn.classList.add('password-button', 'cancel');
-    
-    logoutBtn.addEventListener('click', () => {
-        clearSession();
-        window.location.href = 'index.html'; // Ou sua página principal
+    // Fecha o menu ao redimensionar para desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 1024 && menuOpen) {
+            toggleMenu();
+        }
     });
     
-    document.body.appendChild(logoutBtn);
-}
-
-// Chame esta função quando entrar na página de criação de lojas
-if (window.location.href.includes('criarlojas.html')) {
-    setupLogoutButton();
-}
-
-// Configura o botão de cancelar
-cancelStoreLogin.addEventListener('click', () => {
-    storeModal.style.display = 'none';
-    storeLoginError.style.display = 'none';
-    storeUsername.value = '';
-    storePassword.value = '';
-});
-
-// Permite enviar com Enter
-storePassword.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        submitStoreLogin.click();
+    // Função para esconder a barra de navegação
+    function hideAddressBar() {
+        if (window.innerHeight < window.outerHeight) {
+            document.body.style.height = window.outerHeight + 'px';
+        }
+        
+        setTimeout(function() {
+            window.scrollTo(0, 1);
+        }, 100);
     }
-});
+
+    // Executa quando a página carrega e quando muda de orientação
+    window.addEventListener('load', function() {
+        hideAddressBar();
+        setTimeout(hideAddressBar, 1000);
+    });
+
+    window.addEventListener('orientationchange', hideAddressBar);
+    window.addEventListener('resize', function() {
+        setTimeout(hideAddressBar, 300);
+    });
 </script>
-</div>
 </body>
 </html>
