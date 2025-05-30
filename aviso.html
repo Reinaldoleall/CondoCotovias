@@ -15,6 +15,40 @@
 </head>
 <style>
 
+  /* ESTRUTURA PRINCIPAL AJUSTADA */
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Garante que o body ocupe pelo menos toda a altura da viewport */
+  overflow: hidden; /* Evita scroll duplo */
+}
+
+.container {
+  flex: 1 0 auto; /* O container cresce para ocupar o espaço disponível */
+  padding-bottom: 60px; /* Espaço para o footer */
+  overflow-y: auto; /* Permite scroll apenas no container */
+}
+
+.page-footer {
+  flex-shrink: 0; /* O footer não diminui */
+  width: 100%;
+}
+
+/* Quando não há avisos suficientes para rolar */
+.no-avisos-container .container {
+  padding-bottom: 0;
+}
+
+/* Ajuste para o modal */
+.modal-body {
+  max-height: calc(100vh - 200px); /* Altura máxima com espaço para header/footer */
+  overflow-y: auto;
+}
+
     /* MANTENDO SEUS ESTILOS ORIGINAIS COM PEQUENOS AJUSTES */
     :root {
       --cor-primaria: #2c3e50;
