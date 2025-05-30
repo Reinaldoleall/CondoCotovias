@@ -124,7 +124,7 @@
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  position: fixed;
+  
   overflow: hidden;
 }
 
@@ -287,10 +287,15 @@
         }
 
         
+        /* Conteúdo da Aplicação */
         .app-content {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
+            flex: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+            padding-top: 0;
         }
         
 
