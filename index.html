@@ -790,13 +790,13 @@ body {
   height: auto;
   object-fit: contain;
   display: block;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 0px 0px rgba(0,0,0,0.0);
             border-radius: 10px;
 }
 </style>
 <body>
     <div class="container">
-       _____________________<h1> <i class="material-icons mdc-list-item__graphic">store</i>Todas as lojas</h1>--------------------------------
+       _____________________<h1><i class="material-icons mdc-list-item__graphic">store</i></h1>
         <div id="stores-list" class="stores-grid"></div>
     </div>
 
@@ -834,7 +834,7 @@ body {
                             storeCard.innerHTML = `
                                 <img src="${storeData.logo || 'https://via.placeholder.com/300'}" alt="${storeData.name}" class="store-logo">
                                 <div class="store-info">
-                                    <h3 class="store-name">${storeData.name}</h3>
+                                    <p class="store-name">${storeData.name}</p>
 
                                     <a href="lojas.html?userId=${userId}" class="visit-btn"></a>
                                     
