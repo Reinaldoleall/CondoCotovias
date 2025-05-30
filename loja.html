@@ -2021,7 +2021,7 @@ async function sendCartToWhatsApp() {
         sendButton.innerHTML = '<i class="material-icons">hourglass_top</i> Preparando envio...';
         sendButton.disabled = true;
         
-        // Criar mensagem com os itens do pedido
+        // Criar mensagem detalhada
         let message = `*Pedido - ${storeData.name}*\n\n`;
         let total = 0;
         
@@ -2029,27 +2029,29 @@ async function sendCartToWhatsApp() {
             const product = allProducts.find(p => p.id === item.id);
             const itemTotal = product.price * item.quantity;
             total += itemTotal;
-            message += `✔ ${product.name} - ${item.quantity}x - R$ ${itemTotal.toFixed(2)}\n`;
+            message += `➡ ${product.name}\n`;
+            message += `   Quantidade: ${item.quantity}\n`;
+            message += `   Valor: R$ ${itemTotal.toFixed(2)}\n\n`;
         });
         
-        message += `\n*Total: R$ ${total.toFixed(2)}*\n`;
+        message += `*TOTAL: R$ ${total.toFixed(2)}*\n`;
         message += `Data: ${new Date().toLocaleString('pt-BR')}`;
+
+        // Formatar número (remove tudo que não for dígito)
+        const phoneNumber = storeData.whatsapp.replace(/\D/g, '');
         
-        // Verificar se é mobile ou desktop
-        if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            // Mobile - tentar abrir o app diretamente
-            window.open(`whatsapp://send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`, '_blank');
-        } else {
-            // Desktop - abrir web.whatsapp.com
-            window.open(`https://web.whatsapp.com/send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`, '_blank');
-        }
+        // Criar o link universal
+        const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+        
+        // Abrir diretamente (isso vai funcionar na WebView com a configuração abaixo)
+        window.open(whatsappUrl, '_blank');
         
         // Fechar o resumo e limpar carrinho
         cleanupAfterOrder();
         
     } catch (error) {
-        console.error('Erro ao enviar pedido:', error);
-        alert('Não foi possível abrir o WhatsApp automaticamente. Por favor, envie manualmente.');
+        console.error('Erro:', error);
+        alert('Pedido pronto! Por favor, envie manualmente para: ' + storeData.whatsapp);
     } finally {
         sendButton.innerHTML = originalText;
         sendButton.disabled = false;
