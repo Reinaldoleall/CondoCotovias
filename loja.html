@@ -2021,50 +2021,35 @@ async function sendCartToWhatsApp() {
         sendButton.innerHTML = '<i class="material-icons">hourglass_top</i> Preparando envio...';
         sendButton.disabled = true;
         
-        // Esperar um momento para renderização completa
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Criar mensagem com os itens do pedido
+        let message = `*Pedido - ${storeData.name}*\n\n`;
+        let total = 0;
         
-        // 1. Capturar o resumo como imagem
-        const canvas = await html2canvas(document.getElementById('cart-summary'), {
-            scale: 2,
-            logging: false,
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#ffffff',
-            scrollX: 0,
-            scrollY: -window.scrollY,
-            windowWidth: document.getElementById('cart-summary').scrollWidth,
-            windowHeight: document.getElementById('cart-summary').scrollHeight
+        cart.forEach(item => {
+            const product = allProducts.find(p => p.id === item.id);
+            const itemTotal = product.price * item.quantity;
+            total += itemTotal;
+            message += `✔ ${product.name} - ${item.quantity}x - R$ ${itemTotal.toFixed(2)}\n`;
         });
         
-        // 2. Converter para blob
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 0.9));
+        message += `\n*Total: R$ ${total.toFixed(2)}*\n`;
+        message += `Data: ${new Date().toLocaleString('pt-BR')}`;
         
-        // 3. Criar mensagem padrão
-        const message = `*Pedido - ${storeData.name}*\n\n` +
-                       `Segue o comprovante do pedido.\n` +
-                       `*Total: R$ ${calculateTotal().toFixed(2)}*\n` +
-                       `Data: ${new Date().toLocaleString('pt-BR')}`;
-        
-        // 4. Estratégias diferentes para Android e iOS
-        if (/Android/i.test(navigator.userAgent)) {
-            // Solução para Android
-            await shareOnAndroid(blob, message);
-        } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            // Solução para iOS
-            await shareOnIOS(blob, message);
+        // Verificar se é mobile ou desktop
+        if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            // Mobile - tentar abrir o app diretamente
+            window.open(`whatsapp://send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`, '_blank');
         } else {
-            // Fallback para outros dispositivos
-            await shareFallback(blob, message);
+            // Desktop - abrir web.whatsapp.com
+            window.open(`https://web.whatsapp.com/send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`, '_blank');
         }
         
-        // 5. Fechar o resumo e limpar carrinho
+        // Fechar o resumo e limpar carrinho
         cleanupAfterOrder();
         
     } catch (error) {
         console.error('Erro ao enviar pedido:', error);
-        // Fallback para envio por texto
-        sendTextFallback();
+        alert('Não foi possível abrir o WhatsApp automaticamente. Por favor, envie manualmente.');
     } finally {
         sendButton.innerHTML = originalText;
         sendButton.disabled = false;
