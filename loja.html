@@ -10,8 +10,165 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
+/* Container principal */
+.cart-summary {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    box-sizing: border-box;
+}
 
+.print-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f5f5f5;
+}
 
+.print-logo {
+    max-height: 80px;
+    max-width: 80%;
+    margin: 0 auto 10px;
+    display: block;
+}
+
+.print-store-name {
+    color: #6200ee;
+    margin: 5px 0;
+    font-size: 1.5rem;
+}
+
+.print-date {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 5px 0;
+}
+
+.print-title {
+    color: #6200ee;
+    border-bottom: 2px solid #6200ee;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.print-items {
+    margin-bottom: 20px;
+}
+
+.cart-item-print {
+    display: flex;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    align-items: center;
+}
+
+.product-image-print {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    margin-right: 15px;
+    background-color: #f9f9f9;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-name {
+    font-weight: 500;
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+}
+
+.item-details {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 3px 0;
+}
+
+.item-price {
+    color: #6200ee;
+    font-weight: 500;
+}
+
+.print-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6200ee;
+    padding-top: 15px;
+    margin-top: 10px;
+    border-top: 2px solid #6200ee;
+}
+
+.print-notes {
+    margin-top: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    padding-top: 15px;
+    border-top: 1px dashed #ddd;
+}
+
+.print-actions {
+    margin-top: 25px;
+}
+
+.whatsapp-send-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #25D366;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.whatsapp-send-button:hover {
+    background-color: #128C7E;
+}
+
+.whatsapp-send-button i {
+    font-size: 1.5rem;
+}
+
+.close-summary-button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: transparent;
+    color: #6200ee;
+    border: 1px solid #6200ee;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.close-summary-button:hover {
+    background-color: rgba(98, 0, 238, 0.05);
+}
         /* Estilos do Botão Flutuante do Carrinho */
 .cart-container {
     position: fixed;
@@ -1023,7 +1180,8 @@
     
     <div class="overlay" id="overlay"></div>
     <div class="cart-summary" id="cart-summary">
-        <h2>Resumo do Pedido</h2>
+        <h3>"Por gentileza, tire um print desta tela e envie pelo WhatsApp."
+</h3>
         <div id="summary-content"></div>
         <button class="btn" id="send-whatsapp">Enviar pelo WhatsApp</button>
         <button class="btn btn-outlined" id="close-summary">Fechar</button>
@@ -1053,6 +1211,49 @@
             </div>
         </div>
     </div>
+    
+    <div class="cart-summary" id="cart-summary">
+    <div class="print-header">
+        <!-- Logo da Loja -->
+        <img id="summary-logo" class="print-logo" src="" alt="Logo da Loja">
+        
+        <!-- Nome da Loja -->
+        <h2 id="summary-store-name" class="print-store-name"></h2>
+        
+        <!-- Data do Pedido -->
+        <p class="print-date" id="summary-date"></p>
+    </div>
+    
+    <!-- Título do Resumo -->
+    <h3 class="print-title">Resumo do Pedido</h3>
+    
+    <!-- Itens do Carrinho -->
+    <div id="summary-items" class="print-items">
+        <!-- Itens serão inseridos aqui via JavaScript -->
+    </div>
+    
+    <!-- Total do Pedido -->
+    <div class="print-total">
+        <span>Total do Pedido:</span>
+        <span id="summary-total-price">R$ 0,00</span>
+    </div>
+    
+    <!-- Observações -->
+    <div class="print-notes">
+        <p>Obrigado por sua compra!</p>
+        <p id="summary-contact"></p>
+    </div>
+    
+    <!-- Botão de Ação -->
+    <div class="print-actions">
+        <button id="send-whatsapp" class="whatsapp-send-button">
+            <i class="material-icons">whatsapp</i> Enviar Pedido pelo WhatsApp
+        </button>
+        <button id="close-summary" class="close-summary-button">
+            <i class="material-icons">close</i> Fechar
+        </button>
+    </div>
+</div>
     <script>
         // Configuração do Firebase
         const firebaseConfig = {
@@ -1596,69 +1797,395 @@ function addToCart(product) {
             }, 3000);
         }
         
-        function showCartSummary() {
-            const overlay = document.getElementById('overlay');
-            const cartSummary = document.getElementById('cart-summary');
-            const summaryContent = document.getElementById('summary-content');
-            
-            let summaryHTML = '<div style="margin-bottom: 20px;">';
-            let total = 0;
-            
-            cart.forEach(item => {
-                const product = allProducts.find(p => p.id === item.id);
-                const itemTotal = product.price * item.quantity;
-                total += itemTotal;
-                
-                summaryHTML += `
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>${product.name} (${item.quantity}x)</span>
-                        <span>R$ ${itemTotal.toFixed(2)}</span>
-                    </div>
-                `;
+async function showCartSummary() {
+    const overlay = document.getElementById('overlay');
+    const cartSummary = document.getElementById('cart-summary');
+    const summaryContent = document.getElementById('summary-content');
+    
+    // Mostrar loading
+    summaryContent.innerHTML = '<div style="text-align: center; padding: 20px;"><i class="material-icons" style="font-size: 48px; color: #6200ee;">hourglass_top</i><p>Carregando itens...</p></div>';
+    
+    overlay.classList.add('show');
+    cartSummary.classList.add('show');
+    
+    // Esperar todas as imagens carregarem
+    await preloadAllImages();
+    
+    // Agora renderizar o conteúdo real
+    renderSummaryContent();
+}
+
+async function preloadAllImages() {
+    const imagePromises = [];
+    
+    cart.forEach(item => {
+        const product = allProducts.find(p => p.id === item.id);
+        if (product && product.image) {
+            const img = new Image();
+            img.src = product.image;
+            const promise = new Promise((resolve) => {
+                img.onload = resolve;
+                img.onerror = resolve; // Continua mesmo se houver erro
             });
-            
-            summaryHTML += `</div>
-                <div style="border-top: 1px solid #eee; padding-top: 10px; margin-top: 10px; font-weight: bold; display: flex; justify-content: space-between;">
-                    <span>Total:</span>
-                    <span>R$ ${total.toFixed(2)}</span>
+            imagePromises.push(promise);
+        }
+    });
+    
+    await Promise.all(imagePromises);
+}
+
+function renderSummaryContent() {
+    const summaryContent = document.getElementById('summary-content');
+    
+    let html = `
+        <div class="print-header">
+            ${storeData.logo ? `<img src="${storeData.logo}" class="print-logo" alt="${storeData.name}">` : ''}
+            <h2 class="print-store-name">${storeData.name}</h2>
+            <p class="print-date">${new Date().toLocaleString('pt-BR')}</p>
+        </div>
+        <h3 style="color: #6200ee; border-bottom: 2px solid #6200ee; padding-bottom: 8px;">
+            Resumo do Pedido
+        </h3>
+        <div class="print-items">
+    `;
+    
+    cart.forEach(item => {
+        const product = allProducts.find(p => p.id === item.id);
+        const total = product.price * item.quantity;
+        
+        html += `
+            <div class="cart-item-print">
+                <img src="${product.image || 'https://via.placeholder.com/80?text=Produto'}" 
+                     class="product-image-print" 
+                     alt="${product.name}">
+                <div>
+                    <h4 class="print-text" style="font-weight:bold; margin-bottom:8px;">${product.name}</h4>
+                    <p class="print-text">Quantidade: ${item.quantity}</p>
+                    <p class="print-text">Preço unitário: <span class="print-price">R$ ${product.price.toFixed(2)}</span></p>
+                    <p class="print-text" style="margin-top:8px;">Subtotal: <span class="print-price">R$ ${total.toFixed(2)}</span></p>
                 </div>
-            `;
-            
-            summaryContent.innerHTML = summaryHTML;
-            
-            overlay.classList.add('show');
-            cartSummary.classList.add('show');
+            </div>
+        `;
+    });
+    
+    html += `
+        </div>
+        <div class="print-total">
+            <span>Total do Pedido:</span>
+            <span>R$ ${calculateTotal().toFixed(2)}</span>
+        </div>
+    `;
+    
+    summaryContent.innerHTML = html;
+}
+        
+
+
+// Adicione este código no seu arquivo JavaScript principal
+
+async function captureAndSendOrder() {
+    // 1. Configurar elementos
+    const sendButton = document.getElementById('send-whatsapp');
+    const originalText = sendButton.innerHTML;
+    
+    // 2. Mostrar loading
+    sendButton.innerHTML = '<i class="material-icons">hourglass_top</i> Preparando envio...';
+    sendButton.disabled = true;
+    
+    try {
+        // 3. Esperar um momento para renderização completa
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // 4. Capturar o resumo como imagem
+        const canvas = await html2canvas(document.getElementById('cart-summary'), {
+            scale: 2,
+            logging: false,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            scrollX: 0,
+            scrollY: -window.scrollY,
+            windowWidth: document.getElementById('cart-summary').scrollWidth,
+            windowHeight: document.getElementById('cart-summary').scrollHeight
+        });
+        
+        // 5. Converter para blob
+        const blob = await new Promise(resolve => {
+            canvas.toBlob(resolve, 'image/png', 0.9);
+        });
+        
+        // 6. Criar mensagem padrão
+        const message = `*Pedido - ${storeData.name}*\n\n` +
+                       `Segue o comprovante do pedido em anexo.\n` +
+                       `*Total: R$ ${calculateTotal().toFixed(2)}*\n` +
+                       `Data: ${new Date().toLocaleString('pt-BR')}`;
+        
+        // 7. Enviar via WhatsApp
+        await shareOnWhatsApp(blob, message);
+        
+        // 8. Fechar o resumo e limpar carrinho
+        cleanupAfterOrder();
+        
+    } catch (error) {
+        console.error('Erro ao enviar pedido:', error);
+        alert('Não foi possível enviar automaticamente. Você pode tirar um print manualmente.');
+        sendTextFallback();
+    } finally {
+        sendButton.innerHTML = originalText;
+        sendButton.disabled = false;
+    }
+}
+
+// Função para compartilhar no WhatsApp
+async function shareOnWhatsApp(blob, message) {
+    // Criar arquivo para compartilhamento
+    const file = new File([blob], "pedido.png", { type: "image/png" });
+    
+    // Verificar se é mobile
+    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        // Tentar usar a API de compartilhamento
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: `Pedido - ${storeData.name}`,
+                    text: message,
+                    files: [file]
+                });
+                return;
+            } catch (e) {
+                console.log('Compartilhamento nativo falhou, tentando alternativa...', e);
+            }
         }
         
-        function sendCartToWhatsApp() {
-            if (!storeData || !storeData.whatsapp) {
-                alert('Esta loja não configurou um número de WhatsApp para contato.');
-                return;
-            }
-            
-            let message = `*Pedido da Loja ${storeData.name}*\n\n`;
-            let total = 0;
-            
-            cart.forEach(item => {
-                const product = allProducts.find(p => p.id === item.id);
-                const itemTotal = product.price * item.quantity;
-                total += itemTotal;
-                
-                message += `✔ ${product.name} - ${item.quantity}x - R$ ${itemTotal.toFixed(2)}\n`;
-            });
-            
-            message += `\n*Total: R$ ${total.toFixed(2)}*`;
-            
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/${storeData.whatsapp}?text=${encodedMessage}`, '_blank');
-            
-            // Fecha o resumo e limpa o carrinho
-            document.getElementById('overlay').classList.remove('show');
-            document.getElementById('cart-summary').classList.remove('show');
-            cart = [];
-            updateCart();
-            document.getElementById('cart-panel').classList.remove('show');
+        // Alternativa para WhatsApp no mobile
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        // Criar URL temporária
+        const blobUrl = URL.createObjectURL(blob);
+        
+        // Abrir WhatsApp com a mensagem
+        window.open(`whatsapp://send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`, '_blank');
+        
+        // Limpar depois de alguns segundos
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+        
+    } else {
+        // Para desktop - download e instruções
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Pedido_${storeData.name.replace(/\s+/g, '_')}.png`;
+        link.click();
+        
+        alert('O print foi baixado. Por favor, envie manualmente pelo WhatsApp.');
+        window.open(`https://web.whatsapp.com/send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`, '_blank');
+    }
+}
+
+// Método alternativo para compartilhar no app WhatsApp
+async function shareViaWhatsAppApp(blob, message) {
+    // Criar URL para o blob
+    const blobUrl = URL.createObjectURL(blob);
+    
+    // Criar link para download temporário
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = `Pedido_${storeData.name.replace(/\s+/g, '_')}.png`;
+    document.body.appendChild(link);
+    link.click();
+    
+    // Dar tempo para o download
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Abrir WhatsApp com a mensagem
+    window.open(`whatsapp://send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`, '_blank');
+    
+    // Limpar depois de 5 segundos
+    setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+    }, 5000);
+}
+
+async function sendCartToWhatsApp() {
+    if (!storeData || !storeData.whatsapp) {
+        alert('Esta loja não configurou um número de WhatsApp para contato.');
+        return;
+    }
+
+    const sendButton = document.getElementById('send-whatsapp');
+    const originalText = sendButton.innerHTML;
+    
+    try {
+        // Mostrar loading
+        sendButton.innerHTML = '<i class="material-icons">hourglass_top</i> Preparando envio...';
+        sendButton.disabled = true;
+        
+        // Esperar um momento para renderização completa
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // 1. Capturar o resumo como imagem
+        const canvas = await html2canvas(document.getElementById('cart-summary'), {
+            scale: 2,
+            logging: false,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            scrollX: 0,
+            scrollY: -window.scrollY,
+            windowWidth: document.getElementById('cart-summary').scrollWidth,
+            windowHeight: document.getElementById('cart-summary').scrollHeight
+        });
+        
+        // 2. Converter para blob
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 0.9));
+        
+        // 3. Criar mensagem padrão
+        const message = `*Pedido - ${storeData.name}*\n\n` +
+                       `Segue o comprovante do pedido.\n` +
+                       `*Total: R$ ${calculateTotal().toFixed(2)}*\n` +
+                       `Data: ${new Date().toLocaleString('pt-BR')}`;
+        
+        // 4. Estratégias diferentes para Android e iOS
+        if (/Android/i.test(navigator.userAgent)) {
+            // Solução para Android
+            await shareOnAndroid(blob, message);
+        } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            // Solução para iOS
+            await shareOnIOS(blob, message);
+        } else {
+            // Fallback para outros dispositivos
+            await shareFallback(blob, message);
         }
+        
+        // 5. Fechar o resumo e limpar carrinho
+        cleanupAfterOrder();
+        
+    } catch (error) {
+        console.error('Erro ao enviar pedido:', error);
+        // Fallback para envio por texto
+        sendTextFallback();
+    } finally {
+        sendButton.innerHTML = originalText;
+        sendButton.disabled = false;
+    }
+}
+
+// Função específica para Android
+async function shareOnAndroid(blob, message) {
+    // 1. Converter blob para base64
+    const base64data = await blobToBase64(blob);
+    
+    // 2. Criar link com intent do WhatsApp
+    const whatsappUrl = `https://wa.me/${storeData.whatsapp}?text=${encodeURIComponent(message)}`;
+    
+    // 3. Criar formulário temporário para enviar a imagem
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = whatsappUrl;
+    form.target = '_blank';
+    
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'image';
+    input.value = base64data.split(',')[1]; // Remove o cabeçalho
+    
+    form.appendChild(input);
+    document.body.appendChild(form);
+    
+    // 4. Enviar o formulário
+    form.submit();
+    
+    // 5. Limpar após 5 segundos
+    setTimeout(() => document.body.removeChild(form), 5000);
+}
+
+// Função específica para iOS
+async function shareOnIOS(blob, message) {
+    // 1. Criar URL para o blob
+    const blobUrl = URL.createObjectURL(blob);
+    
+    // 2. Criar link para download temporário
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = `Pedido_${storeData.name.replace(/\s+/g, '_')}.png`;
+    document.body.appendChild(link);
+    link.click();
+    
+    // 3. Dar tempo para o download
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // 4. Abrir WhatsApp com a mensagem
+    window.location.href = `whatsapp://send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`;
+    
+    // 5. Limpar depois de 5 segundos
+    setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+    }, 5000);
+}
+
+// Função auxiliar para converter blob para base64
+function blobToBase64(blob) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+    });
+}
+
+// Fallback para outros dispositivos
+async function shareFallback(blob, message) {
+    // 1. Criar URL para o blob
+    const blobUrl = URL.createObjectURL(blob);
+    
+    // 2. Criar link para download
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = `Pedido_${storeData.name.replace(/\s+/g, '_')}.png`;
+    link.click();
+    
+    // 3. Abrir WhatsApp com a mensagem
+    setTimeout(() => {
+        window.open(`https://wa.me/${storeData.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
+    }, 1000);
+    
+    // 4. Limpar depois de 5 segundos
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+}
+
+// Funções auxiliares
+function calculateTotal() {
+    return cart.reduce((total, item) => {
+        const product = allProducts.find(p => p.id === item.id);
+        return total + (product.price * item.quantity);
+    }, 0);
+}
+
+function cleanupAfterOrder() {
+    document.getElementById('overlay').classList.remove('show');
+    document.getElementById('cart-summary').classList.remove('show');
+    cart = [];
+    updateCart();
+    document.getElementById('cart-panel').classList.remove('show');
+}
+
+function sendTextFallback() {
+    let message = `*Pedido da Loja ${storeData.name}*\n\n`;
+    let total = 0;
+    
+    cart.forEach(item => {
+        const product = allProducts.find(p => p.id === item.id);
+        const itemTotal = product.price * item.quantity;
+        total += itemTotal;
+        message += `✔ ${product.name} - ${item.quantity}x - R$ ${itemTotal.toFixed(2)}\n`;
+    });
+    
+    message += `\n*Total: R$ ${total.toFixed(2)}*`;
+    
+    window.open(`https://wa.me/${storeData.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
+    cleanupAfterOrder();
+}
 
         // Carrega a loja quando a página é aberta
         window.onload = loadStore;
