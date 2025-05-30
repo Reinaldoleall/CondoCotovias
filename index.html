@@ -10,6 +10,165 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
     <style>
+
+        /* Reset e configurações básicas */
+:root {
+  --cor-primaria: #2c3e50;
+  --cor-secundaria: #3498db;
+  --cor-sucesso: #27ae60;
+  --cor-alerta: #f39c12;
+  --cor-erro: #e74c3c;
+  --cor-fundo: #f8fafc;
+  --cor-texto: #2d3436;
+  --cor-texto-secundario: #636e72;
+  --cor-borda: #dfe6e9;
+  --sombra-card: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --sombra-card-hover: 0 6px 12px rgba(0, 0, 0, 0.1);
+  --fonte-principal: 'Roboto', 'Segoe UI', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-user-zoom: none;
+  user-zoom: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+html {
+  height: 100%;
+  touch-action: pan-y;
+}
+
+body {
+  font-family: var(--fonte-principal);
+  color: var(--cor-texto);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--cor-fundo);
+  overscroll-behavior-y: contain;
+}
+
+/* Estrutura principal */
+.tela-fixa {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.drawer-container {
+  flex: 1;
+  display: flex;
+  position: relative;
+  min-height: 0; /* Permite que os filhos controlem o scroll */
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+.content-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Barra superior */
+.top-app-bar {
+  height: 64px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 4;
+}
+
+.menu-button {
+  position: fixed;
+  top: 16px;
+  left: 85%;
+  z-index: 100;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 16px;
+  color: var(--cor-texto);
+}
+
+/* Menu lateral */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s ease;
+}
+
+.overlay--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mdc-drawer {
+  width: 280px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  left: -280px;
+  top: 0;
+  z-index: 10;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+.mdc-drawer--open {
+  transform: translateX(280px);
+}
+
+/* Restante do seu CSS permanece igual... */
+
+@media (min-width: 1024px) {
+  .mdc-drawer {
+    position: relative;
+    left: 0;
+    transform: none;
+  }
+
+  .app-content {
+    margin-left: 280px;
+  }
+
+  .menu-button, .overlay {
+    display: none;
+  }
+}
         /* Estilo para a checkbox "Lembrar de mim" */
         input[type="checkbox"] {
             width: 18px;
@@ -93,66 +252,6 @@
                 overflow: hidden;
             }
             
-            html {
-                height: 100%;
-                overflow: hidden;
-            }
-            
-            .tela-fixa {
-                height: 100vh;
-                height: -webkit-fill-available;
-            }
-        }
-
-        /* Configurações de bloqueio de zoom e barra de navegação */
-        html {
-            touch-action: pan-y;
-            -ms-touch-action: pan-y;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        body {
-  width: 100%;
-  height: 100vh;
-  height: -webkit-fill-available;
-  -webkit-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-  overscroll-behavior-y: contain;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  
-  overflow: hidden;
-}
-
-.tela-fixa {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  height: -webkit-fill-available;
-  overflow: hidden;
-}
-
-        /* Bloqueio de zoom em elementos */
-        * {
-            -webkit-user-zoom: none;
-            user-zoom: none;
-            -webkit-text-size-adjust: none;
-            text-size-adjust: none;
-            max-width: 100%;
-        }
-
-        .content-frame {
-            -webkit-overflow-scrolling: touch;
-            overflow: auto;
-            overscroll-behavior-y: contain;
-        }
 
         /* Esconde a barra de rolagem no WebView */
         ::-webkit-scrollbar {
@@ -161,79 +260,6 @@
             height: 0 !important;
             -webkit-appearance: none;
             background: transparent;
-        }
-
-        /* Remove o zoom e toques indesejados */
-        * {
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-text-size-adjust: none;
-            text-size-adjust: none;
-        }
-
-        /* Garante que o iframe ocupe todo o espaço */
-        .main-content {
-            position: relative;
-            height: calc(100vh - 64px);
-        }
-
-        .content-frame {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Variáveis de Cores e Fontes */
-        :root {
-            --cor-primaria: #2c3e50;
-            --cor-secundaria: #3498db;
-            --cor-sucesso: #27ae60;
-            --cor-alerta: #f39c12;
-            --cor-erro: #e74c3c;
-            --cor-fundo: #f8fafc;
-            --cor-texto: #2d3436;
-            --cor-texto-secundario: #636e72;
-            --cor-borda: #dfe6e9;
-            --sombra-card: 0 4px 6px rgba(0, 0, 0, 0.05);
-            --sombra-card-hover: 0 6px 12px rgba(0, 0, 0, 0.1);
-            --fonte-principal: 'Roboto', 'Segoe UI', sans-serif;
-        }
-
-        /* Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--fonte-principal);
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Estrutura Principal */
-        .drawer-container {
-            display: flex;
-            height: 100vh;
-            position: relative;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0; left: 0;
-            right: 0; bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 5;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s ease;
         }
 
         .overlay--visible {
@@ -289,57 +315,15 @@
 
         
         /* Conteúdo da Aplicação */
-        .app-content {
-            flex: 1;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            margin-left: 0;
-            transition: margin-left 0.3s ease;
-            padding-top: 0;
-        }
+        
         
 
-        .main-content {
-            height: 100vh;
-            padding-top: 0;
-        }
+        
 
-        .content-frame {
-            height: 100vh;
-            padding-top: 0;
-            margin-top: 0;
-        }
+        
 
-        /* Barra superior */
-        .top-app-bar {
-            height: 64px;
-            background-color: white;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 4;
-        }
-
-        .menu-button {
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            border: none;
-            cursor: pointer;
-            color: var(--cor-texto);
-            transition: all 0.3s ease;
-        }
+    
+        
 
         .menu-button:hover {
             background: white;
@@ -347,14 +331,7 @@
         }
 
         .menu-button {
-            left: 85%;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0px;
-            margin-right: 16px;
-            color: var(--cor-texto);
-        }
+        
 
         .page-title {
             font-size: 1.25rem;
