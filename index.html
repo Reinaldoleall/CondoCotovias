@@ -286,16 +286,14 @@
             color: var(--cor-texto-secundario);
         }
 
-        /* Conteúdo da Aplicação */
+        
         .app-content {
-            flex: 1;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            margin-left: 0;
-            transition: margin-left 0.3s ease;
-            padding-top: 0;
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.85); /* FUNDO SEMI-TRANSPARENTE */
+            min-height: 100vh;
         }
+        
 
         .main-content {
             height: 100vh;
