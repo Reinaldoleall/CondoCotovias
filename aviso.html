@@ -11,355 +11,306 @@
   <!-- IntroJS para o tutorial -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
 </head>
 <style>
+  :root {
+    --cor-primaria: #2c3e50;
+    --cor-secundaria: #34495e;
+    --cor-destaque: #3498db;
+    --cor-fundo: #f8f9fa;
+    --cor-texto: #333333;
+    --cor-texto-claro: #7f8c8d;
+    --cor-borda: #e0e0e0;
+    --cor-urgente: #e74c3c;
+    --cor-normal: #2ecc71;
+    --sombra-box: 0 2px 10px rgba(0, 0, 0, 0.05);
+    --fonte-principal: 'Arial', Roboto, 'Helvetica Neue', sans-serif;
+  }
 
-
-
-
-.container {
-  flex: 1 0 auto; /* O container cresce para ocupar o espaço disponível */
-  padding-bottom: 60px; /* Espaço para o footer */
-  overflow-y: auto; /* Permite scroll apenas no container */
-}
-
-.page-footer {
-  flex-shrink: 0; /* O footer não diminui */
-  width: 100%;
-}
-
-/* Quando não há avisos suficientes para rolar */
-.no-avisos-container .container {
-  padding-bottom: 0;
-}
-
-/* Ajuste para o modal */
-.modal-body {
-  max-height: calc(100vh - 200px); /* Altura máxima com espaço para header/footer */
-  overflow-y: auto;
-}
-
-    /* MANTENDO SEUS ESTILOS ORIGINAIS COM PEQUENOS AJUSTES */
-    :root {
-      --cor-primaria: #2c3e50;
-      --cor-secundaria: #34495e;
-      --cor-destaque: #3498db;
-      --cor-fundo: #f8f9fa;
-      --cor-texto: #333333;
-      --cor-texto-claro: #7f8c8d;
-      --cor-borda: #e0e0e0;
-      --cor-urgente: #e74c3c;
-      --cor-normal: #2ecc71;
-      --sombra-box: 0 2px 10px rgba(0, 0, 0, 0.05);
-      --fonte-principal: 'Arial', Roboto, 'Helvetica Neue', sans-serif;
-    }
-
-    /* Restante do seu CSS original permanece igual */
-    /* ... (mantenha todos os seus outros estilos) ... */
-
-    /* AJUSTES PARA MELHOR VISIBILIDADE SOBRE O FUNDO */
-    .aviso-card {
-      background-color: rgba(255, 255, 255, 0.95);
-    }
-
-    .modal {
-      background-color: rgba(255, 255, 255, 0.98);
-    }
-
-    .page-footer {
-      background-color: rgba(44, 62, 80, 0.95) !important;
-      position: relative;
-      z-index: 1;
-    }
-  /* Reset e Fontes - Versão Atualizada para seu HTML */
-
-
-  
-
-body {
-  background-image: url('img/IMG-20250529-WA0015.jpg');
-  background-size: cover;      /* Faz a imagem cobrir toda a tela */
-  background-position: center; /* Centraliza a imagem */
-  background-repeat: no-repeat; /* Evita que a imagem se repita */
-}
-
-
-
-/* Reset Básico */
-* {
+  /* Estrutura principal */
+  html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
+  }
 
-body {
-    font-family: var(--fonte-principal);
-    background-color: var(--cor-fundo);
-    color: var(--cor-texto);
-    line-height: 1.6;
-    min-height: 100vh;
+  body {
     display: flex;
     flex-direction: column;
-}
+    font-family: var(--fonte-principal);
+    color: var(--cor-texto);
+    line-height: 1.6;
+    background-image: url('img/IMG-20250529-WA0015.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Fixa o background */
+  }
 
-/* Container Principal - Ajustado para Materialize */
- .container {
+  /* Container principal ajustado */
+  main {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 60px; /* Espaço para o footer */
+  }
+
+  .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     padding-top: 80px;
-    min-height: calc(100vh - 64px - 56px); /* Altura mínima */
-    overflow-y: auto; /* Permite scroll */
-}
+    overflow-y: visible; /* Permite que o conteúdo flua normalmente */
+  }
 
-@media (min-width: 600px) {
-    .container {
-        max-width: 85%;
-    }
-}
-
-@media (min-width: 992px) {
-    .container {
-        max-width: 70%;
-    }
-}
-
-/* Avisos Container */
-.avisos-container {
+  /* Avisos Container - ajustado para rolagem */
+  .avisos-container {
     margin: 2rem 0;
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
-}
+    position: relative;
+    z-index: 2;
+  }
 
-/* Cards de Avisos */
-.aviso-card {
-    background: white;
+  /* Rodapé fixo */
+  .page-footer {
+    background-color: rgba(44, 62, 80, 0.95) !important;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 3;
+  }
+
+  /* Cards de Avisos */
+  .aviso-card {
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 8px;
     box-shadow: var(--sombra-box);
     overflow: hidden;
     transition: transform 0.3s ease;
     cursor: pointer;
-}
+  }
 
-.aviso-card:hover {
+  .aviso-card:hover {
     transform: translateY(-5px);
-}
+  }
 
-.aviso-header {
+  .aviso-header {
     padding: 1.2rem;
     color: white;
-}
+  }
 
-.aviso-header.normal {
+  .aviso-header.normal {
     background-color: var(--cor-normal);
-}
+  }
 
-.aviso-header.urgente {
+  .aviso-header.urgente {
     background-color: var(--cor-urgente);
-}
+  }
 
-.aviso-titulo {
+  .aviso-titulo {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
-}
+  }
 
-.aviso-data {
+  .aviso-data {
     display: flex;
     align-items: center;
     font-size: 0.9rem;
     opacity: 0.9;
-}
+  }
 
-.aviso-data i {
+  .aviso-data i {
     margin-right: 5px;
     font-size: 1rem;
-}
+  }
 
-.aviso-body {
+  .aviso-body {
     padding: 1.2rem;
-}
+  }
 
-.aviso-resumo {
+  .aviso-resumo {
     color: var(--cor-texto);
     margin-bottom: 0;
-}
+  }
 
-.aviso-footer {
+  .aviso-footer {
     padding: 0.8rem 1.2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid var(--cor-borda);
-}
+  }
 
-.aviso-tag {
+  .aviso-tag {
     padding: 0.3rem 0.8rem;
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: bold;
     text-transform: uppercase;
     color: white;
-}
+  }
 
-.aviso-tag.normal {
+  .aviso-tag.normal {
     background-color: var(--cor-normal);
-}
+  }
 
-.aviso-tag.urgente {
+  .aviso-tag.urgente {
     background-color: var(--cor-urgente);
-}
+  }
 
-.aviso-autor {
+  .aviso-autor {
     display: flex;
     align-items: center;
     color: var(--cor-texto-claro);
     font-size: 0.9rem;
-}
+  }
 
-.aviso-autor i {
+  .aviso-autor i {
     margin-right: 5px;
-}
+  }
 
-/* Modal de Aviso */
-.aviso-modal {
+  /* Modal de Aviso */
+  .aviso-modal {
     border-radius: 8px;
     overflow: hidden;
     max-width: 700px;
-}
+  }
 
-.modal-header {
+  .modal-header {
     padding: 1.5rem;
     color: white;
-}
+  }
 
-.modal-header.normal {
+  .modal-header.normal {
     background-color: var(--cor-normal);
-}
+  }
 
-.modal-header.urgente {
+  .modal-header.urgente {
     background-color: var(--cor-urgente);
-}
+  }
 
-.modal-titulo {
+  .modal-titulo {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-}
+  }
 
-.modal-subheader {
+  .modal-subheader {
     display: flex;
     align-items: center;
     font-size: 0.95rem;
     opacity: 0.9;
-}
+  }
 
-.modal-data {
+  .modal-data {
     display: flex;
     align-items: center;
-}
+  }
 
-.modal-data i {
+  .modal-data i {
     margin-right: 5px;
-}
+  }
 
-.modal-body {
+  .modal-body {
     padding: 1.5rem;
     max-height: 60vh;
     overflow-y: auto;
-}
+  }
 
-.modal-conteudo {
+  .modal-conteudo {
     line-height: 1.7;
-}
+  }
 
-.modal-conteudo p {
+  .modal-conteudo p {
     margin-bottom: 1rem;
-}
+  }
 
-.modal-footer {
+  .modal-footer {
     padding: 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid var(--cor-borda);
-}
+  }
 
-/* Estado quando não há avisos */
-.no-avisos {
+  /* Estado quando não há avisos */
+  .no-avisos {
     text-align: center;
     padding: 3rem 1rem;
     color: var(--cor-texto-claro);
-}
+  }
 
-.no-avisos i {
+  .no-avisos i {
     font-size: 3rem;
     margin-bottom: 1rem;
     color: var(--cor-borda);
-}
+  }
 
-.no-avisos h5 {
+  .no-avisos h5 {
     margin-bottom: 0.5rem;
     color: var(--cor-texto);
-}
+  }
 
-/* Loading */
-.loading-container {
+  /* Loading */
+  .loading-container {
     display: flex;
     justify-content: center;
     padding: 3rem;
-}
+  }
 
-/* Rodapé */
-.page-footer {
-    background-color: var(--cor-primaria) !important;
-    padding: 2rem 0 !important;
-    margin-top: auto;
-}
-
-.page-footer h5 {
-    margin-bottom: 1rem;
-}
-
-/* Ajustes para Material Icons */
-.material-icons {
+  /* Ajustes para Material Icons */
+  .material-icons {
     vertical-align: middle;
-}
+  }
 
-/* Responsividade */
-@media (max-width: 600px) {
+  /* Responsividade */
+  @media (max-width: 600px) {
     .aviso-footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
     }
     
     .modal-body {
-        max-height: 50vh;
+      max-height: 50vh;
     }
-}
+    
+    .container {
+      padding-top: 60px;
+    }
+  }
+
+  @media (min-width: 600px) {
+    .container {
+      max-width: 85%;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .container {
+      max-width: 70%;
+    }
+  }
 </style>
 
 <body>
-
-
-
   <!-- Conteúdo principal -->
-  <main class="container">
-
-    <h4>Fique por dentro das últimas informações e comunicados</h4>
-    
-    <div id="avisos-container" class="avisos-container" data-intro="Os avisos são exibidos em cards organizados. Clique em qualquer um para ver os detalhes" data-step="2">
-      <!-- Loading state -->
-      <div class="loading-container">
-        <div class="preloader-wrapper big active">
-          <div class="spinner-layer spinner-green-only">
-            <div class="circle-clipper left">
-              <div class="circle"></div>
-            </div><div class="gap-patch">
-              <div class="circle"></div>
-            </div><div class="circle-clipper right">
-              <div class="circle"></div>
+  <main>
+    <div class="container">
+      <h4>Fique por dentro das últimas informações e comunicados</h4>
+      
+      <div id="avisos-container" class="avisos-container" data-intro="Os avisos são exibidos em cards organizados. Clique em qualquer um para ver os detalhes" data-step="2">
+        <!-- Loading state -->
+        <div class="loading-container">
+          <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-green-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -368,8 +319,7 @@ body {
   </main>
 
   <!-- Rodapé -->
-  
-<footer class="page-footer" style="background-color: var(--primary-color);">
+  <footer class="page-footer" style="background-color: var(--primary-color);">
     <div class="container">
       <div class="row">
         <div class="col l6 s12">
@@ -379,6 +329,7 @@ body {
       </div>
     </div>
   </footer>
+
   <!-- Modal de Aviso -->
   <div id="avisoModal" class="modal aviso-modal" data-intro="Este é o menu onde voçê acessa outros conteúdos." data-step="3">
     <div class="modal-header normal" id="modalHeader">
@@ -409,14 +360,14 @@ body {
       
       // Configuração do Firebase
       const firebaseConfig = {
-  apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
-  authDomain: "rifas-c414b.firebaseapp.com",
-  databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
-  projectId: "rifas-c414b",
-  storageBucket: "rifas-c414b.firebasestorage.app",
-  messagingSenderId: "770195193538",
-  appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
-};
+        apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
+        authDomain: "rifas-c414b.firebaseapp.com",
+        databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
+        projectId: "rifas-c414b",
+        storageBucket: "rifas-c414b.firebasestorage.app",
+        messagingSenderId: "770195193538",
+        appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
+      };
       
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
@@ -590,9 +541,6 @@ body {
           localStorage.setItem('tutorialCompleto', 'true');
         }).start();
       }
-      
-      // Adiciona evento de clique no botão de ajuda
-      
       
       // Função para formatar o conteúdo mantendo quebras de linha e parágrafos
       function formatarConteudo(texto) {
