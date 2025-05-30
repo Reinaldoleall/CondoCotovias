@@ -14,20 +14,75 @@
 
 </head>
 <style>
+
+  body {
+      margin: 0;
+      padding: 0;
+      position: relative;
+      min-height: 100vh;
+    }
+    
+    body::before {
+      content: "";
+      background-image: url('img/IMG-20250529-WA0015.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+      opacity: 0.9; /* Ajuste a opacidade conforme necessário */
+    }
+
+    /* CONTEÚDO PRINCIPAL (ROLA SOBRE O FUNDO) */
+    .container {
+      background-color: rgba(255, 255, 255, 0.92); /* Fundo semi-transparente */
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+      margin-bottom: 20px;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* MANTENDO SEUS ESTILOS ORIGINAIS COM PEQUENOS AJUSTES */
+    :root {
+      --cor-primaria: #2c3e50;
+      --cor-secundaria: #34495e;
+      --cor-destaque: #3498db;
+      --cor-fundo: #f8f9fa;
+      --cor-texto: #333333;
+      --cor-texto-claro: #7f8c8d;
+      --cor-borda: #e0e0e0;
+      --cor-urgente: #e74c3c;
+      --cor-normal: #2ecc71;
+      --sombra-box: 0 2px 10px rgba(0, 0, 0, 0.05);
+      --fonte-principal: 'Arial', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    /* Restante do seu CSS original permanece igual */
+    /* ... (mantenha todos os seus outros estilos) ... */
+
+    /* AJUSTES PARA MELHOR VISIBILIDADE SOBRE O FUNDO */
+    .aviso-card {
+      background-color: rgba(255, 255, 255, 0.95);
+    }
+
+    .modal {
+      background-color: rgba(255, 255, 255, 0.98);
+    }
+
+    .page-footer {
+      background-color: rgba(44, 62, 80, 0.95) !important;
+      position: relative;
+      z-index: 1;
+    }
   /* Reset e Fontes - Versão Atualizada para seu HTML */
-:root {
-    --cor-primaria: #2c3e50;     /* Azul escuro suave */
-    --cor-secundaria: #34495e;   /* Azul médio */
-    --cor-destaque: #3498db;     /* Azul claro (para links/botões) */
-    --cor-fundo: #f8f9fa;        /* Cinza claro (fundo) */
-    --cor-texto: #333333;        /* Texto escuro (legível) */
-    --cor-texto-claro: #7f8c8d;  /* Texto secundário */
-    --cor-borda: #e0e0e0;        /* Bordas sutis */
-    --cor-urgente: #e74c3c;      /* Vermelho para avisos urgentes */
-    --cor-normal: #2ecc71;       /* Verde para avisos normais */
-    --sombra-box: 0 2px 10px rgba(0, 0, 0, 0.05);
-    --fonte-principal: 'Arial', Roboto, 'Helvetica Neue', sans-serif;
-}
+
 
   
 
