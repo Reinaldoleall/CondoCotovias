@@ -27,16 +27,17 @@
     --fonte-principal: 'Arial', Roboto, 'Helvetica Neue', sans-serif;
   }
 
-  /* Estrutura principal */
-  html, body {
+    html {
     height: 100%;
-    margin: 0;
-    padding: 0;
   }
-
+  
   body {
+    min-height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
+    margin: 0;
+    padding: 0;
     font-family: var(--fonte-principal);
     color: var(--cor-texto);
     line-height: 1.6;
@@ -44,23 +45,22 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed; /* Fixa o background */
+    background-attachment: fixed;
   }
 
   /* Container principal ajustado */
   main {
-    flex: 1;
+    flex: 1 0 auto;
     position: relative;
     z-index: 1;
     padding-bottom: 60px; /* Espaço para o footer */
   }
 
-  .container {
-    max-width: 1200px;
+    .container {
+    max-width: 100%;
     margin: 0 auto;
     padding: 20px;
     padding-top: 80px;
-    overflow-y: visible; /* Permite que o conteúdo flua normalmente */
   }
 
   /* Avisos Container - ajustado para rolagem */
@@ -73,13 +73,24 @@
     z-index: 2;
   }
 
-  /* Rodapé fixo */
   .page-footer {
-    z-index: 1000;
     background-color: rgba(44, 62, 80, 0.95) !important;
-    flex-shrink: 0;
-    position: relative;
+    position: fixed;
+    bottom: -25px;
+    width: 100%;
     z-index: 3;
+    padding: 10px 0 !important; /* Reduz o padding vertical */
+    height: auto; /* Altura automática conforme conteúdo */
+  }
+  
+    .page-footer .container {
+    padding: 0 0px; /* Ajusta padding interno do container */
+    margin: 0 auto;
+  }
+  
+  .page-footer h5, .page-footer p {
+    margin: 1px 10; /* Ajusta margens do texto */
+    line-height: 1.5; /* Ajusta espaçamento entre linhas */
   }
 
   /* Cards de Avisos */
@@ -317,6 +328,7 @@
           </div>
         </div>
       </div>
+     <br><br><br><br>
     </div>
   </main>
 
