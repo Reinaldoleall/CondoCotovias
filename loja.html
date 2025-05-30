@@ -1382,7 +1382,7 @@
             window.addEventListener('scroll', function() {
                 const currentScroll = window.pageYOffset;
                 
-                if (currentScroll > headerHeight * 0.1) {
+                if (currentScroll > headerHeight * 0.5) {
                     if (!isLogoVisible) {
                         headerLogo.classList.add('visible');
                         mainLogo.classList.add('hidden');
