@@ -10,7 +10,25 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
-    
+        .review-author-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .admin-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #6200ee;
+            color: white;
+            padding: 12px;
+            border-radius: 50%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
 /* Estilos para alertas */
 .review-alert {
     padding: 12px 16px;
@@ -1611,6 +1629,8 @@
             </div>
             
             <div class="add-review-section">
+                      <h4>Deixe sua avaliação</h4>
+        <input type="text" id="review-author" class="review-author-input" placeholder="Seu nome (opcional)">
                 <h4>Deixe sua avaliação</h4>
                 <div class="rating-input">
                     <span>Sua avaliação:</span>
@@ -1633,6 +1653,11 @@
 <button id="open-reviews" class="reviews-button">
     <i class="material-icons">star</i>
 </button>
+
+    <!-- Link para o painel administrativo -->
+    <a href="admin-avaliacoes.html?userId=${userId}" class="admin-link" id="admin-link">
+        <i class="material-icons">admin_panel_settings</i>
+    </a>
     <script>
         // Configuração do Firebase
         const firebaseConfig = {
@@ -1878,59 +1903,62 @@ function renderStars(rating) {
 }
 
 // Envia uma nova avaliação
-function submitReview() {
-    const reviewText = document.getElementById('review-text').value.trim();
-    
-    if (currentUserRating === 0) {
-        showAlert('Por favor, selecione uma classificação com estrelas.', 'error');
-        return;
-    }
-    
-    if (reviewText === '') {
-        showAlert('Por favor, escreva sua avaliação.', 'error');
-        return;
-    }
-    
-    // Mostra o loading
-    const submitButton = document.getElementById('submit-review');
-    const originalText = submitButton.innerHTML;
-    submitButton.innerHTML = '<i class="material-icons">hourglass_top</i> Enviando...';
-    submitButton.disabled = true;
-    
-    // Cria o objeto de avaliação
-    const newReview = {
-        rating: currentUserRating,
-        text: reviewText,
-        date: new Date().toISOString(),
-        author: 'Cliente'
-    };
-    
-    // Envia para o Firebase
-    reviewsRef.push(newReview)
-        .then(() => {
-            // Limpa o formulário
-            document.getElementById('review-text').value = '';
-            currentUserRating = 0;
+        function submitReview() {
+            const reviewText = document.getElementById('review-text').value.trim();
+            const authorName = document.getElementById('review-author').value.trim();
             
-            // Reseta as estrelas
-            document.querySelectorAll('.star-rating .star').forEach(star => {
-                star.classList.remove('active');
-                star.textContent = '☆';
-            });
+            if (currentUserRating === 0) {
+                showAlert('Por favor, selecione uma classificação com estrelas.', 'error');
+                return;
+            }
             
-            // Mostra mensagem de sucesso
-            showAlert('Avaliação enviada com sucesso! Obrigado por seu feedback.', 'success');
-        })
-        .catch(error => {
-            console.error('Erro ao enviar avaliação:', error);
-            showAlert('Ocorreu um erro ao enviar sua avaliação. Por favor, tente novamente.', 'error');
-        })
-        .finally(() => {
-            // Restaura o botão
-            submitButton.innerHTML = originalText;
-            submitButton.disabled = false;
-        });
-}
+            if (reviewText === '') {
+                showAlert('Por favor, escreva sua avaliação.', 'error');
+                return;
+            }
+            
+            // Mostra o loading
+            const submitButton = document.getElementById('submit-review');
+            const originalText = submitButton.innerHTML;
+            submitButton.innerHTML = '<i class="material-icons">hourglass_top</i> Enviando...';
+            submitButton.disabled = true;
+            
+            // Cria o objeto de avaliação
+            const newReview = {
+                rating: currentUserRating,
+                text: reviewText,
+                date: new Date().toISOString(),
+                author: authorName || 'Anônimo',
+                responded: false // Adiciona status de resposta
+            };
+            
+            // Envia para o Firebase
+            reviewsRef.push(newReview)
+                .then(() => {
+                    // Limpa o formulário
+                    document.getElementById('review-text').value = '';
+                    document.getElementById('review-author').value = '';
+                    currentUserRating = 0;
+                    
+                    // Reseta as estrelas
+                    document.querySelectorAll('.star-rating .star').forEach(star => {
+                        star.classList.remove('active');
+                        star.textContent = '☆';
+                    });
+                    
+                    // Mostra mensagem de sucesso
+                    showAlert('Avaliação enviada com sucesso! Obrigado por seu feedback.', 'success');
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar avaliação:', error);
+                    showAlert('Ocorreu um erro ao enviar sua avaliação. Por favor, tente novamente.', 'error');
+                })
+                .finally(() => {
+                    // Restaura o botão
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                });
+        }
 
 // Função para mostrar alertas personalizados
 function showAlert(message, type) {
@@ -2862,7 +2890,16 @@ function sendTextFallback() {
     window.open(`https://wa.me/${storeData.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
     cleanupAfterOrder();
 }
-
+        function checkAdminAccess() {
+            // Verificar se é o dono da loja (pode implementar autenticação)
+            const isOwner = localStorage.getItem('isOwner') === 'true';
+            document.getElementById('admin-link').style.display = isOwner ? 'block' : 'none';
+        }
+        
+                window.onload = function() {
+            loadStore();
+            checkAdminAccess();
+        };
         // Carrega a loja quando a página é aberta
         window.onload = loadStore;
     </script>
