@@ -10,6 +10,47 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
+    
+/* Estilos para alertas */
+.review-alert {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    animation: fadeIn 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.review-alert-success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.review-alert-error {
+    background-color: #F44336;
+    color: white;
+}
+
+.review-alert i {
+    cursor: pointer;
+}
+
+.fade-out {
+    animation: fadeOut 0.3s ease;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
 /* Estilos para o sistema de avaliações */
 .reviews-button {
     position: fixed;
@@ -1545,6 +1586,7 @@
             <button class="reviews-modal-close">&times;</button>
         </div>
         <div class="reviews-modal-body">
+    <div id="alerts-container"></div>
             <div class="store-rating-summary">
                 <div class="average-rating">
                     <span class="rating-number" id="average-rating">0.0</span>
@@ -1636,6 +1678,11 @@ function initReviewsSystem() {
     
     // Carrega as avaliações
     loadReviews();
+    
+    // Limpa alertas ao abrir o modal
+    document.getElementById('open-reviews').addEventListener('click', () => {
+        document.getElementById('alerts-container').innerHTML = '';
+    });
 }
 
 // Abrir modal de avaliações
@@ -1698,10 +1745,19 @@ function setupStarRating() {
 
 // Carrega as avaliações do Firebase
 function loadReviews() {
+    if (!reviewsRef) {
+        console.error('Referência de avaliações não definida');
+        return;
+    }
+    
     reviewsRef.on('value', (snapshot) => {
-        reviews = snapshot.val() || [];
+        const reviewsData = snapshot.val();
+        reviews = reviewsData ? Object.values(reviewsData) : [];
         renderReviews();
         updateRatingSummary();
+    }, (error) => {
+        console.error('Erro ao carregar avaliações:', error);
+        showAlert('Erro ao carregar avaliações. Por favor, recarregue a página.', 'error');
     });
 }
 
@@ -1826,21 +1882,27 @@ function submitReview() {
     const reviewText = document.getElementById('review-text').value.trim();
     
     if (currentUserRating === 0) {
-        alert('Por favor, selecione uma classificação com estrelas.');
+        showAlert('Por favor, selecione uma classificação com estrelas.', 'error');
         return;
     }
     
     if (reviewText === '') {
-        alert('Por favor, escreva sua avaliação.');
+        showAlert('Por favor, escreva sua avaliação.', 'error');
         return;
     }
+    
+    // Mostra o loading
+    const submitButton = document.getElementById('submit-review');
+    const originalText = submitButton.innerHTML;
+    submitButton.innerHTML = '<i class="material-icons">hourglass_top</i> Enviando...';
+    submitButton.disabled = true;
     
     // Cria o objeto de avaliação
     const newReview = {
         rating: currentUserRating,
         text: reviewText,
         date: new Date().toISOString(),
-        author: 'Cliente' // Você pode personalizar ou pedir nome
+        author: 'Cliente'
     };
     
     // Envia para o Firebase
@@ -1856,72 +1918,113 @@ function submitReview() {
                 star.textContent = '☆';
             });
             
-            alert('Avaliação enviada com sucesso! Obrigado por seu feedback.');
+            // Mostra mensagem de sucesso
+            showAlert('Avaliação enviada com sucesso! Obrigado por seu feedback.', 'success');
         })
         .catch(error => {
             console.error('Erro ao enviar avaliação:', error);
-            alert('Ocorreu um erro ao enviar sua avaliação. Por favor, tente novamente.');
+            showAlert('Ocorreu um erro ao enviar sua avaliação. Por favor, tente novamente.', 'error');
+        })
+        .finally(() => {
+            // Restaura o botão
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
         });
 }
 
-        // Carrega os dados da loja
-        function loadStore() {
-            if (!userId) {
-                alert('Loja não encontrada!');
-                window.location.href = 'index.html';
-                return;
-            }
-            
-            const storeRef = database.ref('stores/' + userId);
-            const reviewsRef = database.ref('stores/' + userId + '/reviews');
-            
-            storeRef.on('value', (snapshot) => {
-                storeData = snapshot.val();
-                
-                if (storeData) {
-                    // Atualiza o cabeçalho da loja
-                    const logoUrl = storeData.logo || 'https://via.placeholder.com/150';
-                    document.getElementById('store-view-name').textContent = storeData.name;
-                    document.getElementById('store-view-title').textContent = storeData.name;
-                    document.getElementById('store-view-desc').textContent = storeData.description || '';
-                    
-                    // Sincroniza ambos os logos
-                    document.getElementById('store-view-logo').src = logoUrl;
-                    document.getElementById('store-view-logo-header').src = logoUrl;
-                    
-                    document.getElementById('store-view-header').style.setProperty('--store-primary-color', storeData.color || '#6200ee');
-                    
-                    // Verifica se existem produtos
-                    if (storeData.products) {
-                        // Converte os produtos para array e armazena
-                        allProducts = Object.entries(storeData.products).map(([id, product]) => ({ 
-                            id, 
-                            ...product,
-                            category: product.category ? product.category.toString() : null
-                        }));
-                        
-                        renderCategories(storeData.categories || {});
-                        renderProducts(allProducts);
-                        
-                        // Configura a pesquisa
-                        setupSearch();
-                    } else {
-                        document.getElementById('store-products').innerHTML = '<p class="no-products-message">Nenhum produto disponível no momento.</p>';
-                    }
-                } else {
-                    alert('Loja não encontrada!');
-                    window.location.href = 'index.html';
-                }
-            });
-            
-            // Configura o efeito do logo no header
-            setupHeaderLogoEffect();
-            
-            // Configura os eventos do carrinho
-            setupCartEvents();
-            setupModalEvents();
-            initReviewsSystem();
+// Função para mostrar alertas personalizados
+function showAlert(message, type) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `review-alert review-alert-${type}`;
+    
+    // Adiciona ícone e mensagem
+    const icon = type === 'success' ? 'check_circle' : 'error';
+    alertDiv.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <i class="material-icons">${icon}</i>
+            <span>${message}</span>
+        </div>
+        <i class="material-icons close-alert">close</i>
+    `;
+    
+    // Adiciona evento para fechar
+    alertDiv.querySelector('.close-alert').addEventListener('click', () => {
+        alertDiv.remove();
+    });
+    
+    // Adiciona ao container de alertas
+    const alertsContainer = document.getElementById('alerts-container');
+    alertsContainer.appendChild(alertDiv);
+    
+    // Remove após 5 segundos
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.classList.add('fade-out');
+            setTimeout(() => alertDiv.remove(), 300);
         }
+    }, 5000);
+}
+
+        // Carrega os dados da loja
+function loadStore() {
+    if (!userId) {
+        alert('Loja não encontrada!');
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    // Define a referência para as avaliações globalmente
+    window.reviewsRef = database.ref('stores/' + userId + '/reviews');
+    
+    const storeRef = database.ref('stores/' + userId);
+    
+    storeRef.on('value', (snapshot) => {
+        storeData = snapshot.val();
+        
+        if (storeData) {
+            // Atualiza o cabeçalho da loja
+            const logoUrl = storeData.logo || 'https://via.placeholder.com/150';
+            document.getElementById('store-view-name').textContent = storeData.name;
+            document.getElementById('store-view-title').textContent = storeData.name;
+            document.getElementById('store-view-desc').textContent = storeData.description || '';
+            
+            // Sincroniza ambos os logos
+            document.getElementById('store-view-logo').src = logoUrl;
+            document.getElementById('store-view-logo-header').src = logoUrl;
+            
+            document.getElementById('store-view-header').style.setProperty('--store-primary-color', storeData.color || '#6200ee');
+            
+            // Verifica se existem produtos
+            if (storeData.products) {
+                // Converte os produtos para array e armazena
+                allProducts = Object.entries(storeData.products).map(([id, product]) => ({ 
+                    id, 
+                    ...product,
+                    category: product.category ? product.category.toString() : null
+                }));
+                
+                renderCategories(storeData.categories || {});
+                renderProducts(allProducts);
+                
+                // Configura a pesquisa
+                setupSearch();
+            } else {
+                document.getElementById('store-products').innerHTML = '<p class="no-products-message">Nenhum produto disponível no momento.</p>';
+            }
+        } else {
+            alert('Loja não encontrada!');
+            window.location.href = 'index.html';
+        }
+    });
+    
+    // Configura o efeito do logo no header
+    setupHeaderLogoEffect();
+    
+    // Configura os eventos do carrinho
+    setupCartEvents();
+    setupModalEvents();
+    initReviewsSystem();
+}
         
         // Configura os eventos do carrinho
         function setupCartEvents() {
