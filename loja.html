@@ -10,7 +10,274 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
+/* Estilos para o sistema de avaliações */
+.reviews-button {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background-color: #FFA000;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+    border: none;
+    transition: all 0.3s;
+}
 
+.reviews-button:hover {
+    background-color: #FF8F00;
+    transform: scale(1.1);
+}
+
+.reviews-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.reviews-modal.show {
+    display: flex;
+}
+
+.reviews-modal-content {
+    background-color: white;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+.reviews-modal-header {
+    position: relative;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reviews-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.reviews-modal-body {
+    padding: 16px;
+}
+
+.store-rating-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.average-rating {
+    text-align: center;
+    min-width: 150px;
+}
+
+.rating-number {
+    font-size: 3rem;
+    font-weight: bold;
+    display: block;
+    color: #333;
+}
+
+.stars {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0;
+}
+
+.star {
+    color: #FFD700;
+    font-size: 1.5rem;
+}
+
+.total-reviews {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.rating-bars {
+    flex: 1;
+    min-width: 250px;
+}
+
+.rating-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.rating-bar span:first-child {
+    width: 80px;
+    color: #666;
+}
+
+.bar-container {
+    flex: 1;
+    height: 10px;
+    background-color: #eee;
+    border-radius: 5px;
+    margin: 0 10px;
+    overflow: hidden;
+}
+
+.bar {
+    height: 100%;
+    background-color: #FFD700;
+    border-radius: 5px;
+}
+
+.percentage {
+    width: 40px;
+    text-align: right;
+    color: #666;
+}
+
+.reviews-list {
+    margin: 20px 0;
+}
+
+.review-item {
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.review-author {
+    font-weight: 500;
+}
+
+.review-date {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.review-rating {
+    color: #FFD700;
+    margin: 5px 0;
+}
+
+.review-text {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.review-response {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.review-response:before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    border-width: 0 10px 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent #f5f5f5 transparent;
+}
+
+.response-label {
+    font-weight: 500;
+    color: #6200ee;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.add-review-section {
+    padding: 20px 0;
+    border-top: 1px solid #eee;
+    margin-top: 20px;
+}
+
+.rating-input {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.star-rating {
+    display: inline-flex;
+    margin-left: 10px;
+}
+
+.star-rating .star {
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star-rating .star:hover, 
+.star-rating .star.active {
+    color: #FFD700;
+}
+
+#review-text {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-height: 100px;
+    margin-bottom: 15px;
+    resize: vertical;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .store-rating-summary {
+        flex-direction: column;
+    }
+    
+    .average-rating {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    .rating-number {
+        font-size: 2rem;
+        display: inline;
+    }
+    
+    .stars {
+        margin: 0;
+    }
+}
         body {
   background-image: url('img/IMG-20250529-WA0015.jpg');
     background-size: cover;
@@ -1269,6 +1536,61 @@
         </button>
     </div>
 </div>
+
+<!-- Modal de Avaliações -->
+<div class="reviews-modal" id="reviews-modal">
+    <div class="reviews-modal-content">
+        <div class="reviews-modal-header">
+            <h3>Avaliações da Loja</h3>
+            <button class="reviews-modal-close">&times;</button>
+        </div>
+        <div class="reviews-modal-body">
+            <div class="store-rating-summary">
+                <div class="average-rating">
+                    <span class="rating-number" id="average-rating">0.0</span>
+                    <div class="stars" id="average-stars"></div>
+                    <span class="total-reviews" id="total-reviews">(0 avaliações)</span>
+                </div>
+                <div class="rating-bars">
+                    <!-- Barras de distribuição de estrelas -->
+                    <div class="rating-bar">
+                        <span>5 estrelas</span>
+                        <div class="bar-container">
+                            <div class="bar" id="bar-5"></div>
+                        </div>
+                        <span class="percentage" id="percent-5">0%</span>
+                    </div>
+                    <!-- Repetir para 4, 3, 2, 1 estrelas -->
+                </div>
+            </div>
+            
+            <div class="reviews-list" id="reviews-list">
+                <!-- Avaliações serão carregadas aqui -->
+            </div>
+            
+            <div class="add-review-section">
+                <h4>Deixe sua avaliação</h4>
+                <div class="rating-input">
+                    <span>Sua avaliação:</span>
+                    <div class="star-rating">
+                        <span class="star" data-value="1">☆</span>
+                        <span class="star" data-value="2">☆</span>
+                        <span class="star" data-value="3">☆</span>
+                        <span class="star" data-value="4">☆</span>
+                        <span class="star" data-value="5">☆</span>
+                    </div>
+                </div>
+                <textarea id="review-text" placeholder="Conte sua experiência com esta loja..."></textarea>
+                <button id="submit-review" class="btn">Enviar Avaliação</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botão para abrir avaliações (coloque onde achar melhor) -->
+<button id="open-reviews" class="reviews-button">
+    <i class="material-icons">star</i> Avaliações
+</button>
     <script>
         // Configuração do Firebase
         const firebaseConfig = {
@@ -1285,6 +1607,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         
+        
         // Obtém o ID do usuário da URL
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('userId');
@@ -1294,6 +1617,252 @@
         let currentCategory = null;
         let currentProductInModal = null;
         let currentQuantity = 1;
+        let currentUserRating = 0;
+let reviews = [];
+
+// Inicializa o sistema de avaliações
+function initReviewsSystem() {
+    // Botão para abrir avaliações
+    document.getElementById('open-reviews').addEventListener('click', openReviewsModal);
+    
+    // Fechar modal
+    document.querySelector('.reviews-modal-close').addEventListener('click', closeReviewsModal);
+    
+    // Sistema de estrelas para avaliação
+    setupStarRating();
+    
+    // Enviar avaliação
+    document.getElementById('submit-review').addEventListener('click', submitReview);
+    
+    // Carrega as avaliações
+    loadReviews();
+}
+
+// Abrir modal de avaliações
+function openReviewsModal() {
+    document.getElementById('reviews-modal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+// Fechar modal de avaliações
+function closeReviewsModal() {
+    document.getElementById('reviews-modal').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+// Configura o sistema de estrelas para avaliação
+function setupStarRating() {
+    const stars = document.querySelectorAll('.star-rating .star');
+    
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const value = parseInt(this.getAttribute('data-value'));
+            currentUserRating = value;
+            
+            // Atualiza a exibição das estrelas
+            stars.forEach((s, index) => {
+                if (index < value) {
+                    s.classList.add('active');
+                    s.textContent = '★';
+                } else {
+                    s.classList.remove('active');
+                    s.textContent = '☆';
+                }
+            });
+        });
+        
+        // Efeito hover
+        star.addEventListener('mouseover', function() {
+            const value = parseInt(this.getAttribute('data-value'));
+            
+            stars.forEach((s, index) => {
+                if (index < value) {
+                    s.textContent = '★';
+                } else {
+                    s.textContent = '☆';
+                }
+            });
+        });
+        
+        star.addEventListener('mouseout', function() {
+            stars.forEach((s, index) => {
+                if (index < currentUserRating) {
+                    s.textContent = '★';
+                } else {
+                    s.textContent = '☆';
+                }
+            });
+        });
+    });
+}
+
+// Carrega as avaliações do Firebase
+function loadReviews() {
+    reviewsRef.on('value', (snapshot) => {
+        reviews = snapshot.val() || [];
+        renderReviews();
+        updateRatingSummary();
+    });
+}
+
+// Renderiza a lista de avaliações
+function renderReviews() {
+    const reviewsList = document.getElementById('reviews-list');
+    reviewsList.innerHTML = '';
+    
+    if (reviews.length === 0) {
+        reviewsList.innerHTML = '<p class="no-reviews">Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>';
+        return;
+    }
+    
+    // Ordena por data (mais recente primeiro)
+    const sortedReviews = Object.values(reviews).sort((a, b) => 
+        new Date(b.date) - new Date(a.date)
+    );
+    
+    sortedReviews.forEach(review => {
+        const reviewItem = document.createElement('div');
+        reviewItem.className = 'review-item';
+        
+        let responseHtml = '';
+        if (review.response) {
+            responseHtml = `
+                <div class="review-response">
+                    <span class="response-label">Resposta da loja:</span>
+                    <p>${review.response}</p>
+                </div>
+            `;
+        }
+        
+        // Formata a data
+        const reviewDate = new Date(review.date);
+        const formattedDate = reviewDate.toLocaleDateString('pt-BR');
+        
+        reviewItem.innerHTML = `
+            <div class="review-header">
+                <span class="review-author">${review.author || 'Anônimo'}</span>
+                <span class="review-date">${formattedDate}</span>
+            </div>
+            <div class="review-rating">
+                ${renderStars(review.rating)}
+            </div>
+            <p class="review-text">${review.text}</p>
+            ${responseHtml}
+        `;
+        
+        reviewsList.appendChild(reviewItem);
+    });
+}
+
+// Atualiza o resumo de avaliações
+function updateRatingSummary() {
+    if (reviews.length === 0) {
+        document.getElementById('average-rating').textContent = '0.0';
+        document.getElementById('total-reviews').textContent = '(0 avaliações)';
+        
+        // Reseta as barras de porcentagem
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById(`bar-${i}`).style.width = '0%';
+            document.getElementById(`percent-${i}`).textContent = '0%';
+        }
+        
+        return;
+    }
+    
+    // Calcula a média de avaliações
+    const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
+    const averageRating = totalRatings / reviews.length;
+    
+    document.getElementById('average-rating').textContent = averageRating.toFixed(1);
+    document.getElementById('total-reviews').textContent = `(${reviews.length} avaliações)`;
+    
+    // Atualiza as estrelas da média
+    const averageStars = document.getElementById('average-stars');
+    averageStars.innerHTML = renderStars(averageRating);
+    
+    // Calcula a distribuição de estrelas
+    const ratingDistribution = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+    
+    reviews.forEach(review => {
+        ratingDistribution[review.rating]++;
+    });
+    
+    // Atualiza as barras de porcentagem
+    for (let i = 1; i <= 5; i++) {
+        const percentage = (ratingDistribution[i] / reviews.length) * 100;
+        document.getElementById(`bar-${i}`).style.width = `${percentage}%`;
+        document.getElementById(`percent-${i}`).textContent = `${Math.round(percentage)}%`;
+    }
+}
+
+// Renderiza estrelas baseado na avaliação
+function renderStars(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    
+    let starsHtml = '';
+    
+    // Estrelas cheias
+    for (let i = 0; i < fullStars; i++) {
+        starsHtml += '<span class="star">★</span>';
+    }
+    
+    // Meia estrela
+    if (hasHalfStar) {
+        starsHtml += '<span class="star">½</span>';
+    }
+    
+    // Estrelas vazias
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    for (let i = 0; i < emptyStars; i++) {
+        starsHtml += '<span class="star">☆</span>';
+    }
+    
+    return starsHtml;
+}
+
+// Envia uma nova avaliação
+function submitReview() {
+    const reviewText = document.getElementById('review-text').value.trim();
+    
+    if (currentUserRating === 0) {
+        alert('Por favor, selecione uma classificação com estrelas.');
+        return;
+    }
+    
+    if (reviewText === '') {
+        alert('Por favor, escreva sua avaliação.');
+        return;
+    }
+    
+    // Cria o objeto de avaliação
+    const newReview = {
+        rating: currentUserRating,
+        text: reviewText,
+        date: new Date().toISOString(),
+        author: 'Cliente' // Você pode personalizar ou pedir nome
+    };
+    
+    // Envia para o Firebase
+    reviewsRef.push(newReview)
+        .then(() => {
+            // Limpa o formulário
+            document.getElementById('review-text').value = '';
+            currentUserRating = 0;
+            
+            // Reseta as estrelas
+            document.querySelectorAll('.star-rating .star').forEach(star => {
+                star.classList.remove('active');
+                star.textContent = '☆';
+            });
+            
+            alert('Avaliação enviada com sucesso! Obrigado por seu feedback.');
+        })
+        .catch(error => {
+            console.error('Erro ao enviar avaliação:', error);
+            alert('Ocorreu um erro ao enviar sua avaliação. Por favor, tente novamente.');
+        });
+}
 
         // Carrega os dados da loja
         function loadStore() {
@@ -1304,6 +1873,7 @@
             }
             
             const storeRef = database.ref('stores/' + userId);
+            const reviewsRef = database.ref('stores/' + userId + '/reviews');
             
             storeRef.on('value', (snapshot) => {
                 storeData = snapshot.val();
@@ -1350,6 +1920,7 @@
             // Configura os eventos do carrinho
             setupCartEvents();
             setupModalEvents();
+            initReviewsSystem();
         }
         
         // Configura os eventos do carrinho
