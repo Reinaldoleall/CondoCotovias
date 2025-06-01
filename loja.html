@@ -29,735 +29,740 @@
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-/* Estilos para alertas */
-.review-alert {
-    padding: 12px 16px;
-    border-radius: 4px;
-    margin-bottom: 16px;
-    font-size: 0.9rem;
-    animation: fadeIn 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.review-alert-success {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.review-alert-error {
-    background-color: #F44336;
-    color: white;
-}
-
-.review-alert i {
-    cursor: pointer;
-}
-
-.fade-out {
-    animation: fadeOut 0.3s ease;
-    opacity: 0;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-/* Estilos para o sistema de avaliações */
-.reviews-button {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    background-color: #FFA000;
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    cursor: pointer;
-    z-index: 1000;
-    border: none;
-    transition: all 0.3s;
-}
-
-.reviews-button:hover {
-    background-color: #FF8F00;
-    transform: scale(1.1);
-}
-
-.reviews-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.reviews-modal.show {
-    display: flex;
-}
-
-.reviews-modal-content {
-    background-color: white;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    animation: fadeIn 0.3s ease;
-}
-
-.reviews-modal-header {
-    position: relative;
-    padding: 16px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.reviews-modal-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #666;
-}
-
-.reviews-modal-body {
-    padding: 16px;
-}
-
-.store-rating-summary {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
-}
-
-.average-rating {
-    text-align: center;
-    min-width: 150px;
-}
-
-.rating-number {
-    font-size: 3rem;
-    font-weight: bold;
-    display: block;
-    color: #333;
-}
-
-.stars {
-    display: flex;
-    justify-content: center;
-    margin: 8px 0;
-}
-
-.star {
-    color: #FFD700;
-    font-size: 1.5rem;
-}
-
-.total-reviews {
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.rating-bars {
-    flex: 1;
-    min-width: 250px;
-}
-
-.rating-bar {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
-.rating-bar span:first-child {
-    width: 80px;
-    color: #666;
-}
-
-.bar-container {
-    flex: 1;
-    height: 10px;
-    background-color: #eee;
-    border-radius: 5px;
-    margin: 0 10px;
-    overflow: hidden;
-}
-
-.bar {
-    height: 100%;
-    background-color: #FFD700;
-    border-radius: 5px;
-}
-
-.percentage {
-    width: 40px;
-    text-align: right;
-    color: #666;
-}
-
-.reviews-list {
-    margin: 20px 0;
-}
-
-.review-item {
-    padding: 16px;
-    border-bottom: 1px solid #eee;
-}
-
-.review-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
-
-.review-author {
-    font-weight: 500;
-}
-
-.review-date {
-    color: #666;
-    font-size: 0.8rem;
-}
-
-.review-rating {
-    color: #FFD700;
-    margin: 5px 0;
-}
-
-.review-text {
-    margin-bottom: 10px;
-    line-height: 1.5;
-}
-
-.review-response {
-    background-color: #f5f5f5;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-    position: relative;
-}
-
-.review-response:before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: 20px;
-    border-width: 0 10px 10px 10px;
-    border-style: solid;
-    border-color: transparent transparent #f5f5f5 transparent;
-}
-
-.response-label {
-    font-weight: 500;
-    color: #6200ee;
-    margin-bottom: 5px;
-    display: block;
-}
-
-.add-review-section {
-    padding: 20px 0;
-    border-top: 1px solid #eee;
-    margin-top: 20px;
-}
-
-.rating-input {
-    display: flex;
-    align-items: center;
-    margin: 15px 0;
-}
-
-.star-rating {
-    display: inline-flex;
-    margin-left: 10px;
-}
-
-.star-rating .star {
-    font-size: 2rem;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.star-rating .star:hover, 
-.star-rating .star.active {
-    color: #FFD700;
-}
-
-#review-text {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    min-height: 100px;
-    margin-bottom: 15px;
-    resize: vertical;
-}
-
-/* Responsivo */
-@media (max-width: 600px) {
-    .store-rating-summary {
-        flex-direction: column;
-    }
-    
-    .average-rating {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-    }
-    
-    .rating-number {
-        font-size: 2rem;
-        display: inline;
-    }
-    
-    .stars {
-        margin: 0;
-    }
-}
-        body {
-  background-image: url('img/IMG-20250529-WA0015.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-  }
         
-/* Container principal */
-.cart-summary {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    font-family: 'Roboto', sans-serif;
-    color: #333;
-    box-sizing: border-box;
-}
+        /* Estilos para alertas */
+        .review-alert {
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            animation: fadeIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-.print-header {
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #f5f5f5;
-}
+        .review-alert-success {
+            background-color: #4CAF50;
+            color: white;
+        }
 
-.print-logo {
-    max-height: 80px;
-    max-width: 80%;
-    margin: 0 auto 10px;
-    display: block;
-}
+        .review-alert-error {
+            background-color: #F44336;
+            color: white;
+        }
 
-.print-store-name {
-    color: #6200ee;
-    margin: 5px 0;
-    font-size: 1.5rem;
-}
+        .review-alert i {
+            cursor: pointer;
+        }
 
-.print-date {
-    color: #666;
-    font-size: 0.9rem;
-    margin: 5px 0;
-}
+        .fade-out {
+            animation: fadeOut 0.3s ease;
+            opacity: 0;
+        }
 
-.print-title {
-    color: #6200ee;
-    border-bottom: 2px solid #6200ee;
-    padding-bottom: 8px;
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.print-items {
-    margin-bottom: 20px;
-}
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        /* Estilos para o sistema de avaliações */
+        .reviews-button {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background-color: #FFA000;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 1000;
+            border: none;
+            transition: all 0.3s;
+        }
 
-.cart-item-print {
-    display: flex;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #f0f0f0;
-    align-items: center;
-}
+        .reviews-button:hover {
+            background-color: #FF8F00;
+            transform: scale(1.1);
+        }
 
-.product-image-print {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #eee;
-    margin-right: 15px;
-    background-color: #f9f9f9;
-}
+        .reviews-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-.item-info {
-    flex: 1;
-}
+        .reviews-modal.show {
+            display: flex;
+        }
 
-.item-name {
-    font-weight: 500;
-    margin: 0 0 5px 0;
-    font-size: 1rem;
-}
+        .reviews-modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
+        }
 
-.item-details {
-    color: #666;
-    font-size: 0.9rem;
-    margin: 3px 0;
-}
+        .reviews-modal-header {
+            position: relative;
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.item-price {
-    color: #6200ee;
-    font-weight: 500;
-}
+        .reviews-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
 
-.print-total {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #6200ee;
-    padding-top: 15px;
-    margin-top: 10px;
-    border-top: 2px solid #6200ee;
-}
+        .reviews-modal-body {
+            padding: 16px;
+        }
 
-.print-notes {
-    margin-top: 20px;
-    text-align: center;
-    color: #666;
-    font-size: 0.9rem;
-    padding-top: 15px;
-    border-top: 1px dashed #ddd;
-}
+        .store-rating-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
 
-.print-actions {
-    margin-top: 25px;
-}
+        .average-rating {
+            text-align: center;
+            min-width: 150px;
+        }
 
-.whatsapp-send-button {
-    width: 100%;
-    padding: 15px;
-    background-color: #25D366;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .rating-number {
+            font-size: 3rem;
+            font-weight: bold;
+            display: block;
+            color: #333;
+        }
 
-.whatsapp-send-button:hover {
-    background-color: #128C7E;
-}
+        .stars {
+            display: flex;
+            justify-content: center;
+            margin: 8px 0;
+        }
 
-.whatsapp-send-button i {
-    font-size: 1.5rem;
-}
+        .star {
+            color: #FFD700;
+            font-size: 1.5rem;
+        }
 
-.close-summary-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    background-color: transparent;
-    color: #6200ee;
-    border: 1px solid #6200ee;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
+        .total-reviews {
+            color: #666;
+            font-size: 0.9rem;
+        }
 
-.close-summary-button:hover {
-    background-color: rgba(98, 0, 238, 0.05);
-}
+        .rating-bars {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .rating-bar span:first-child {
+            width: 80px;
+            color: #666;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+
+        .bar {
+            height: 100%;
+            background-color: #FFD700;
+            border-radius: 5px;
+        }
+
+        .percentage {
+            width: 40px;
+            text-align: right;
+            color: #666;
+        }
+
+        .reviews-list {
+            margin: 20px 0;
+        }
+
+        .review-item {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .review-author {
+            font-weight: 500;
+        }
+
+        .review-date {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .review-rating {
+            color: #FFD700;
+            margin: 5px 0;
+        }
+
+        .review-text {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .review-response {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .review-response:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent #f5f5f5 transparent;
+        }
+
+        .response-label {
+            font-weight: 500;
+            color: #6200ee;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .add-review-section {
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+
+        .rating-input {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .star-rating {
+            display: inline-flex;
+            margin-left: 10px;
+        }
+
+        .star-rating .star {
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star-rating .star:hover, 
+        .star-rating .star.active {
+            color: #FFD700;
+        }
+
+        #review-text {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 100px;
+            margin-bottom: 15px;
+            resize: vertical;
+        }
+
+        /* Responsivo */
+        @media (max-width: 600px) {
+            .store-rating-summary {
+                flex-direction: column;
+            }
+            
+            .average-rating {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .rating-number {
+                font-size: 2rem;
+                display: inline;
+            }
+            
+            .stars {
+                margin: 0;
+            }
+        }
+        
+        body {
+            background-image: url('img/IMG-20250529-WA0015.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
+        /* Container principal */
+        .cart-summary {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        .print-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f5f5f5;
+        }
+
+        .print-logo {
+            max-height: 80px;
+            max-width: 80%;
+            margin: 0 auto 10px;
+            display: block;
+        }
+
+        .print-store-name {
+            color: #6200ee;
+            margin: 5px 0;
+            font-size: 1.5rem;
+        }
+
+        .print-date {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+
+        .print-title {
+            color: #6200ee;
+            border-bottom: 2px solid #6200ee;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .print-items {
+            margin-bottom: 20px;
+        }
+
+        .cart-item-print {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+        }
+
+        .product-image-print {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #eee;
+            margin-right: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 500;
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+        }
+
+        .item-details {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 3px 0;
+        }
+
+        .item-price {
+            color: #6200ee;
+            font-weight: 500;
+        }
+
+        .print-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #6200ee;
+            padding-top: 15px;
+            margin-top: 10px;
+            border-top: 2px solid #6200ee;
+        }
+
+        .print-notes {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .print-actions {
+            margin-top: 25px;
+        }
+
+        .whatsapp-send-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .whatsapp-send-button:hover {
+            background-color: #128C7E;
+        }
+
+        .whatsapp-send-button i {
+            font-size: 1.5rem;
+        }
+
+        .close-summary-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: transparent;
+            color: #6200ee;
+            border: 1px solid #6200ee;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-summary-button:hover {
+            background-color: rgba(98, 0, 238, 0.05);
+        }
+        
         /* Estilos do Botão Flutuante do Carrinho */
-.cart-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-}
+        .cart-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
 
-.cart-button {
-    background-color: var(--primary-color);
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--elevation-4);
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.3s, background-color 0.3s;
-}
+        .cart-button {
+            background-color: var(--primary-color);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--elevation-4);
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s, background-color 0.3s;
+        }
 
-.cart-button:hover {
-    background-color: var(--primary-dark);
-    transform: scale(1.1);
-}
+        .cart-button:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.1);
+        }
 
-.cart-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: var(--error);
-    color: white;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-}
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--error);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
 
-/* Painel do Carrinho */
-.cart-panel {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 90%;
-    max-width: 400px;
-    max-height: 70vh;
-    background-color: var(--surface);
-    border-radius: 8px;
-    box-shadow: var(--elevation-8);
-    padding: 16px;
-    display: none;
-    flex-direction: column;
-    z-index: 1000;
-    overflow-y: auto;
-    animation: fadeIn 0.3s ease;
-}
+        /* Painel do Carrinho */
+        .cart-panel {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 70vh;
+            background-color: var(--surface);
+            border-radius: 8px;
+            box-shadow: var(--elevation-8);
+            padding: 16px;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
 
-.cart-panel.show {
-    display: flex;
-}
+        .cart-panel.show {
+            display: flex;
+        }
 
-/* Itens do Carrinho */
-.cart-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-}
+        /* Itens do Carrinho */
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
 
-.cart-item-image {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-right: 12px;
-}
+        .cart-item-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 12px;
+        }
 
-.cart-item-info {
-    flex: 1;
-}
+        .cart-item-info {
+            flex: 1;
+        }
 
-.cart-item-name {
-    font-weight: 500;
-    margin-bottom: 4px;
-}
+        .cart-item-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
 
-.cart-item-price {
-    color: var(--primary-color);
-    font-weight: 500;
-}
+        .cart-item-price {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
 
-.cart-item-actions {
-    display: flex;
-    align-items: center;
-}
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+        }
 
-.cart-item-actions button {
-    background: none;
-    border: none;
-    color: var(--primary-color);
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0 8px;
-    transition: color 0.2s;
-}
+        .cart-item-actions button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 8px;
+            transition: color 0.2s;
+        }
 
-.cart-item-actions button:hover {
-    color: var(--primary-dark);
-}
+        .cart-item-actions button:hover {
+            color: var(--primary-dark);
+        }
 
-.cart-item-quantity {
-    margin: 0 8px;
-    min-width: 20px;
-    text-align: center;
-}
+        .cart-item-quantity {
+            margin: 0 8px;
+            min-width: 20px;
+            text-align: center;
+        }
 
-/* Total e Ações do Carrinho */
-.cart-total {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(0,0,0,0.1);
-    font-weight: 500;
-    font-size: 1.1rem;
-    display: flex;
-    justify-content: space-between;
-}
+        /* Total e Ações do Carrinho */
+        .cart-total {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            font-weight: 500;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+        }
 
-.cart-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-}
+        .cart-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
 
-.cart-actions button {
-    flex: 1;
-    padding: 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
-}
+        .cart-actions button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-#clear-cart {
-    background-color: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-}
+        #clear-cart {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
 
-#clear-cart:hover {
-    background-color: rgba(0,0,0,0.05);
-}
+        #clear-cart:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
 
-#checkout {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-}
+        #checkout {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
 
-#checkout:hover {
-    background-color: var(--primary-dark);
-}
+        #checkout:hover {
+            background-color: var(--primary-dark);
+        }
 
-/* Resumo do Carrinho */
-.cart-summary {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    z-index: 2000;
-    max-width: 90%;
-    max-height: 90vh;
-    overflow: auto;
-}
+        /* Resumo do Carrinho */
+        .cart-summary {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            z-index: 2000;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow: auto;
+        }
 
-.cart-summary.show {
-    display: block;
-}
+        .cart-summary.show {
+            display: block;
+        }
 
-#send-whatsapp {
-    background-color: #25D366;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 4px;
-    margin-top: 20px;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        #send-whatsapp {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 20px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-#send-whatsapp:hover {
-    background-color: #128C7E;
-}
+        #send-whatsapp:hover {
+            background-color: #128C7E;
+        }
 
-#close-summary {
-    background-color: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 12px;
-    border-radius: 4px;
-    margin-top: 10px;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        #close-summary {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-#close-summary:hover {
-    background-color: rgba(0,0,0,0.05);
-}
+        #close-summary:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
 
-/* Overlay */
-.overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 1500;
-}
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1500;
+        }
 
-.overlay.show {
-    display: block;
-}
+        .overlay.show {
+            display: block;
+        }
 
-/* Animação mais suave */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+        /* Animação mais suave */
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(4px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
-/* Aplicação da animação */
-.elemento {
-  animation: fadeIn 0.8s ease-out both;
-  will-change: opacity, transform;
-}
+        /* Aplicação da animação */
+        .elemento {
+          animation: fadeIn 0.8s ease-out both;
+          will-change: opacity, transform;
+        }
+        
         :root {
             --primary-color: #6200ee;
             --primary-dark: #3700b3;
@@ -820,8 +825,8 @@
         }
 
         .app-title {
-          z-index: 1000;
-          box-shadow: 0 0px 0px rgba(0,0,0,0.9);
+            z-index: 1000;
+            box-shadow: 0 0px 0px rgba(0,0,0,0.9);
             font-size: 1.25rem;
             font-weight: 500;
             margin: 0;
@@ -874,7 +879,6 @@
             height: 50px;
             border-radius: 6px;
             object-fit: cover;
-            
             position: absolute;
             left: 50%;
             transform: translateX(-50%) translateY(-10px);
@@ -1354,7 +1358,7 @@
             }
         }
         
-                /* Modal de Detalhes do Produto */
+        /* Modal de Detalhes do Produto */
         .product-modal {
             display: none;
             position: fixed;
@@ -1521,8 +1525,7 @@
     
     <div class="overlay" id="overlay"></div>
     <div class="cart-summary" id="cart-summary">
-        <h3>"Por gentileza, tire um print desta tela e envie pelo WhatsApp."
-</h3>
+        <h3>"Por gentileza, tire um print desta tela e envie pelo WhatsApp."</h3>
         <div id="summary-content"></div>
         <button class="btn" id="send-whatsapp">Enviar pelo WhatsApp</button>
         <button class="btn btn-outlined" id="close-summary">Fechar</button>
@@ -1620,7 +1623,34 @@
                         </div>
                         <span class="percentage" id="percent-5">0%</span>
                     </div>
-                    <!-- Repetir para 4, 3, 2, 1 estrelas -->
+                    <div class="rating-bar">
+                        <span>4 estrelas</span>
+                        <div class="bar-container">
+                            <div class="bar" id="bar-4"></div>
+                        </div>
+                        <span class="percentage" id="percent-4">0%</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span>3 estrelas</span>
+                        <div class="bar-container">
+                            <div class="bar" id="bar-3"></div>
+                        </div>
+                        <span class="percentage" id="percent-3">0%</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span>2 estrelas</span>
+                        <div class="bar-container">
+                            <div class="bar" id="bar-2"></div>
+                        </div>
+                        <span class="percentage" id="percent-2">0%</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span>1 estrela</span>
+                        <div class="bar-container">
+                            <div class="bar" id="bar-1"></div>
+                        </div>
+                        <span class="percentage" id="percent-1">0%</span>
+                    </div>
                 </div>
             </div>
             
@@ -1629,8 +1659,7 @@
             </div>
             
             <div class="add-review-section">
-                      <h4>Deixe sua avaliação</h4>
-        <input type="text" id="review-author" class="review-author-input" placeholder="Seu nome (opcional)">
+                <input type="text" id="review-author" class="review-author-input" placeholder="Seu nome (opcional)">
                 <h4>Deixe sua avaliação</h4>
                 <div class="rating-input">
                     <span>Sua avaliação:</span>
@@ -1674,7 +1703,6 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         
-        
         // Obtém o ID do usuário da URL
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('userId');
@@ -1685,224 +1713,228 @@
         let currentProductInModal = null;
         let currentQuantity = 1;
         let currentUserRating = 0;
-let reviews = [];
+        let reviews = [];
+        let reviewsRef = null;
 
-// Inicializa o sistema de avaliações
-function initReviewsSystem() {
-    // Botão para abrir avaliações
-    document.getElementById('open-reviews').addEventListener('click', openReviewsModal);
-    
-    // Fechar modal
-    document.querySelector('.reviews-modal-close').addEventListener('click', closeReviewsModal);
-    
-    // Sistema de estrelas para avaliação
-    setupStarRating();
-    
-    // Enviar avaliação
-    document.getElementById('submit-review').addEventListener('click', submitReview);
-    
-    // Carrega as avaliações
-    loadReviews();
-    
-    // Limpa alertas ao abrir o modal
-    document.getElementById('open-reviews').addEventListener('click', () => {
-        document.getElementById('alerts-container').innerHTML = '';
-    });
-}
-
-// Abrir modal de avaliações
-function openReviewsModal() {
-    document.getElementById('reviews-modal').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-// Fechar modal de avaliações
-function closeReviewsModal() {
-    document.getElementById('reviews-modal').classList.remove('show');
-    document.body.style.overflow = '';
-}
-
-// Configura o sistema de estrelas para avaliação
-function setupStarRating() {
-    const stars = document.querySelectorAll('.star-rating .star');
-    
-    stars.forEach(star => {
-        star.addEventListener('click', function() {
-            const value = parseInt(this.getAttribute('data-value'));
-            currentUserRating = value;
+        // Inicializa o sistema de avaliações
+        function initReviewsSystem() {
+            // Define a referência para as avaliações
+            reviewsRef = database.ref('stores/' + userId + '/reviews');
             
-            // Atualiza a exibição das estrelas
-            stars.forEach((s, index) => {
-                if (index < value) {
-                    s.classList.add('active');
-                    s.textContent = '★';
-                } else {
-                    s.classList.remove('active');
-                    s.textContent = '☆';
-                }
-            });
-        });
-        
-        // Efeito hover
-        star.addEventListener('mouseover', function() {
-            const value = parseInt(this.getAttribute('data-value'));
+            // Botão para abrir avaliações
+            document.getElementById('open-reviews').addEventListener('click', openReviewsModal);
             
-            stars.forEach((s, index) => {
-                if (index < value) {
-                    s.textContent = '★';
-                } else {
-                    s.textContent = '☆';
-                }
+            // Fechar modal
+            document.querySelector('.reviews-modal-close').addEventListener('click', closeReviewsModal);
+            
+            // Sistema de estrelas para avaliação
+            setupStarRating();
+            
+            // Enviar avaliação
+            document.getElementById('submit-review').addEventListener('click', submitReview);
+            
+            // Carrega as avaliações
+            loadReviews();
+            
+            // Limpa alertas ao abrir o modal
+            document.getElementById('open-reviews').addEventListener('click', () => {
+                document.getElementById('alerts-container').innerHTML = '';
             });
-        });
-        
-        star.addEventListener('mouseout', function() {
-            stars.forEach((s, index) => {
-                if (index < currentUserRating) {
-                    s.textContent = '★';
-                } else {
-                    s.textContent = '☆';
-                }
+        }
+
+        // Abrir modal de avaliações
+        function openReviewsModal() {
+            document.getElementById('reviews-modal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Fechar modal de avaliações
+        function closeReviewsModal() {
+            document.getElementById('reviews-modal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // Configura o sistema de estrelas para avaliação
+        function setupStarRating() {
+            const stars = document.querySelectorAll('.star-rating .star');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const value = parseInt(this.getAttribute('data-value'));
+                    currentUserRating = value;
+                    
+                    // Atualiza a exibição das estrelas
+                    stars.forEach((s, index) => {
+                        if (index < value) {
+                            s.classList.add('active');
+                            s.textContent = '★';
+                        } else {
+                            s.classList.remove('active');
+                            s.textContent = '☆';
+                        }
+                    });
+                });
+                
+                // Efeito hover
+                star.addEventListener('mouseover', function() {
+                    const value = parseInt(this.getAttribute('data-value'));
+                    
+                    stars.forEach((s, index) => {
+                        if (index < value) {
+                            s.textContent = '★';
+                        } else {
+                            s.textContent = '☆';
+                        }
+                    });
+                });
+                
+                star.addEventListener('mouseout', function() {
+                    stars.forEach((s, index) => {
+                        if (index < currentUserRating) {
+                            s.textContent = '★';
+                        } else {
+                            s.textContent = '☆';
+                        }
+                    });
+                });
             });
-        });
-    });
-}
-
-// Carrega as avaliações do Firebase
-function loadReviews() {
-    if (!reviewsRef) {
-        console.error('Referência de avaliações não definida');
-        return;
-    }
-    
-    reviewsRef.on('value', (snapshot) => {
-        const reviewsData = snapshot.val();
-        reviews = reviewsData ? Object.values(reviewsData) : [];
-        renderReviews();
-        updateRatingSummary();
-    }, (error) => {
-        console.error('Erro ao carregar avaliações:', error);
-        showAlert('Erro ao carregar avaliações. Por favor, recarregue a página.', 'error');
-    });
-}
-
-// Renderiza a lista de avaliações
-function renderReviews() {
-    const reviewsList = document.getElementById('reviews-list');
-    reviewsList.innerHTML = '';
-    
-    if (reviews.length === 0) {
-        reviewsList.innerHTML = '<p class="no-reviews">Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>';
-        return;
-    }
-    
-    // Ordena por data (mais recente primeiro)
-    const sortedReviews = Object.values(reviews).sort((a, b) => 
-        new Date(b.date) - new Date(a.date)
-    );
-    
-    sortedReviews.forEach(review => {
-        const reviewItem = document.createElement('div');
-        reviewItem.className = 'review-item';
-        
-        let responseHtml = '';
-        if (review.response) {
-            responseHtml = `
-                <div class="review-response">
-                    <span class="response-label">Resposta da loja:</span>
-                    <p>${review.response}</p>
-                </div>
-            `;
         }
-        
-        // Formata a data
-        const reviewDate = new Date(review.date);
-        const formattedDate = reviewDate.toLocaleDateString('pt-BR');
-        
-        reviewItem.innerHTML = `
-            <div class="review-header">
-                <span class="review-author">${review.author || 'Anônimo'}</span>
-                <span class="review-date">${formattedDate}</span>
-            </div>
-            <div class="review-rating">
-                ${renderStars(review.rating)}
-            </div>
-            <p class="review-text">${review.text}</p>
-            ${responseHtml}
-        `;
-        
-        reviewsList.appendChild(reviewItem);
-    });
-}
 
-// Atualiza o resumo de avaliações
-function updateRatingSummary() {
-    if (reviews.length === 0) {
-        document.getElementById('average-rating').textContent = '0.0';
-        document.getElementById('total-reviews').textContent = '(0 avaliações)';
-        
-        // Reseta as barras de porcentagem
-        for (let i = 1; i <= 5; i++) {
-            document.getElementById(`bar-${i}`).style.width = '0%';
-            document.getElementById(`percent-${i}`).textContent = '0%';
+        // Carrega as avaliações do Firebase
+        function loadReviews() {
+            if (!reviewsRef) {
+                console.error('Referência de avaliações não definida');
+                return;
+            }
+            
+            reviewsRef.on('value', (snapshot) => {
+                const reviewsData = snapshot.val();
+                reviews = reviewsData ? Object.values(reviewsData) : [];
+                renderReviews();
+                updateRatingSummary();
+            }, (error) => {
+                console.error('Erro ao carregar avaliações:', error);
+                showAlert('Erro ao carregar avaliações. Por favor, recarregue a página.', 'error');
+            });
         }
-        
-        return;
-    }
-    
-    // Calcula a média de avaliações
-    const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
-    const averageRating = totalRatings / reviews.length;
-    
-    document.getElementById('average-rating').textContent = averageRating.toFixed(1);
-    document.getElementById('total-reviews').textContent = `(${reviews.length} avaliações)`;
-    
-    // Atualiza as estrelas da média
-    const averageStars = document.getElementById('average-stars');
-    averageStars.innerHTML = renderStars(averageRating);
-    
-    // Calcula a distribuição de estrelas
-    const ratingDistribution = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-    
-    reviews.forEach(review => {
-        ratingDistribution[review.rating]++;
-    });
-    
-    // Atualiza as barras de porcentagem
-    for (let i = 1; i <= 5; i++) {
-        const percentage = (ratingDistribution[i] / reviews.length) * 100;
-        document.getElementById(`bar-${i}`).style.width = `${percentage}%`;
-        document.getElementById(`percent-${i}`).textContent = `${Math.round(percentage)}%`;
-    }
-}
 
-// Renderiza estrelas baseado na avaliação
-function renderStars(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    
-    let starsHtml = '';
-    
-    // Estrelas cheias
-    for (let i = 0; i < fullStars; i++) {
-        starsHtml += '<span class="star">★</span>';
-    }
-    
-    // Meia estrela
-    if (hasHalfStar) {
-        starsHtml += '<span class="star">½</span>';
-    }
-    
-    // Estrelas vazias
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-    for (let i = 0; i < emptyStars; i++) {
-        starsHtml += '<span class="star">☆</span>';
-    }
-    
-    return starsHtml;
-}
+        // Renderiza a lista de avaliações
+        function renderReviews() {
+            const reviewsList = document.getElementById('reviews-list');
+            reviewsList.innerHTML = '';
+            
+            if (reviews.length === 0) {
+                reviewsList.innerHTML = '<p class="no-reviews">Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>';
+                return;
+            }
+            
+            // Ordena por data (mais recente primeiro)
+            const sortedReviews = [...reviews].sort((a, b) => 
+                new Date(b.date) - new Date(a.date)
+            );
+            
+            sortedReviews.forEach(review => {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = 'review-item';
+                
+                let responseHtml = '';
+                if (review.response) {
+                    responseHtml = `
+                        <div class="review-response">
+                            <span class="response-label">Resposta da loja:</span>
+                            <p>${review.response}</p>
+                        </div>
+                    `;
+                }
+                
+                // Formata a data
+                const reviewDate = new Date(review.date);
+                const formattedDate = reviewDate.toLocaleDateString('pt-BR');
+                
+                reviewItem.innerHTML = `
+                    <div class="review-header">
+                        <span class="review-author">${review.author || 'Anônimo'}</span>
+                        <span class="review-date">${formattedDate}</span>
+                    </div>
+                    <div class="review-rating">
+                        ${renderStars(review.rating)}
+                    </div>
+                    <p class="review-text">${review.text}</p>
+                    ${responseHtml}
+                `;
+                
+                reviewsList.appendChild(reviewItem);
+            });
+        }
 
-// Envia uma nova avaliação
+        // Atualiza o resumo de avaliações
+        function updateRatingSummary() {
+            if (reviews.length === 0) {
+                document.getElementById('average-rating').textContent = '0.0';
+                document.getElementById('total-reviews').textContent = '(0 avaliações)';
+                
+                // Reseta as barras de porcentagem
+                for (let i = 1; i <= 5; i++) {
+                    document.getElementById(`bar-${i}`).style.width = '0%';
+                    document.getElementById(`percent-${i}`).textContent = '0%';
+                }
+                
+                return;
+            }
+            
+            // Calcula a média de avaliações
+            const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = totalRatings / reviews.length;
+            
+            document.getElementById('average-rating').textContent = averageRating.toFixed(1);
+            document.getElementById('total-reviews').textContent = `(${reviews.length} avaliações)`;
+            
+            // Atualiza as estrelas da média
+            const averageStars = document.getElementById('average-stars');
+            averageStars.innerHTML = renderStars(averageRating);
+            
+            // Calcula a distribuição de estrelas
+            const ratingDistribution = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+            
+            reviews.forEach(review => {
+                ratingDistribution[review.rating]++;
+            });
+            
+            // Atualiza as barras de porcentagem
+            for (let i = 1; i <= 5; i++) {
+                const percentage = (ratingDistribution[i] / reviews.length) * 100;
+                document.getElementById(`bar-${i}`).style.width = `${percentage}%`;
+                document.getElementById(`percent-${i}`).textContent = `${Math.round(percentage)}%`;
+            }
+        }
+
+        // Renderiza estrelas baseado na avaliação
+        function renderStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            let starsHtml = '';
+            
+            // Estrelas cheias
+            for (let i = 0; i < fullStars; i++) {
+                starsHtml += '<span class="star">★</span>';
+            }
+            
+            // Meia estrela
+            if (hasHalfStar) {
+                starsHtml += '<span class="star">½</span>';
+            }
+            
+            // Estrelas vazias
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                starsHtml += '<span class="star">☆</span>';
+            }
+            
+            return starsHtml;
+        }
+
+        // Envia uma nova avaliação
         function submitReview() {
             const reviewText = document.getElementById('review-text').value.trim();
             const authorName = document.getElementById('review-author').value.trim();
@@ -1914,6 +1946,16 @@ function renderStars(rating) {
             
             if (reviewText === '') {
                 showAlert('Por favor, escreva sua avaliação.', 'error');
+                return;
+            }
+            
+            if (reviewText.length > 500) {
+                showAlert('A avaliação não pode ter mais de 500 caracteres.', 'error');
+                return;
+            }
+            
+            if (authorName.length > 50) {
+                showAlert('O nome não pode ter mais de 50 caracteres.', 'error');
                 return;
             }
             
@@ -1929,14 +1971,13 @@ function renderStars(rating) {
                 text: reviewText,
                 date: new Date().toISOString(),
                 author: authorName || 'Anônimo',
-                responded: false // Adiciona status de resposta
+                responded: false
             };
             
             // Envia para o Firebase
             reviewsRef.push(newReview)
                 .then(() => {
-                  
-                  console.log('Avaliação enviada com sucesso:', newReview);
+                    console.log('Avaliação enviada com sucesso:', newReview);
                     // Limpa o formulário
                     document.getElementById('review-text').value = '';
                     document.getElementById('review-author').value = '';
@@ -1951,16 +1992,6 @@ function renderStars(rating) {
                     // Mostra mensagem de sucesso
                     showAlert('Avaliação enviada com sucesso! Obrigado por seu feedback.', 'success');
                 })
-                
-                        .catch(error => {
-            console.error('Detalhes do erro:', {
-                errorCode: error.code,
-                errorMessage: error.message,
-                reviewData: newReview
-            });
-            showAlert('Ocorreu um erro ao enviar sua avaliação. Por favor, tente novamente.', 'error');
-        })
-        
                 .catch(error => {
                     console.error('Erro ao enviar avaliação:', error);
                     showAlert('Ocorreu um erro ao enviar sua avaliação. Por favor, tente novamente.', 'error');
@@ -1972,104 +2003,96 @@ function renderStars(rating) {
                 });
         }
 
-// Função para mostrar alertas personalizados
-function showAlert(message, type) {
-    const alertDiv = document.createElement('div');
-    alertDiv.className = `review-alert review-alert-${type}`;
-    
-    // Adiciona ícone e mensagem
-    const icon = type === 'success' ? 'check_circle' : 'error';
-    alertDiv.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <i class="material-icons">${icon}</i>
-            <span>${message}</span>
-        </div>
-        <i class="material-icons close-alert">close</i>
-    `;
-    
-    // Adiciona evento para fechar
-    alertDiv.querySelector('.close-alert').addEventListener('click', () => {
-        alertDiv.remove();
-    });
-    
-    // Adiciona ao container de alertas
-    const alertsContainer = document.getElementById('alerts-container');
-    alertsContainer.appendChild(alertDiv);
-    
-    // Remove após 5 segundos
-    setTimeout(() => {
-        if (alertDiv.parentNode) {
-            alertDiv.classList.add('fade-out');
-            setTimeout(() => alertDiv.remove(), 300);
+        // Função para mostrar alertas personalizados
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `review-alert review-alert-${type}`;
+            
+            // Adiciona ícone e mensagem
+            const icon = type === 'success' ? 'check_circle' : 'error';
+            alertDiv.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="material-icons">${icon}</i>
+                    <span>${message}</span>
+                </div>
+                <i class="material-icons close-alert">close</i>
+            `;
+            
+            // Adiciona evento para fechar
+            alertDiv.querySelector('.close-alert').addEventListener('click', () => {
+                alertDiv.remove();
+            });
+            
+            // Adiciona ao container de alertas
+            const alertsContainer = document.getElementById('alerts-container');
+            alertsContainer.appendChild(alertDiv);
+            
+            // Remove após 5 segundos
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.classList.add('fade-out');
+                    setTimeout(() => alertDiv.remove(), 300);
+                }
+            }, 5000);
         }
-    }, 5000);
-}
 
         // Carrega os dados da loja
-function loadStore() {
-    if (!userId) {
-        alert('Loja não encontrada!');
-        window.location.href = 'index.html';
-        return;
-    }
-    
-    // Define a referência para as avaliações globalmente
-    window.reviewsRef = database.ref('stores/' + userId + '/reviews');
-    
-    const storeRef = database.ref('stores/' + userId);
-    
-    // Adicione isso após definir reviewsRef
-reviewsRef.on('child_added', (snapshot) => {
-    console.log('Nova avaliação recebida no Firebase:', snapshot.val());
-});
-    
-    storeRef.on('value', (snapshot) => {
-        storeData = snapshot.val();
-        
-        if (storeData) {
-            // Atualiza o cabeçalho da loja
-            const logoUrl = storeData.logo || 'https://via.placeholder.com/150';
-            document.getElementById('store-view-name').textContent = storeData.name;
-            document.getElementById('store-view-title').textContent = storeData.name;
-            document.getElementById('store-view-desc').textContent = storeData.description || '';
-            
-            // Sincroniza ambos os logos
-            document.getElementById('store-view-logo').src = logoUrl;
-            document.getElementById('store-view-logo-header').src = logoUrl;
-            
-            document.getElementById('store-view-header').style.setProperty('--store-primary-color', storeData.color || '#6200ee');
-            
-            // Verifica se existem produtos
-            if (storeData.products) {
-                // Converte os produtos para array e armazena
-                allProducts = Object.entries(storeData.products).map(([id, product]) => ({ 
-                    id, 
-                    ...product,
-                    category: product.category ? product.category.toString() : null
-                }));
-                
-                renderCategories(storeData.categories || {});
-                renderProducts(allProducts);
-                
-                // Configura a pesquisa
-                setupSearch();
-            } else {
-                document.getElementById('store-products').innerHTML = '<p class="no-products-message">Nenhum produto disponível no momento.</p>';
-            }
-        } else {
+    function loadStore() {
+        if (!userId) {
             alert('Loja não encontrada!');
             window.location.href = 'index.html';
+            return;
         }
-    });
-    
-    // Configura o efeito do logo no header
-    setupHeaderLogoEffect();
-    
-    // Configura os eventos do carrinho
-    setupCartEvents();
-    setupModalEvents();
-    initReviewsSystem();
-}
+        
+        const storeRef = database.ref('stores/' + userId);
+        
+        storeRef.on('value', (snapshot) => {
+            storeData = snapshot.val();
+            
+            if (storeData) {
+                // Atualiza o cabeçalho da loja
+                const logoUrl = storeData.logo || 'https://via.placeholder.com/150';
+                document.getElementById('store-view-name').textContent = storeData.name;
+                document.getElementById('store-view-title').textContent = storeData.name;
+                document.getElementById('store-view-desc').textContent = storeData.description || '';
+                
+                // Sincroniza ambos os logos
+                document.getElementById('store-view-logo').src = logoUrl;
+                document.getElementById('store-view-logo-header').src = logoUrl;
+                
+                document.getElementById('store-view-header').style.setProperty('--store-primary-color', storeData.color || '#6200ee');
+                
+                // Verifica se existem produtos
+                if (storeData.products) {
+                    // Converte os produtos para array e armazena
+                    allProducts = Object.entries(storeData.products).map(([id, product]) => ({ 
+                        id, 
+                        ...product,
+                        category: product.category ? product.category.toString() : null
+                    }));
+                    
+                    renderCategories(storeData.categories || {});
+                    renderProducts(allProducts);
+                    
+                    // Configura a pesquisa
+                    setupSearch();
+                } else {
+                    document.getElementById('store-products').innerHTML = '<p class="no-products-message">Nenhum produto disponível no momento.</p>';
+                }
+            } else {
+                alert('Loja não encontrada!');
+                window.location.href = 'index.html';
+            }
+        });
+        
+        // Configura o efeito do logo no header
+        setupHeaderLogoEffect();
+        
+        // Configura os eventos do carrinho
+        setupCartEvents();
+        setupModalEvents();
+        initReviewsSystem();
+    }
         
         // Configura os eventos do carrinho
         function setupCartEvents() {
@@ -2211,7 +2234,7 @@ reviewsRef.on('child_added', (snapshot) => {
         }
         
         // Renderiza os produtos
-function renderProducts(products) {
+        function renderProducts(products) {
             const storeProducts = document.getElementById('store-products');
             storeProducts.innerHTML = '';
             
@@ -2298,13 +2321,6 @@ function renderProducts(products) {
                     closeProductModal();
                 }
             });
-            
-            // Habilite persistência
-firebase.database().setPersistenceEnabled(true)
-    .then(() => {
-        console.log('Persistência habilitada');
-        loadReviews();
-    });
             
             // Aumentar quantidade
             document.getElementById('increase-quantity').addEventListener('click', () => {
@@ -2514,7 +2530,7 @@ firebase.database().setPersistenceEnabled(true)
             });
         }
         
-function addToCart(product) {
+        function addToCart(product) {
             const existingItem = cart.find(item => item.id === product.id);
             
             if (existingItem) {
@@ -2538,401 +2554,166 @@ function addToCart(product) {
             }, 3000);
         }
         
-async function showCartSummary() {
-    const overlay = document.getElementById('overlay');
-    const cartSummary = document.getElementById('cart-summary');
-    const summaryContent = document.getElementById('summary-content');
-    
-    // Mostrar loading
-    summaryContent.innerHTML = '<div style="text-align: center; padding: 20px;"><i class="material-icons" style="font-size: 48px; color: #6200ee;">hourglass_top</i><p>Carregando itens...</p></div>';
-    
-    overlay.classList.add('show');
-    cartSummary.classList.add('show');
-    
-    // Esperar todas as imagens carregarem
-    await preloadAllImages();
-    
-    // Agora renderizar o conteúdo real
-    renderSummaryContent();
-}
-
-async function preloadAllImages() {
-    const imagePromises = [];
-    
-    cart.forEach(item => {
-        const product = allProducts.find(p => p.id === item.id);
-        if (product && product.image) {
-            const img = new Image();
-            img.src = product.image;
-            const promise = new Promise((resolve) => {
-                img.onload = resolve;
-                img.onerror = resolve; // Continua mesmo se houver erro
-            });
-            imagePromises.push(promise);
+        async function showCartSummary() {
+            const overlay = document.getElementById('overlay');
+            const cartSummary = document.getElementById('cart-summary');
+            const summaryContent = document.getElementById('summary-content');
+            
+            // Mostrar loading
+            summaryContent.innerHTML = '<div style="text-align: center; padding: 20px;"><i class="material-icons" style="font-size: 48px; color: #6200ee;">hourglass_top</i><p>Carregando itens...</p></div>';
+            
+            overlay.classList.add('show');
+            cartSummary.classList.add('show');
+            
+            // Esperar todas as imagens carregarem
+            await preloadAllImages();
+            
+            // Agora renderizar o conteúdo real
+            renderSummaryContent();
         }
-    });
-    
-    await Promise.all(imagePromises);
-}
 
-function renderSummaryContent() {
-    const summaryContent = document.getElementById('summary-content');
-    
-    let html = `
-        <div class="print-header">
-            ${storeData.logo ? `<img src="${storeData.logo}" class="print-logo" alt="${storeData.name}">` : ''}
-            <h2 class="print-store-name">${storeData.name}</h2>
-            <p class="print-date">${new Date().toLocaleString('pt-BR')}</p>
-        </div>
-        <h3 style="color: #6200ee; border-bottom: 2px solid #6200ee; padding-bottom: 8px;">
-            Resumo do Pedido
-        </h3>
-        <div class="print-items">
-    `;
-    
-    cart.forEach(item => {
-        const product = allProducts.find(p => p.id === item.id);
-        const total = product.price * item.quantity;
-        
-        html += `
-            <div class="cart-item-print">
-                <img src="${product.image || 'https://via.placeholder.com/80?text=Produto'}" 
-                     class="product-image-print" 
-                     alt="${product.name}">
-                <div>
-                    <h4 class="print-text" style="font-weight:bold; margin-bottom:8px;">${product.name}</h4>
-                    <p class="print-text">Quantidade: ${item.quantity}</p>
-                    <p class="print-text">Preço unitário: <span class="print-price">R$ ${product.price.toFixed(2)}</span></p>
-                    <p class="print-text" style="margin-top:8px;">Subtotal: <span class="print-price">R$ ${total.toFixed(2)}</span></p>
+        async function preloadAllImages() {
+            const imagePromises = [];
+            
+            cart.forEach(item => {
+                const product = allProducts.find(p => p.id === item.id);
+                if (product && product.image) {
+                    const img = new Image();
+                    img.src = product.image;
+                    const promise = new Promise((resolve) => {
+                        img.onload = resolve;
+                        img.onerror = resolve; // Continua mesmo se houver erro
+                    });
+                    imagePromises.push(promise);
+                }
+            });
+            
+            await Promise.all(imagePromises);
+        }
+
+        function renderSummaryContent() {
+            const summaryContent = document.getElementById('summary-content');
+            
+            let html = `
+                <div class="print-header">
+                    ${storeData.logo ? `<img src="${storeData.logo}" class="print-logo" alt="${storeData.name}">` : ''}
+                    <h2 class="print-store-name">${storeData.name}</h2>
+                    <p class="print-date">${new Date().toLocaleString('pt-BR')}</p>
                 </div>
-            </div>
-        `;
-    });
-    
-    html += `
-        </div>
-        <div class="print-total">
-            <span>Total do Pedido:</span>
-            <span>R$ ${calculateTotal().toFixed(2)}</span>
-        </div>
-    `;
-    
-    summaryContent.innerHTML = html;
-}
-        
+                <h3 style="color: #6200ee; border-bottom: 2px solid #6200ee; padding-bottom: 8px;">
+                    Resumo do Pedido
+                </h3>
+                <div class="print-items">
+            `;
+            
+            cart.forEach(item => {
+                const product = allProducts.find(p => p.id === item.id);
+                const total = product.price * item.quantity;
+                
+                html += `
+                    <div class="cart-item-print">
+                        <img src="${product.image || 'https://via.placeholder.com/80?text=Produto'}" 
+                             class="product-image-print" 
+                             alt="${product.name}">
+                        <div>
+                            <h4 class="print-text" style="font-weight:bold; margin-bottom:8px;">${product.name}</h4>
+                            <p class="print-text">Quantidade: ${item.quantity}</p>
+                            <p class="print-text">Preço unitário: <span class="print-price">R$ ${product.price.toFixed(2)}</span></p>
+                            <p class="print-text" style="margin-top:8px;">Subtotal: <span class="print-price">R$ ${total.toFixed(2)}</span></p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                </div>
+                <div class="print-total">
+                    <span>Total do Pedido:</span>
+                    <span>R$ ${calculateTotal().toFixed(2)}</span>
+                </div>
+            `;
+            
+            summaryContent.innerHTML = html;
+        }
 
-
-// Adicione este código no seu arquivo JavaScript principal
-
-async function captureAndSendOrder() {
-    // 1. Configurar elementos
-    const sendButton = document.getElementById('send-whatsapp');
-    const originalText = sendButton.innerHTML;
-    
-    // 2. Mostrar loading
-    sendButton.innerHTML = '<i class="material-icons">hourglass_top</i> Preparando envio...';
-    sendButton.disabled = true;
-    
-    try {
-        // 3. Esperar um momento para renderização completa
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // 4. Capturar o resumo como imagem
-        const canvas = await html2canvas(document.getElementById('cart-summary'), {
-            scale: 2,
-            logging: false,
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#ffffff',
-            scrollX: 0,
-            scrollY: -window.scrollY,
-            windowWidth: document.getElementById('cart-summary').scrollWidth,
-            windowHeight: document.getElementById('cart-summary').scrollHeight
-        });
-        
-        // 5. Converter para blob
-        const blob = await new Promise(resolve => {
-            canvas.toBlob(resolve, 'image/png', 0.9);
-        });
-        
-        // 6. Criar mensagem padrão
-        const message = `*Pedido - ${storeData.name}*\n\n` +
-                       `Segue o comprovante do pedido em anexo.\n` +
-                       `*Total: R$ ${calculateTotal().toFixed(2)}*\n` +
-                       `Data: ${new Date().toLocaleString('pt-BR')}`;
-        
-        // 7. Enviar via WhatsApp
-        await shareOnWhatsApp(blob, message);
-        
-        // 8. Fechar o resumo e limpar carrinho
-        cleanupAfterOrder();
-        
-    } catch (error) {
-        console.error('Erro ao enviar pedido:', error);
-        alert('Não foi possível enviar automaticamente. Você pode tirar um print manualmente.');
-        sendTextFallback();
-    } finally {
-        sendButton.innerHTML = originalText;
-        sendButton.disabled = false;
-    }
-}
-
-// Função para compartilhar no WhatsApp
-async function shareOnWhatsApp(blob, message) {
-    // Criar arquivo para compartilhamento
-    const file = new File([blob], "pedido.png", { type: "image/png" });
-    
-    // Verificar se é mobile
-    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        // Tentar usar a API de compartilhamento
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: `Pedido - ${storeData.name}`,
-                    text: message,
-                    files: [file]
-                });
+        async function sendCartToWhatsApp() {
+            if (!storeData || !storeData.whatsapp) {
+                alert('Esta loja não configurou um número de WhatsApp para contato.');
                 return;
-            } catch (e) {
-                console.log('Compartilhamento nativo falhou, tentando alternativa...', e);
+            }
+
+            const sendButton = document.getElementById('send-whatsapp');
+            const originalText = sendButton.innerHTML;
+            
+            try {
+                // Mostrar loading
+                sendButton.innerHTML = '<i class="material-icons">hourglass_top</i> Preparando envio...';
+                sendButton.disabled = true;
+                
+                // Criar mensagem detalhada
+                let message = `*Pedido - ${storeData.name}*\n\n`;
+                let total = 0;
+                
+                cart.forEach(item => {
+                    const product = allProducts.find(p => p.id === item.id);
+                    const itemTotal = product.price * item.quantity;
+                    total += itemTotal;
+                    message += `➡ ${product.name}\n`;
+                    message += `   Quantidade: ${item.quantity}\n`;
+                    message += `   Valor: R$ ${itemTotal.toFixed(2)}\n\n`;
+                });
+                
+                message += `*TOTAL: R$ ${total.toFixed(2)}*\n`;
+                message += `Data: ${new Date().toLocaleString('pt-BR')}`;
+
+                // Formatar número (remove tudo que não for dígito)
+                const phoneNumber = storeData.whatsapp.replace(/\D/g, '');
+                
+                // Criar o link universal
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+                
+                // Abrir diretamente (isso vai funcionar na WebView com a configuração abaixo)
+                window.open(whatsappUrl, '_blank');
+                
+                // Fechar o resumo e limpar carrinho
+                cleanupAfterOrder();
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Pedido pronto! Por favor, envie manualmente para: ' + storeData.whatsapp);
+            } finally {
+                sendButton.innerHTML = originalText;
+                sendButton.disabled = false;
             }
         }
-        
-        // Alternativa para WhatsApp no mobile
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        // Criar URL temporária
-        const blobUrl = URL.createObjectURL(blob);
-        
-        // Abrir WhatsApp com a mensagem
-        window.open(`whatsapp://send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`, '_blank');
-        
-        // Limpar depois de alguns segundos
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
-        
-    } else {
-        // Para desktop - download e instruções
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `Pedido_${storeData.name.replace(/\s+/g, '_')}.png`;
-        link.click();
-        
-        alert('O print foi baixado. Por favor, envie manualmente pelo WhatsApp.');
-        window.open(`https://web.whatsapp.com/send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`, '_blank');
-    }
-}
 
-// Método alternativo para compartilhar no app WhatsApp
-async function shareViaWhatsAppApp(blob, message) {
-    // Criar URL para o blob
-    const blobUrl = URL.createObjectURL(blob);
-    
-    // Criar link para download temporário
-    const link = document.createElement('a');
-    link.href = blobUrl;
-    link.download = `Pedido_${storeData.name.replace(/\s+/g, '_')}.png`;
-    document.body.appendChild(link);
-    link.click();
-    
-    // Dar tempo para o download
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Abrir WhatsApp com a mensagem
-    window.open(`whatsapp://send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`, '_blank');
-    
-    // Limpar depois de 5 segundos
-    setTimeout(() => {
-        document.body.removeChild(link);
-        URL.revokeObjectURL(blobUrl);
-    }, 5000);
-}
+        // Funções auxiliares
+        function calculateTotal() {
+            return cart.reduce((total, item) => {
+                const product = allProducts.find(p => p.id === item.id);
+                return total + (product.price * item.quantity);
+            }, 0);
+        }
 
-async function sendCartToWhatsApp() {
-    if (!storeData || !storeData.whatsapp) {
-        alert('Esta loja não configurou um número de WhatsApp para contato.');
-        return;
-    }
+        function cleanupAfterOrder() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('cart-summary').classList.remove('show');
+            cart = [];
+            updateCart();
+            document.getElementById('cart-panel').classList.remove('show');
+        }
 
-    const sendButton = document.getElementById('send-whatsapp');
-    const originalText = sendButton.innerHTML;
-    
-    try {
-        // Mostrar loading
-        sendButton.innerHTML = '<i class="material-icons">hourglass_top</i> Preparando envio...';
-        sendButton.disabled = true;
-        
-        // Criar mensagem detalhada
-        let message = `*Pedido - ${storeData.name}*\n\n`;
-        let total = 0;
-        
-        cart.forEach(item => {
-            const product = allProducts.find(p => p.id === item.id);
-            const itemTotal = product.price * item.quantity;
-            total += itemTotal;
-            message += `➡ ${product.name}\n`;
-            message += `   Quantidade: ${item.quantity}\n`;
-            message += `   Valor: R$ ${itemTotal.toFixed(2)}\n\n`;
-        });
-        
-        message += `*TOTAL: R$ ${total.toFixed(2)}*\n`;
-        message += `Data: ${new Date().toLocaleString('pt-BR')}`;
-
-        // Formatar número (remove tudo que não for dígito)
-        const phoneNumber = storeData.whatsapp.replace(/\D/g, '');
-        
-        // Criar o link universal
-        const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
-        
-        // Abrir diretamente (isso vai funcionar na WebView com a configuração abaixo)
-        window.open(whatsappUrl, '_blank');
-        
-        // Fechar o resumo e limpar carrinho
-        cleanupAfterOrder();
-        
-    } catch (error) {
-        console.error('Erro:', error);
-        alert('Pedido pronto! Por favor, envie manualmente para: ' + storeData.whatsapp);
-    } finally {
-        sendButton.innerHTML = originalText;
-        sendButton.disabled = false;
-    }
-}
-
-// Função específica para Android
-async function shareOnAndroid(blob, message) {
-    // 1. Converter blob para base64
-    const base64data = await blobToBase64(blob);
-    
-    // 2. Criar link com intent do WhatsApp
-    const whatsappUrl = `https://wa.me/${storeData.whatsapp}?text=${encodeURIComponent(message)}`;
-    
-    // 3. Criar formulário temporário para enviar a imagem
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = whatsappUrl;
-    form.target = '_blank';
-    
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'image';
-    input.value = base64data.split(',')[1]; // Remove o cabeçalho
-    
-    form.appendChild(input);
-    document.body.appendChild(form);
-    
-    // 4. Enviar o formulário
-    form.submit();
-    
-    // 5. Limpar após 5 segundos
-    setTimeout(() => document.body.removeChild(form), 5000);
-}
-
-// Função específica para iOS
-async function shareOnIOS(blob, message) {
-    // 1. Criar URL para o blob
-    const blobUrl = URL.createObjectURL(blob);
-    
-    // 2. Criar link para download temporário
-    const link = document.createElement('a');
-    link.href = blobUrl;
-    link.download = `Pedido_${storeData.name.replace(/\s+/g, '_')}.png`;
-    document.body.appendChild(link);
-    link.click();
-    
-    // 3. Dar tempo para o download
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // 4. Abrir WhatsApp com a mensagem
-    window.location.href = `whatsapp://send?phone=${storeData.whatsapp}&text=${encodeURIComponent(message)}`;
-    
-    // 5. Limpar depois de 5 segundos
-    setTimeout(() => {
-        document.body.removeChild(link);
-        URL.revokeObjectURL(blobUrl);
-    }, 5000);
-}
-
-// Função auxiliar para converter blob para base64
-function blobToBase64(blob) {
-    return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(blob);
-    });
-}
-
-// Fallback para outros dispositivos
-async function shareFallback(blob, message) {
-    // 1. Criar URL para o blob
-    const blobUrl = URL.createObjectURL(blob);
-    
-    // 2. Criar link para download
-    const link = document.createElement('a');
-    link.href = blobUrl;
-    link.download = `Pedido_${storeData.name.replace(/\s+/g, '_')}.png`;
-    link.click();
-    
-    // 3. Abrir WhatsApp com a mensagem
-    setTimeout(() => {
-        window.open(`https://wa.me/${storeData.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
-    }, 1000);
-    
-    // 4. Limpar depois de 5 segundos
-    setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
-}
-
-// Funções auxiliares
-function calculateTotal() {
-    return cart.reduce((total, item) => {
-        const product = allProducts.find(p => p.id === item.id);
-        return total + (product.price * item.quantity);
-    }, 0);
-}
-
-function cleanupAfterOrder() {
-    document.getElementById('overlay').classList.remove('show');
-    document.getElementById('cart-summary').classList.remove('show');
-    cart = [];
-    updateCart();
-    document.getElementById('cart-panel').classList.remove('show');
-}
-
-function sendTextFallback() {
-    let message = `*Pedido da Loja ${storeData.name}*\n\n`;
-    let total = 0;
-    
-    cart.forEach(item => {
-        const product = allProducts.find(p => p.id === item.id);
-        const itemTotal = product.price * item.quantity;
-        total += itemTotal;
-        message += `✔ ${product.name} - ${item.quantity}x - R$ ${itemTotal.toFixed(2)}\n`;
-    });
-    
-    message += `\n*Total: R$ ${total.toFixed(2)}*`;
-    
-    window.open(`https://wa.me/${storeData.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
-    cleanupAfterOrder();
-}
-
-function validateReview(review) {
-    return review.rating >= 1 && review.rating <= 5 && 
-           review.text.length > 0 && 
-           review.text.length <= 500 &&
-           (!review.author || review.author.length <= 50);
-}
         function checkAdminAccess() {
             // Verificar se é o dono da loja (pode implementar autenticação)
             const isOwner = localStorage.getItem('isOwner') === 'true';
             document.getElementById('admin-link').style.display = isOwner ? 'block' : 'none';
         }
         
-                window.onload = function() {
+        // Carrega a loja quando a página é aberta
+        window.onload = function() {
             loadStore();
             checkAdminAccess();
         };
-        // Carrega a loja quando a página é aberta
-        window.onload = loadStore;
     </script>
 </body>
 </html>
