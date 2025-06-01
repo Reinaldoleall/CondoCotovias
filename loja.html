@@ -1935,6 +1935,8 @@ function renderStars(rating) {
             // Envia para o Firebase
             reviewsRef.push(newReview)
                 .then(() => {
+                  
+                  console.log('Avaliação enviada com sucesso:', newReview);
                     // Limpa o formulário
                     document.getElementById('review-text').value = '';
                     document.getElementById('review-author').value = '';
@@ -1949,6 +1951,16 @@ function renderStars(rating) {
                     // Mostra mensagem de sucesso
                     showAlert('Avaliação enviada com sucesso! Obrigado por seu feedback.', 'success');
                 })
+                
+                        .catch(error => {
+            console.error('Detalhes do erro:', {
+                errorCode: error.code,
+                errorMessage: error.message,
+                reviewData: newReview
+            });
+            showAlert('Ocorreu um erro ao enviar sua avaliação. Por favor, tente novamente.', 'error');
+        })
+        
                 .catch(error => {
                     console.error('Erro ao enviar avaliação:', error);
                     showAlert('Ocorreu um erro ao enviar sua avaliação. Por favor, tente novamente.', 'error');
@@ -2005,6 +2017,11 @@ function loadStore() {
     window.reviewsRef = database.ref('stores/' + userId + '/reviews');
     
     const storeRef = database.ref('stores/' + userId);
+    
+    // Adicione isso após definir reviewsRef
+reviewsRef.on('child_added', (snapshot) => {
+    console.log('Nova avaliação recebida no Firebase:', snapshot.val());
+});
     
     storeRef.on('value', (snapshot) => {
         storeData = snapshot.val();
@@ -2281,6 +2298,13 @@ function renderProducts(products) {
                     closeProductModal();
                 }
             });
+            
+            // Habilite persistência
+firebase.database().setPersistenceEnabled(true)
+    .then(() => {
+        console.log('Persistência habilitada');
+        loadReviews();
+    });
             
             // Aumentar quantidade
             document.getElementById('increase-quantity').addEventListener('click', () => {
@@ -2889,6 +2913,13 @@ function sendTextFallback() {
     
     window.open(`https://wa.me/${storeData.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
     cleanupAfterOrder();
+}
+
+function validateReview(review) {
+    return review.rating >= 1 && review.rating <= 5 && 
+           review.text.length > 0 && 
+           review.text.length <= 500 &&
+           (!review.author || review.author.length <= 50);
 }
         function checkAdminAccess() {
             // Verificar se é o dono da loja (pode implementar autenticação)
