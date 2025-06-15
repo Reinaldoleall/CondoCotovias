@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Virtual</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="css/loja.css">
+ 
+</head>
+<body>
+    <div id="store-view-container">
+        <div class="app-bar">
+            <img src="" alt="Logo da Loja" class="store-logo-header" id="store-view-logo-header">
+            <h1 class="app-title" id="store-view-name"></h1>
+        </div>
+        
+        <nav class="nav-bar" id="store-categories-nav">
+            <ul class="nav-menu" id="nav-menu">
+                <!-- Categorias serão inseridas aqui via JavaScript -->
+            </ul>
+        </nav>
+        
+        <div class="store-header" id="store-view-header">
+            <img src="" alt="Logo da Loja" class="store-logo main-logo" id="store-view-logo">
+            <h1 id="store-view-title"></h1>
+            <p id="store-view-desc"></p>
+        </div>
+        
+        <div class="container">
+            <div class="card">
+                <h2>Nossos Produtos</h2>
+                
+                <div class="search-container">
+                    <i class="material-icons search-icon">search</i>
+                    <input type="text" class="search-input" id="product-search" placeholder="Pesquisar produtos...">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                
+                <div id="store-products" class="grid"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cart-container">
+        <div class="cart-button" id="cart-button">
+            <i class="material-icons">shopping_cart</i>
+            <span class="cart-count" id="cart-count">0</span>
+        </div>
+        <div class="cart-panel" id="cart-panel">
+            <h3>Carrinho de Compras</h3>
+            <div id="cart-items"></div>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total">R$ 0,00</span>
+            </div>
+            <div class="cart-actions">
+                <button class="btn btn-outlined" id="clear-cart">Limpar</button>
+                <button class="btn" id="checkout">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    <div class="cart-summary" id="cart-summary">
+       
+        <div id="summary-content"></div>
+        <button class="btn" id="send-whatsapp">Enviar pelo WhatsApp</button>
+        <button class="btn btn-outlined" id="close-summary">Fechar</button>
+    </div>
+    <div class="product-modal" id="product-modal">
+        <div class="product-modal-content">
+            <div class="product-modal-header">
+                <button class="product-modal-close" id="close-product-modal">&times;</button>
+                <h2 id="product-modal-title"></h2>
+            </div>
+            <div class="product-modal-body">
+                <div class="product-modal-image-container">
+                    <div class="product-modal-image" id="product-modal-image"></div>
+                </div>
+                <div class="product-modal-info">
+                    <div class="product-modal-price" id="product-modal-price"></div>
+                    <p class="product-modal-description" id="product-modal-description"></p>
+                    <div class="product-modal-actions">
+                        <button class="btn btn-outlined" id="decrease-quantity">-</button>
+                        <span id="product-quantity" style="margin: 0 12px; font-size: 1.2rem;">1</span>
+                        <button class="btn btn-outlined" id="increase-quantity">+</button>
+                        <button class="btn" id="add-to-cart-modal" style="flex-grow: 1;">
+                            <i class="material-icons">shopping_cart</i> Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Avaliações -->
+    <div class="reviews-modal" id="reviews-modal">
+        <div class="reviews-modal-content">
+            <div class="reviews-modal-header">
+                <h3>Avaliações da Loja</h3>
+                <button class="reviews-modal-close">&times;</button>
+            </div>
+            <div class="reviews-modal-body">
+                <div id="alerts-container"></div>
+                <div class="store-rating-summary">
+                    <div class="average-rating">
+                        <span class="rating-number" id="average-rating">0.0</span>
+                        <div class="stars" id="average-stars"></div>
+                        <span class="total-reviews" id="total-reviews">(0 avaliações)</span>
+                    </div>
+                    <div class="rating-bars">
+                        <div class="rating-bar">
+                            <span>5 estrelas</span>
+                            <div class="bar-container">
+                                <div class="bar" id="bar-5"></div>
+                            </div>
+                            <span class="percentage" id="percent-5">0%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span>4 estrelas</span>
+                            <div class="bar-container">
+                                <div class="bar" id="bar-4"></div>
+                            </div>
+                            <span class="percentage" id="percent-4">0%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span>3 estrelas</span>
+                            <div class="bar-container">
+                                <div class="bar" id="bar-3"></div>
+                            </div>
+                            <span class="percentage" id="percent-3">0%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span>2 estrelas</span>
+                            <div class="bar-container">
+                                <div class="bar" id="bar-2"></div>
+                            </div>
+                            <span class="percentage" id="percent-2">0%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span>1 estrela</span>
+                            <div class="bar-container">
+                                <div class="bar" id="bar-1"></div>
+                            </div>
+                            <span class="percentage" id="percent-1">0%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reviews-list" id="reviews-list">
+                    <!-- Avaliações serão carregadas aqui -->
+                </div>
+                
+                <div class="add-review-section">
+                    <input type="text" id="review-author" class="review-author-input" placeholder="Seu nome (opcional)">
+                    <h4>Deixe sua avaliação</h4>
+                    <div class="rating-input">
+                        <span>Sua avaliação:</span>
+                        <div class="star-rating">
+                            <span class="star" data-value="1">☆</span>
+                            <span class="star" data-value="2">☆</span>
+                            <span class="star" data-value="3">☆</span>
+                            <span class="star" data-value="4">☆</span>
+                            <span class="star" data-value="5">☆</span>
+                        </div>
+                    </div>
+                    <textarea id="review-text" placeholder="Conte sua experiência com esta loja..."></textarea>
+                    <button id="submit-review" class="btn">Enviar Avaliação</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <button id="open-reviews" class="reviews-button">
+        <i class="material-icons">star</i>
+    </button>
+    
+    <a href="admin_panel_settings.html?userId=${userId}" class="admin-link" id="admin-link">
+        <i class="material-icons">admin_panel_settings</i>
+    </a>
+    
+     <script src="js/loja.js"></script>
+</body>
+</html>

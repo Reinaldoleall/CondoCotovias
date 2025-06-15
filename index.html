@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Condomínio Cotovias</title>
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://via.placeholder.com/64" type="image/png">
+   
+    
+    <!-- Meta tags -->
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="description" content="Aplicativo do Condomínio Cotovias - Gestão de avisos, lojas e administração">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- iOS meta tags -->
+    <meta name="apple-mobile-web-app-title" content="Cotovias">
+    <link rel="apple-touch-icon" href="https://via.placeholder.com/180">
+    
+    <!-- Android meta tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/inicio.css">
+    
+</head>
+<body>
+    <div class="app-container">
+        <!-- App Bar -->
+        <header class="app-bar">
+            <button class="app-bar__button" id="menuButton">
+                <span class="material-icons">menu</span>
+            </button>
+            <h1 class="app-bar__title" id="pageTitle">Avisos</h1>
+            <button class="app-bar__button" id="helpButton">
+                <span class="material-icons">help_outline</span>
+            </button>
+        </header>
+        
+        <!-- Navigation Drawer -->
+        <div class="drawer-container">
+            <div class="drawer-overlay" id="drawerOverlay"></div>
+            
+            <aside class="drawer" id="drawer">
+                <div class="drawer__header">
+                    <h2 class="drawer__title">Condomínio Cotovias</h2>
+                    <p class="drawer__subtitle">Área do Morador</p>
+                </div>
+                
+                <ul class="drawer__list">
+                    <li class="drawer__item drawer__item--active" data-page="aviso.html">
+                        <span class="material-icons drawer__icon">dashboard</span>
+                        <span class="drawer__text">Avisos</span>
+                    </li>
+                    
+                    <li class="drawer__item" data-page="admin.html" id="adminMenuItem">
+                        <span class="material-icons drawer__icon">admin_panel_settings</span>
+                        <span class="drawer__text">Administração</span>
+                    </li>
+                    
+                    <li class="drawer__item" data-page="login.html">
+                        <span class="material-icons drawer__icon">people</span>
+                        <span class="drawer__text">Usuários</span>
+                    </li>
+                    
+                    <li class="drawer__item" id="createStoreBtn">
+                        <span class="material-icons drawer__icon">local_mall</span>
+                        <span class="drawer__text">Crie sua loja</span>
+                    </li>
+                    
+                    <li class="drawer__item" data-page="lojas.html">
+                        <span class="material-icons drawer__icon">store</span>
+                        <span class="drawer__text">Lojas</span>
+                    </li>
+                </ul>
+            </aside>
+            
+            <!-- Main Content -->
+            <main class="app-content">
+                <iframe class="content-frame" id="contentFrame" src="aviso.html" frameborder="0"></iframe>
+            </main>
+        </div>
+        
+        <!-- Floating Action Button -->
+        <button class="fab" id="helpFab">
+            <span class="material-icons fab__icon">help_outline</span>
+        </button>
+    </div>
+    
+    <!-- Admin Password Modal -->
+    <div class="modal" id="adminModal">
+        <div class="modal__content">
+            <div class="modal__header">
+                <span class="material-icons modal__header-icon">admin_panel_settings</span>
+                <h2 class="modal__header-title">Acesso Administrativo</h2>
+            </div>
+            
+            <div class="modal__body">
+                <p>Esta área é restrita a administradores autorizados. Por favor, autentique-se para continuar.</p>
+                
+                <div class="input-container mt-3">
+                    <div class="input-field">
+                        <span class="material-icons input-field__icon">lock</span>
+                        <input type="password" class="input-field__input" id="adminPassword" placeholder="Digite sua senha">
+                    </div>
+                    
+                    <div class="error-message" id="adminError">
+                        <span class="material-icons error-message__icon">error</span>
+                        <span>Senha incorreta. Tente novamente.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal__footer">
+                <button class="button button--text" id="cancelAdmin">
+                    <span class="material-icons button__icon">close</span>
+                    Cancelar
+                </button>
+                <button class="button button--contained" id="submitAdmin">
+                    <span class="material-icons button__icon">check</span>
+                    Acessar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Store Login Modal -->
+    <div class="modal" id="storeLoginModal">
+        <div class="modal__content">
+            <div class="modal__header">
+                <span class="material-icons modal__header-icon">store</span>
+                <h2 class="modal__header-title">Acesso à Criação de Lojas</h2>
+            </div>
+            
+            <div class="modal__body">
+                <div class="input-container">
+                    <div class="input-field">
+                        <span class="material-icons input-field__icon">person_outline</span>
+                        <input type="text" class="input-field__input" id="storeUsername" placeholder="Digite seu usuário">
+                    </div>
+                </div>
+                
+                <div class="input-container">
+                    <div class="input-field">
+                        <span class="material-icons input-field__icon">lock_outline</span>
+                        <input type="password" class="input-field__input" id="storePassword" placeholder="Digite sua senha">
+                    </div>
+                </div>
+                
+                <div class="input-container" style="display: flex; align-items: center;">
+                    <input type="checkbox" id="rememberMe" checked style="margin-right: var(--spacing-sm);">
+                    <label for="rememberMe">Lembrar de mim</label>
+                </div>
+                
+                <div class="error-message" id="storeLoginError">
+                    <span class="material-icons error-message__icon">error_outline</span>
+                    <span>Credenciais inválidas. Tente novamente.</span>
+                </div>
+            </div>
+            
+            <div class="modal__footer">
+                <button class="button button--text" id="cancelStoreLogin">
+                    <span class="material-icons button__icon">close</span>
+                    Cancelar
+                </button>
+                <button class="button button--contained" id="submitStoreLogin">
+                    <span class="material-icons button__icon">check</span>
+                    Acessar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <div class="loading__spinner"></div>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script src="js/inicial.js"></script>
+</body>
+</html>

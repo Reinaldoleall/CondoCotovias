@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lojas Disponíveis</title>
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/lojas.css">
+  
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Nossas Lojas Parceiras</h1>
+            <p>Descubra as melhores lojas disponíveis em nossa plataforma</p>
+        </header>
+
+        <div class="search-container">
+            <div class="search-input-container">
+                <i class="material-icons search-icon">search</i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Pesquisar lojas...">
+                <div class="suggestions-container" id="suggestionsContainer"></div>
+            </div>
+            <div class="search-results" id="searchResults">
+                Mostrando resultados para: <strong id="searchTerm"></strong>
+            </div>
+        </div>
+
+        <div id="stores-list" class="stores-grid">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <i class="material-icons">search_off</i>
+            <h3>Nenhuma loja encontrada</h3>
+            <p>Não encontramos lojas correspondentes à sua pesquisa. Tente outros termos.</p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script src= "js/lojas.js"></script>
+</body>
+</html>

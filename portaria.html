@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portaria - Sistema de Encomendas</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#6750A4">
+    <meta name="description" content="Sistema de gerenciamento de encomendas para condomínios">
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+     <link rel="stylesheet" href="css/portaria.css">
+    <script>
+        (function() {
+            emailjs.init("u4fUcSd9Yi3exmOiv");
+        })();
+    </script>
+  
+</head>
+<body>
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="md-loading-overlay">
+        <div class="md-loading-container">
+            <div class="md-loading-spinner">
+                <div class="md-spinner-layer md-spinner-blue">
+                    <div class="md-spinner-circle-clipper left">
+                        <div class="md-spinner-circle"></div>
+                    </div>
+                    <div class="md-spinner-gap-patch">
+                        <div class="md-spinner-circle"></div>
+                    </div>
+                    <div class="md-spinner-circle-clipper right">
+                        <div class="md-spinner-circle"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="md-loading-text">Processando...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col s12 right-align">
+                <button id="btnLogout" class="btn waves-effect waves-light red" aria-label="Sair do sistema">
+                    <i class="material-icons-round left" aria-hidden="true">exit_to_app</i> Sair
+                </button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">
+                                <i class="material-icons-round">local_shipping</i>
+                                <h5>Registrar Encomenda</h5>
+                            </span>
+                            
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">home</i>
+                                    <input id="blocoEncomenda" type="text" class="validate" required aria-label="Bloco do apartamento" aria-required="true">
+                                    <label for="blocoEncomenda">Bloco</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">meeting_room</i>
+                                    <input id="apartamentoEncomenda" type="text" class="validate" required aria-label="Número do apartamento" aria-required="true">
+                                    <label for="apartamentoEncomenda">Apartamento</label>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons-round prefix">format_list_numbered</i>
+                                    <input id="quantidadeEncomenda" type="number" class="validate" min="1" value="1" required aria-label="Quantidade de encomendas" aria-required="true">
+                                    <label for="quantidadeEncomenda">Quantidade</label>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons-round prefix">description</i>
+                                    <textarea id="descricaoEncomenda" class="materialize-textarea" aria-label="Descrição da encomenda (opcional)"></textarea>
+                                    <label for="descricaoEncomenda">Descrição (opcional)</label>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col s12 center-align">
+                                    <button id="btnRegistrarEncomenda" class="btn waves-effect waves-light">
+                                        Registrar
+                                        <i class="material-icons-round right">send</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col s12 m6">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">
+                                <i class="material-icons-round">pending_actions</i>
+                                <h5>Encomendas Pendentes</h5>
+                            </span>
+                            
+                            <div class="row search-container">
+                                <div class="col s12">
+                                    <div class="input-field">
+                                        <i class="material-icons-round prefix">search</i>
+                                        <input type="text" id="searchInput" placeholder="Buscar por bloco e apartamento (ex: A 101)" aria-label="Buscar encomendas">
+                                        <label for="searchInput">Buscar Encomendas</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <ul class="collection" id="listaEncomendasPortaria" aria-live="polite">
+                                <li class="collection-item empty-state">
+                                    <div class="center-align">
+                                        <i class="material-icons-round large">local_shipping</i>
+                                        <p>Nenhuma encomenda pendente</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Entrega de Encomenda -->
+    <div id="modalEntrega" class="modal" aria-modal="true" role="dialog" aria-labelledby="modalEntregaTitle">
+        <div class="modal-content">
+            <h4 id="modalEntregaTitle">Registrar Entrega</h4>
+            <div class="row">
+                <div class="col s12">
+                    <p>Confirmar entrega da encomenda para:</p>
+                    <div class="input-field">
+                        <i class="material-icons-round prefix">person</i>
+                        <input id="nomeRetirante" type="text" class="validate" required aria-label="Nome de quem está retirando a encomenda" aria-required="true">
+                        <label for="nomeRetirante">Nome de quem está retirando</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat" aria-label="Cancelar">Cancelar</a>
+            <a href="#!" class="waves-effect waves-light btn" id="btnConfirmarEntrega">Confirmar</a>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes da Encomenda -->
+    <div id="modalDetalhes" class="modal" aria-modal="true" role="dialog" aria-labelledby="modalDetalhesTitle">
+        <div class="modal-content">
+            <h4 id="modalDetalhesTitle">Detalhes da Encomenda</h4>
+            <div class="row">
+                <div class="col s6">
+                    <p><strong>Bloco/Apartamento:</strong> <span id="detalhesBlocoApto"></span></p>
+                    <p><strong>Data/Hora:</strong> <span id="detalhesData"></span></p>
+                    <p><strong>Registrado por:</strong> <span id="detalhesPorteiro"></span></p>
+                </div>
+                <div class="col s6">
+                    <p><strong>Quantidade:</strong> <span id="detalhesQuantidade"></span></p>
+                    <p><strong>Status:</strong> <span id="detalhesStatus" class="badge"></span></p>
+                    <p><strong>Descrição:</strong> <span id="detalhesDescricao"></span></p>
+                </div>
+            </div>
+            <div class="row" id="detalhesRetiradaSection">
+                <div class="col s12">
+                    <p><strong>Retirado por:</strong> <span id="detalhesRetiradoPor"></span></p>
+                    <p><strong>Data da Retirada:</strong> <span id="detalhesDataRetirada"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat" aria-label="Fechar detalhes">Fechar</a>
+            <a href="#!" class="waves-effect waves-light btn hide" id="btnEntregarDetalhes">Registrar Entrega</a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="js/portaria.js"></script>
+</body>
+</html>

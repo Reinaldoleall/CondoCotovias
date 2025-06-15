@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login - Sistema de Encomendas</title>
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/login.css">
+    
+    <!-- Material Design Variables -->
+   
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card__header">
+                <h1 class="card__title">Login</h1>
+            </div>
+            
+            <div class="card__body">
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <div class="input-container">
+                        <span class="material-icons input-icon">email</span>
+                        <input id="email" type="email" class="input-field" required>
+                    </div>
+                    <span class="helper-text">Informe seu email cadastrado</span>
+                </div>
+                
+                <!-- Senha -->
+                <div class="form-group">
+                    <label for="senha" class="form-label">Senha</label>
+                    <div class="input-container">
+                        <span class="material-icons input-icon">lock</span>
+                        <input id="senha" type="password" class="input-field" required>
+                    </div>
+                    <span class="helper-text">Mínimo 6 caracteres</span>
+                </div>
+                
+                <!-- Botão de Login -->
+                <button id="btnLogin" class="btn">
+                    <span class="material-icons btn__icon">login</span>
+                    Entrar
+                </button>
+                
+                <!-- Links -->
+                <div class="link-container">
+                    <a href="#" id="esqueciSenha" class="link">Esqueci minha senha</a>
+                </div>
+                
+                <div class="link-container">
+                    Não tem uma conta? <a href="cadastro.html" class="link">Cadastre-se</a>
+                </div>
+                
+                <!-- Container para mensagens -->
+                <div id="messageContainer" class="message-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script src="js/login.js"></script>
+</body>
+</html>
