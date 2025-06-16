@@ -492,15 +492,18 @@ ul.collection {
 /* ----- LOADING INDICATOR ----- */
 #loadingIndicator {
     position: fixed;
-    top: 300;
-    left: 300;
-    width: 20%;
-    height: 20%;
-    background-color: rgba(255, 255, 255, 0.7);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.8);
     z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 [data-theme="dark"] #loadingIndicator {
     background-color: rgba(0, 0, 0, 0.7);
