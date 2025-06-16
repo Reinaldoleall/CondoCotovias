@@ -8,432 +8,224 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
 </head>
 <style>
-  
-        /*
-        ============================================
-        |            STYLESHEET (CSS)              |
-        ============================================
-        | Design System baseado em Material 3 (MD3)|
-        --------------------------------------------
-        */
-        :root {
-            /* Paleta de Cores de Referência (Claro) */
-            --md-ref-palette-primary: #6750A4;
-            --md-ref-palette-primary-container: #EADDFF;
-            --md-ref-palette-secondary: #625B71;
-            --md-ref-palette-secondary-container: #E8DEF8;
-            --md-ref-palette-tertiary: #7D5260;
-            --md-ref-palette-error: #B3261E;
-            --md-ref-palette-surface: #FFFBFE;
-            --md-ref-palette-surface-variant: #E7E0EC;
-            --md-ref-palette-outline: #79747E;
-            --md-ref-palette-on-primary: #FFFFFF;
-            --md-ref-palette-on-primary-container: #21005D;
-            --md-ref-palette-on-secondary: #FFFFFF;
-            --md-ref-palette-on-secondary-container: #1D192B;
-            --md-ref-palette-on-tertiary: #FFFFFF;
-            --md-ref-palette-on-tertiary-container: #31111D;
-            --md-ref-palette-on-error: #FFFFFF;
-            --md-ref-palette-on-error-container: #410E0B;
-            --md-ref-palette-on-surface: #1C1B1F;
-            --md-ref-palette-on-surface-variant: #49454F;
-            --md-ref-palette-background: #FFFBFE;
+    
+/* ==========================================================================
+   1. Variáveis de Tema e Estilos Base
+   ========================================================================== */
+:root {
+    --primary-color: #34495e;  /* Azul petróleo */
+    --secondary-color: #2980b9; /* Azul mais claro */
+    --accent-color: #3498db;   /* Azul para destaque */
+    --success-color: #27ae60;  /* Verde */
+    --warning-color: #f39c12;  /* Laranja */
+    --danger-color: #c0392b;   /* Vermelho */
+    --light-gray: #ecf0f1;
+    --dark-text: #2c3e50;
+}
 
-            /* Tokens de Sistema (Cores) */
-            --md-sys-color-primary: var(--md-ref-palette-primary);
-            --md-sys-color-on-primary: var(--md-ref-palette-on-primary);
-            --md-sys-color-primary-container: var(--md-ref-palette-primary-container);
-            --md-sys-color-on-primary-container: var(--md-ref-palette-on-primary-container);
-            --md-sys-color-secondary: var(--md-ref-palette-secondary);
-            --md-sys-color-on-secondary: var(--md-ref-palette-on-secondary);
-            --md-sys-color-secondary-container: var(--md-ref-palette-secondary-container);
-            --md-sys-color-on-secondary-container: var(--md-ref-palette-on-secondary-container);
-            --md-sys-color-error: var(--md-ref-palette-error);
-            --md-sys-color-on-error: var(--md-ref-palette-on-error);
-            --md-sys-color-surface: var(--md-ref-palette-surface);
-            --md-sys-color-on-surface: var(--md-ref-palette-on-surface);
-            --md-sys-color-surface-variant: var(--md-ref-palette-surface-variant);
-            --md-sys-color-on-surface-variant: var(--md-ref-palette-on-surface-variant);
-            --md-sys-color-outline: var(--md-ref-palette-outline);
-            --md-sys-color-background: var(--md-ref-palette-background);
+body {
+    background-color: var(--light-gray);
+    color: var(--dark-text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-            /* Elevação (Sombra) */
-            --md-elevation-level-0: none;
-            --md-elevation-level-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
-            --md-elevation-level-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
-            --md-elevation-level-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.30);
+.container {
+    width: 95%;
+    max-width: 1200px;
+    margin-top: 2rem;
+    flex: 1;
+}
 
-            /* Forma (Bordas) */
-            --md-shape-corner-medium: 12px;
-            --md-shape-corner-large: 16px;
-            --md-shape-corner-full: 9999px;
-        }
+h4, h5 {
+    font-weight: 300;
+    color: var(--primary-color);
+}
 
-        /* TEMA ESCURO (DARK MODE) */
-        body.dark-mode {
-            --md-ref-palette-primary: #D0BCFF;
-            --md-ref-palette-primary-container: #4F378B;
-            --md-ref-palette-secondary: #CCC2DC;
-            --md-ref-palette-secondary-container: #4A4458;
-            --md-ref-palette-tertiary: #EFB8C8;
-            --md-ref-palette-error: #F2B8B5;
-            --md-ref-palette-surface: #1C1B1F;
-            --md-ref-palette-surface-variant: #49454F;
-            --md-ref-palette-outline: #938F99;
-            --md-ref-palette-on-primary: #381E72;
-            --md-ref-palette-on-primary-container: #EADDFF;
-            --md-ref-palette-on-secondary: #332D41;
-            --md-ref-palette-on-secondary-container: #E8DEF8;
-            --md-ref-palette-on-tertiary: #492532;
-            --md-ref-palette-on-tertiary-container: #FFD8E4;
-            --md-ref-palette-on-error: #601410;
-            --md-ref-palette-on-error-container: #F9DEDC;
-            --md-ref-palette-on-surface: #E6E1E5;
-            --md-ref-palette-on-surface-variant: #CAC4D0;
-            --md-ref-palette-background: #1C1B1F;
-        }
+/* ==========================================================================
+   2. Cabeçalho e Botões de Ação
+   ========================================================================== */
+.header-actions {
+    padding: 1rem 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
 
-        /* BASE E RESET */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+#btnAtualizar, #btnLogout {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--md-sys-color-background);
-            color: var(--md-sys-color-on-surface);
-            line-height: 1.5;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .container {
-            width: 95%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 24px 16px;
-        }
+#btnAtualizar:hover, #btnLogout:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+}
 
-        /* CABEÇALHO E CONTROLES */
-        .header-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
+.rotate {
+    animation: spin 1s linear infinite;
+}
 
-        .user-info {
-            flex-grow: 1;
-        }
-        
-        .user-info h4 {
-            font-size: 1.75rem;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface);
-        }
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
 
-        .user-info p {
-            color: var(--md-sys-color-on-surface-variant);
-            font-size: 1rem;
-        }
+/* ==========================================================================
+   3. Cards e Listas de Encomendas
+   ========================================================================== */
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden; /* Garante que o conteúdo respeite o border-radius */
+}
 
-        #blocoApto {
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-            padding: 4px 12px;
-            border-radius: var(--md-shape-corner-full);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
+.card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
 
-        .actions-toolbar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        /* BOTÕES */
-        .btn, .btn-flat {
-            border-radius: var(--md-shape-corner-full);
-            text-transform: none;
-            font-weight: 500;
-            letter-spacing: 0.1px;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-        .btn {
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-        }
-        .btn:hover {
-            box-shadow: var(--md-elevation-level-1);
-            background-color: var(--md-sys-color-primary);
-        }
-        .btn.red {
-            background-color: var(--md-sys-color-error);
-            color: var(--md-sys-color-on-error);
-        }
-        .btn-flat {
-            color: var(--md-sys-color-primary);
-        }
-        .btn i.left {
-            margin-right: 8px;
-        }
-        .rotate {
-            animation: rotate 1.2s linear infinite;
-        }
-        @keyframes rotate { to { transform: rotate(360deg); } }
+.card .card-content {
+    padding: 24px;
+}
 
-        /* BUSCA E FILTROS */
-        .search-wrapper {
-            position: relative;
-            margin-bottom: 24px;
-        }
-        .search-wrapper .material-icons-round {
-            position: absolute;
-            top: 50%;
-            left: 16px;
-            transform: translateY(-50%);
-            color: var(--md-sys-color-on-surface-variant);
-        }
-        #searchInput {
-            background-color: var(--md-sys-color-surface-variant);
-            border-radius: var(--md-shape-corner-full);
-            border: none;
-            padding-left: 50px !important;
-            width: calc(85%) !important;
-            height: 56px !important;
-            color: var(--md-sys-color-on-surface-variant);
-        }
-        #searchInput:focus {
-            border-bottom: none !important;
-            box-shadow: none !important;
-        }
-        #searchInput::placeholder {
-            color: var(--md-sys-color-on-surface-variant);
-        }
+.collapsible {
+    border: none;
+    box-shadow: none;
+}
 
-        /* CARDS */
-        .card {
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--md-shape-corner-large);
-            box-shadow: var(--md-elevation-level-1);
-            border: 1px solid transparent;
-            overflow: hidden;
-            margin-bottom: 24px;
-            transition: all 0.3s ease;
-        }
+.collapsible-header {
+    font-weight: 500;
+    border-bottom: 1px solid #ddd !important;
+    transition: background-color 0.3s ease;
+}
 
-        .card-title {
-            padding: 16px 24px;
-            font-size: 1.25rem;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .card-title i {
-            color: var(--md-sys-color-primary);
-        }
-        .card .card-content {
-            padding: 0 8px 16px 8px;
-        }
+.collapsible-header:hover {
+    background-color: rgba(0,0,0,0.03);
+}
 
-        /* LISTA DE ENCOMENDAS (COLLAPSIBLE) */
-        .collapsible {
-            border: none;
-            box-shadow: none;
-        }
-        .collapsible li {
-            border-radius: var(--md-shape-corner-medium);
-            border: 1px solid var(--md-sys-color-outline);
-            margin: 0 16px 12px 16px;
-            transition: all 0.3s ease;
-            background-color: var(--md-sys-color-surface);
-            animation: fadeIn 0.5s ease-out forwards;
-            opacity: 0;
-        }
-        @keyframes fadeIn { to { opacity: 1; } }
+.collapsible-header i {
+    margin-right: 15px;
+    color: var(--secondary-color);
+}
 
-        .collapsible-header {
-            border-bottom: none;
-            padding: 16px;
-        }
-        .collapsible-header i {
-            margin-right: 16px;
-        }
-        .collapsible-body {
-            background-color: var(--md-sys-color-surface-variant);
-            color: var(--md-sys-color-on-surface-variant);
-            border-top: 1px solid var(--md-sys-color-outline);
-            padding: 16px;
-        }
-        .badge {
-            font-weight: 500;
-            border-radius: var(--md-shape-corner-full);
-        }
-        .badge.pendente {
-            background-color: var(--md-ref-palette-tertiary-container);
-            color: var(--md-ref-palette-on-tertiary-container);
-        }
-        .badge.confirmacao {
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-        }
-        .badge.retirado {
-            background-color: var(--md-sys-color-secondary-container);
-            color: var(--md-sys-color-on-secondary-container);
-        }
+.collapsible-body {
+    background-color: #fafafa;
+    border-bottom: 1px solid #ddd !important;
+}
 
-        /* ESTADO VAZIO */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-        }
-        .empty-state .icon {
-            font-size: 4rem;
-            color: var(--md-sys-color-outline);
-        }
-        .empty-state p {
-            color: var(--md-sys-color-on-surface-variant);
-            font-size: 1.1rem;
-        }
+.collapsible-body p {
+    padding: 0.5rem 0;
+}
 
-        /* MODAIS */
-        .modal {
-            border-radius: var(--md-shape-corner-large);
-            background-color: var(--md-sys-color-surface);
-            max-width: 560px;
-        }
-        .modal .modal-content {
-            color: var(--md-sys-color-on-surface);
-            padding: 24px;
-        }
-        .modal .modal-content h4 {
-            color: var(--md-sys-color-on-surface);
-            font-size: 1.5rem;
-            margin-bottom: 24px;
-        }
-        .modal .modal-footer {
-            background-color: transparent;
-            padding: 8px 24px 16px 24px;
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
+.updated {
+    animation: fadeIn 1.5s ease-out;
+}
 
-        /* OVERLAY DE CARREGAMENTO */
-        .md-loading-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .md-loading-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .preloader-wrapper.big {
-            width: 48px;
-            height: 48px;
-        }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-        /* TOASTS (NOTIFICAÇÕES) */
-        .md-toast {
-            position: fixed;
-            bottom: 24px;
-            left: 24px;
-            border-radius: var(--md-shape-corner-medium);
-            background-color: var(--md-sys-color-on-surface);
-            color: var(--md-sys-color-surface);
-            padding: 14px 24px;
-            z-index: 10000;
-            box-shadow: var(--md-elevation-level-3);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transform: translateY(150%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .md-toast.show {
-            transform: translateY(0);
-        }
-        .md-toast .icon {
-            font-size: 24px;
-        }
-        .md-toast.success .icon { color: #66BB6A; }
-        .md-toast.error .icon { color: #EF5350; }
-        .md-toast.warning .icon { color: #FFA726; }
+/* ==========================================================================
+   4. Estilos de Status (Badges)
+   ========================================================================== */
+.badge {
+    color: white !important;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    text-align: center;
+}
 
-        /* STATUS DE CONEXÃO */
-        #connectionStatus {
-            position: fixed;
-            bottom: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 12px 16px;
-            border-radius: var(--md-shape-corner-medium);
-            color: var(--md-sys-color-on-primary);
-            font-weight: 500;
-            z-index: 9998;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: var(--md-elevation-level-2);
-            transition: bottom 0.5s ease-in-out;
-        }
-        #connectionStatus.show {
-            bottom: 24px;
-        }
-        #connectionStatus.online { background-color: var(--md-sys-color-primary); }
-        #connectionStatus.offline { background-color: var(--md-sys-color-error); }
-        
-        /* RESPONSIVIDADE */
-        @media (max-width: 600px) {
-            .container {
-                width: 100%;
-                padding: 16px 8px;
-            }
-            .header-controls {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .actions-toolbar {
-                width: 100%;
-                justify-content: flex-start;
-            }
-            .user-info h4 {
-                font-size: 1.5rem;
-            }
-            .md-toast {
-                left: 16px;
-                right: 16px;
-                width: auto;
-            }
-        }
-  
+.badge.orange { background-color: var(--warning-color); }
+.badge.blue { background-color: var(--accent-color); }
+.badge.green { background-color: var(--success-color); }
+
+
+/* ==========================================================================
+   5. Modal e Estado Vazio
+   ========================================================================== */
+.modal {
+    border-radius: 8px;
+    max-width: 600px;
+}
+
+.modal .modal-footer {
+    background-color: #f5f5f5;
+    border-top: 1px solid #e0e0e0;
+    border-radius: 0 0 8px 8px;
+}
+
+.empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    margin: 1rem;
+}
+
+.empty-state .material-icons {
+    font-size: 4rem;
+    color: #bbb;
+}
+
+.empty-state p {
+    font-size: 1.2rem;
+    color: #999;
+    margin-top: 1rem;
+}
+
+
+/* ==========================================================================
+   6. Indicador de Conexão
+   ========================================================================== */
+#connectionStatus {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 20px 20px 0 0;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    transition: all 0.5s ease;
+}
+
+#connectionStatus.online {
+    background-color: var(--success-color);
+}
+
+#connectionStatus.offline {
+    background-color: var(--danger-color);
+}
+
+#connectionStatus i {
+    margin-right: 8px;
+}
+
+/* Esconde o status após a animação de entrada */
+#connectionStatus:not(.show) {
+    bottom: -60px;
+    opacity: 0;
+}
 </style>
 <body>
     <div class="container">
         <div class="row">
             <div class="col s12 right-align">
-<---<button id="btnAtualizar" class="btn waves-effect waves-light blue darken-2" onclick="window.location.href='usuario.html'">
+<button id="btnAtualizar" class="btn waves-effect waves-light blue darken-2" onclick="window.location.href='usuario.html'">
     <i class="material-icons left">refresh</i> Atualizar
 </button>
                 <button id="btnLogout" class="btn waves-effect waves-light red darken-2">
                     <i class="material-icons left">exit_to_app</i> Sair
-                </button>--->
+                </button>
             </div>
         </div>
         
@@ -596,7 +388,7 @@
                         atualizarInterfaceUsuario();
                         
                         if (userData.tipo !== 'morador') {
-                            window.location.href = 'index1.html';
+                            window.location.href = 'index.html';
                             return;
                         }
                         
