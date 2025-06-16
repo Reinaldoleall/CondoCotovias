@@ -2,619 +2,561 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Portaria Pro - Sistema de Encomendas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portaria - Sistema de Encomendas</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <meta name="theme-color" content="#2c3e50">
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
-    <script>
-        // Inicializa o EmailJS com seu User ID
-        (function() {
-            emailjs.init("u4fUcSd9Yi3exmOiv"); // Substitua pelo seu User ID do EmailJS
-        })();
-    </script>
+<script>
+    // Inicializa o EmailJS com seu User ID
+    (function() {
+        emailjs.init("u4fUcSd9Yi3exmOiv");
+    })();
+</script>
     <style>
-      
-      /*
-===================================================
-|                 STYLESHEET (CSS)                |
-===================================================
-| Design System baseado em Material 3 (MD3)       |
-| Versão 2.0 - Dashboard, Tema e Melhorias de UX  |
----------------------------------------------------
-*/
-
-:root {
-    /* Paleta de Cores de Referência (Claro) */
-    --md-ref-palette-primary: #6750A4;
-    --md-ref-palette-primary-container: #EADDFF;
-    --md-ref-palette-secondary: #625B71;
-    --md-ref-palette-error: #B3261E;
-    --md-ref-palette-tertiary: #006874;
-    --md-ref-palette-tertiary-container: #97F0FF;
-    --md-ref-palette-surface: #FDF7FF;
-    --md-ref-palette-surface-variant: #E7E0EC;
-    --md-ref-palette-outline: #79747E;
-    --md-ref-palette-on-primary: #FFFFFF;
-    --md-ref-palette-on-primary-container: #21005D;
-    --md-ref-palette-on-secondary: #FFFFFF;
-    --md-ref-palette-on-error: #FFFFFF;
-    --md-ref-palette-on-surface: #1C1B1F;
-    --md-ref-palette-on-surface-variant: #49454F;
-    --md-ref-palette-on-tertiary-container: #001F24;
-    --md-ref-palette-background: #FDF7FF;
-    --md-ref-palette-success: #4CAF50;
-    --md-ref-palette-success-container: #C8E6C9;
-    --md-ref-palette-on-success-container: #1B5E20;
-
-
-    /* Tokens de Sistema (Cores) */
-    --md-sys-color-primary: var(--md-ref-palette-primary);
-    --md-sys-color-on-primary: var(--md-ref-palette-on-primary);
-    --md-sys-color-primary-container: var(--md-ref-palette-primary-container);
-    --md-sys-color-on-primary-container: var(--md-ref-palette-on-primary-container);
-    --md-sys-color-secondary: var(--md-ref-palette-secondary);
-    --md-sys-color-on-secondary: var(--md-ref-palette-on-secondary);
-    --md-sys-color-error: var(--md-ref-palette-error);
-    --md-sys-color-on-error: var(--md-ref-palette-on-error);
-    --md-sys-color-surface: var(--md-ref-palette-surface);
-    --md-sys-color-on-surface: var(--md-ref-palette-on-surface);
-    --md-sys-color-surface-variant: var(--md-ref-palette-surface-variant);
-    --md-sys-color-on-surface-variant: var(--md-ref-palette-on-surface-variant);
-    --md-sys-color-outline: var(--md-ref-palette-outline);
-    --md-sys-color-background: var(--md-ref-palette-background);
-    --md-sys-color-tertiary: var(--md-ref-palette-tertiary);
-    --md-sys-color-on-tertiary-container: var(--md-ref-palette-on-tertiary-container);
-    --md-sys-color-tertiary-container: var(--md-ref-palette-tertiary-container);
-    --md-sys-color-success: var(--md-ref-palette-success);
-    --md-sys-color-success-container: var(--md-ref-palette-success-container);
-    --md-sys-color-on-success-container: var(--md-ref-palette-on-success-container);
-
-    /* Elevação e Forma */
-    --md-elevation-level-1: 0 1px 2px rgba(0,0,0,.3), 0 1px 3px 1px rgba(0,0,0,.15);
-    --md-elevation-level-2: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15);
-    --md-elevation-level-3: 0 4px 8px 3px rgba(0,0,0,.15), 0 1px 3px rgba(0,0,0,.3);
-    --md-shape-corner-medium: 12px;
-    --md-shape-corner-large: 16px;
-    --md-shape-corner-full: 9999px;
     
-    /* Tipografia */
-    --md-sys-typescale-body-font: 'Roboto', sans-serif;
-    --md-sys-typescale-body-weight: 400;
-    --md-sys-typescale-body-line-height: 1.5;
-    --md-sys-typescale-body-size: 1rem;
-    
-    /* Espaçamentos */
-    --md-space-xxs: 4px;
-    --md-space-xs: 8px;
-    --md-space-sm: 12px;
-    --md-space-md: 16px;
-    --md-space-lg: 24px;
-    --md-space-xl: 32px;
-    --md-space-xxl: 48px;
-}
+        /* Estilos Personalizados para Portaria - Sistema de Encomendas */
+        :root {
+            --cor-primaria: #2c3e50;       /* Azul escuro */
+            --cor-secundaria: #3498db;     /* Azul principal */
+            --cor-sucesso: #27ae60;        /* Verde */
+            --cor-alerta: #f39c12;         /* Laranja */
+            --cor-erro: #e74c3c;           /* Vermelho */
+            --cor-fundo: #f8fafc;          /* Cinza muito claro */
+            --cor-texto: #2d3436;          /* Texto escuro */
+            --cor-texto-secundario: #636e72; /* Texto cinza */
+            --cor-borda: #dfe6e9;          /* Bordas claras */
+            --sombra-card: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --sombra-card-hover: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --fonte-principal: 'Roboto', 'Segoe UI', sans-serif;
+        }
 
-/* TEMA ESCURO (DARK MODE) */
-body.dark-mode {
-    --md-ref-palette-primary: #D0BCFF;
-    --md-ref-palette-primary-container: #4F378B;
-    --md-ref-palette-secondary: #CCC2DC;
-    --md-ref-palette-error: #F2B8B5;
-    --md-ref-palette-tertiary: #4FD8EB;
-    --md-ref-palette-tertiary-container: #004E58;
-    --md-ref-palette-surface: #141218;
-    --md-ref-palette-surface-variant: #49454F;
-    --md-ref-palette-outline: #938F99;
-    --md-ref-palette-on-primary: #381E72;
-    --md-ref-palette-on-primary-container: #EADDFF;
-    --md-ref-palette-on-secondary: #332D41;
-    --md-ref-palette-on-error: #601410;
-    --md-ref-palette-on-surface: #E6E1E5;
-    --md-ref-palette-on-surface-variant: #CAC4D0;
-    --md-ref-palette-on-tertiary-container: #97F0FF;
-    --md-ref-palette-background: #141218;
-    --md-ref-palette-success-container: #005305;
-    --md-ref-palette-on-success-container: #98FAB0;
-}
 
-/* BASE E RESET */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+        /* Reset e Base */
+        body {
+            font-family: var(--fonte-principal);
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
 
-body {
-    font-family: var(--md-sys-typescale-body-font);
-    font-weight: var(--md-sys-typescale-body-weight);
-    font-size: var(--md-sys-typescale-body-size);
-    line-height: var(--md-sys-typescale-body-line-height);
-    background-color: var(--md-sys-color-background);
-    color: var(--md-sys-color-on-surface);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+        /* Container Principal */
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 15px;
+            flex: 1;
+        }
 
-.container { 
-    width: 100%; 
-    max-width: 1400px; 
-    margin: 0 auto;
-    padding: var(--md-space-md);
-    flex: 1;
-}
+        /* Botão de Logout */
+        #btnLogout {
+            margin-top: 15px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
 
-/* CABEÇALHO E DASHBOARD */
-.header-bar {
-    background-color: var(--md-sys-color-surface);
-    padding: var(--md-space-md);
-    border-bottom: 1px solid var(--md-sys-color-outline);
-    margin-bottom: var(--md-space-lg);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--md-space-md);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    transition: background-color 0.3s ease;
-}
+        #btnLogout:hover {
+            transform: translateY(-2px);
+        }
 
-.header-welcome h5 { 
-    font-size: 1.5rem; 
-    margin: 0; 
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface);
-}
+        /* Cards Principais */
+        .card {
+            border-radius: 10px;
+            box-shadow: var(--sombra-card);
+            border: none;
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
 
-.header-welcome p { 
-    color: var(--md-sys-color-on-surface-variant); 
-    margin: 0; 
+        .card:hover {
+            box-shadow: var(--sombra-card-hover);
+        }
+
+        .card .card-content {
+            padding: 25px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--cor-primaria);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid var(--cor-borda);
+            padding-bottom: 10px;
+        }
+
+        .card-title h5 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .card-title i.material-icons {
+            margin-right: 10px;
+            color: var(--cor-secundaria);
+        }
+
+        /* Formulário de Registro */
+        .input-field {
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-field label {
+            color: var(--cor-texto-secundario);
+        }
+
+        .input-field input:focus + label,
+        .input-field textarea:focus + label {
+            color: var(--cor-secundaria);
+        }
+
+        .input-field input:focus,
+        .input-field textarea:focus {
+            border-bottom: 1px solid var(--cor-secundaria) !important;
+            box-shadow: 0 1px 0 0 var(--cor-secundaria) !important;
+        }
+
+        .prefix.active {
+            color: var(--cor-secundaria);
+        }
+
+        /* Lista de Encomendas */
+        .collection {
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .collection .collection-item {
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid var(--cor-borda);
+            padding: 15px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .collection .collection-item:last-child {
+            border-bottom: none;
+        }
+
+        .collection .collection-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .encomenda-item {
+            cursor: pointer;
+        }
+
+        /* Badges */
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        .badge.orange {
+            background-color: var(--cor-alerta);
+        }
+
+        .badge.blue {
+            background-color: var(--cor-secundaria);
+        }
+
+        .badge.green {
+            background-color: var(--cor-sucesso);
+        }
+
+        /* Botões */
+        .btn {
+            text-transform: none;
+            font-weight: 500;
+            letter-spacing: normal;
+            border-radius: 6px;
+            padding: 0 20px;
+            height: 44px;
+            line-height: 44px;
+            box-shadow: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn.blue {
+            background-color: var(--cor-secundaria);
+        }
+
+        .btn.green {
+            background-color: var(--cor-sucesso);
+        }
+
+        .btn.red {
+            background-color: var(--cor-erro);
+        }
+
+        .btn i.right {
+            margin-left: 8px;
+        }
+
+        .btn-floating {
+            box-shadow: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-floating:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Search */
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-container .input-field {
+            margin-top: 0;
+        }
+
+        /* Modais */
+        .modal {
+            border-radius: 10px;
+            overflow: hidden;
+            max-width: 600px;
+        }
+
+        .modal-content {
+            padding: 25px;
+        }
+
+        .modal-content h4 {
+            color: var(--cor-primaria);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--cor-borda);
+        }
+
+        .modal-footer {
+            background-color: #f8f9fa;
+            padding: 15px 25px;
+            border-top: 1px solid var(--cor-borda);
+        }
+
+        .modal-close {
+            color: var(--cor-texto-secundario);
+        }
+
+        /* Estados Vazios */
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: #dfe6e9;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: var(--cor-texto-secundario);
+            font-size: 1.1rem;
+        }
+
+        /* Loading Spinner */
+        #loadingIndicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .spinner-blue-only {
+            border-color: var(--cor-secundaria);
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .container {
+                width: 100%;
+                padding: 0 15px;
+            }
+            
+            .card .card-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .card-title, .card-title h5 {
+                font-size: 1.2rem;
+            }
+            
+            .modal-content {
+                padding: 20px 15px;
+            }
+            
+            .modal-footer {
+                padding: 15px;
+            }
+            
+            .collection .collection-item {
+                padding: 12px 15px;
+            }
+            
+            #btnLogout {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .collection-item {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* Melhorias para os cards de encomenda */
+        .encomenda-item strong {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--cor-primaria);
+        }
+
+        .encomenda-item small {
+            color: var(--cor-texto-secundario);
+            font-size: 0.85rem;
+        }
+
+        .encomenda-item p {
+            margin-top: 8px;
+            color: var(--cor-texto);
+            font-size: 0.95rem;
+        }
+
+        /* Ajustes para o formulário */
+        .row .col {
+            padding: 0 10px;
+        }
+
+        .input-field .prefix ~ input,
+        .input-field .prefix ~ textarea {
+            width: calc(100% - 3rem);
+            margin-left: 3rem;
+        }
+
+        /* Feedback visual para campos obrigatórios */
+        input:required, textarea:required {
+            border-left: 3px solid var(--cor-alerta) !important;
+        }
+
+        input:required:valid, textarea:required:valid {
+            border-left: 3px solid var(--cor-sucesso) !important;
+        }
+        
+.search-results-count {
+    color: var(--cor-texto-secundario);
     font-size: 0.9rem;
+    padding: 10px 20px;
+    text-align: right;
+    border-bottom: 1px solid var(--cor-borda);
+    background-color: #f5f5f5;
+    margin: 0;
 }
 
-.header-actions { 
-    display: flex; 
-    align-items: center; 
-    gap: var(--md-space-xs); 
-}
-
-.stats-dashboard {
-    display: flex;
-    gap: var(--md-space-md);
-    margin-bottom: var(--md-space-lg);
-    flex-wrap: wrap;
-}
-
-.stat-card {
-    flex: 1;
-    min-width: 180px;
-    background-color: var(--md-sys-color-surface);
-    padding: var(--md-space-md);
-    border-radius: var(--md-shape-corner-medium);
-    text-align: left;
-    box-shadow: var(--md-elevation-level-1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border-left: 5px solid var(--md-sys-color-primary);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.stat-card.tertiary { border-left-color: var(--md-sys-color-tertiary); }
-.stat-card.success { border-left-color: var(--md-sys-color-success); }
-
-
-.stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--md-elevation-level-2);
-}
-
-.stat-card .stat-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--md-sys-color-on-surface);
-    line-height: 1;
-}
-
-.stat-card .stat-label {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface-variant);
-}
-
-/* CARDS E FORMULÁRIOS */
-.card {
-    width: 100%;
-    background-color: var(--md-sys-color-surface);
-    border-radius: var(--md-shape-corner-large);
-    box-shadow: var(--md-elevation-level-1);
-    border: 1px solid transparent;
-    transition: all 0.3s ease;
-    margin-bottom: var(--md-space-md);
-    overflow: hidden;
-}
-
-.card:hover { box-shadow: var(--md-elevation-level-2); }
-.card .card-content { padding: var(--md-space-lg); width: 100%; }
-.card .card-title {
-    padding: 0;
-    margin-bottom: var(--md-space-md);
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface);
-    display: flex;
-    align-items: center;
-    gap: var(--md-space-sm);
-}
-.card .card-title i { color: var(--md-sys-color-primary); font-size: 1.8rem; }
-
-/* Ajustes específicos para os campos do formulário de registro */
-#blocoEncomenda, #apartamentoEncomenda, #quantidadeEncomenda {
-    width: calc(85% - 3rem) !important;
-}
-
-/* Estilo dos campos de formulário */
-.input-field { margin-bottom: var(--md-space-md); position: relative; }
-.input-field input, .input-field textarea, .input-field select {
-    background-color: var(--md-sys-color-surface-variant) !important;
-    border: 1px solid var(--md-sys-color-outline) !important;
-    border-radius: 5px !important;
-    color: var(--md-sys-color-on-surface) !important;
-    padding: 0 var(--md-space-md) !important;
-    height: 56px !important;
-    box-sizing: border-box;
-    width: 100%;
-    font-size: 1rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.input-field textarea {
-    min-height: 120px !important;
-    padding-top: var(--md-space-sm) !important;
-    padding-bottom: var(--md-space-sm) !important;
-    resize: vertical;
-}
-
-.input-field input:focus, .input-field textarea:focus, .input-field select:focus {
-    border-color: var(--md-sys-color-primary) !important;
-    box-shadow: 0 0 0 2px var(--md-sys-color-primary) !important;
-    outline: none;
-}
-
-.input-field label {
-    color: var(--md-sys-color-on-surface-variant);
-    pointer-events: none;
-    position: absolute;
-    left: 16px;
-    top: 18px;
-    transition: all 0.2s ease-out;
-    background-color: transparent;
-    padding: 0 4px;
-}
-
-.input-field input:focus + label, .input-field input:not(:placeholder-shown) + label,
-.input-field textarea:focus + label, .input-field textarea:not(:placeholder-shown) + label {
-    top: -8px;
-    left: 12px;
-    font-size: 0.8rem;
-    background-color: var(--md-sys-color-surface); /* MD3 style label */
-    color: var(--md-sys-color-primary);
-}
-
-.input-field .prefix {
-    color: var(--md-sys-color-on-surface-variant);
-    position: absolute;
-    font-size: 1.8rem;
-    top: 14px;
-    left: 12px;
-}
-
-.input-field .prefix ~ input,
-.input-field .prefix ~ textarea,
-.input-field .prefix ~ label {
-    margin-left: 40px !important;
-    width: calc(90% - 40px) !important;
-}
-.input-field .prefix ~ label { left: 52px; }
-
-/* BOTÕES */
-.btn, .btn-flat, .btn-floating {
-    border-radius: var(--md-shape-corner-full);
-    text-transform: none;
-    font-weight: 500;
-    letter-spacing: normal;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--md-space-xs);
-    border: none;
-}
-.btn { 
-    height: 48px; line-height: 48px; padding: 0 var(--md-space-lg);
-    background-color: var(--md-sys-color-primary); 
-    color: var(--md-sys-color-on-primary); 
-    box-shadow: var(--md-elevation-level-1);
-}
-.btn:hover, .btn:focus {
-    background-color: color-mix(in srgb, var(--md-sys-color-primary) 90%, black);
-    box-shadow: var(--md-elevation-level-2);
-}
-.btn.red { background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error); }
-.btn-flat { color: var(--md-sys-color-primary); background-color: transparent; }
-.btn-flat:hover, .btn-flat:focus { background-color: rgba(var(--md-sys-color-primary), 0.08); }
-.btn i.material-icons-round { font-size: 1.2rem; }
-#btnLogout, #btnThemeToggle {
-    background-color: var(--md-sys-color-surface-variant);
-    color: var(--md-sys-color-on-surface-variant);
-    box-shadow: none;
-}
-#btnLogout:hover { background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error); }
-#btnThemeToggle:hover { background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
-
-/* LISTA DE ENCOMENDAS */
-.collection { border: none; margin: 0; }
-.collection .collection-item {
-    background-color: var(--md-sys-color-surface-variant);
-    border-radius: var(--md-shape-corner-medium);
-    margin-bottom: var(--md-space-sm);
-    padding: var(--md-space-md);
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: 1px solid transparent;
-    list-style-type: none;
-}
-.collection .collection-item:hover {
-    box-shadow: var(--md-elevation-level-2);
-    transform: translateY(-2px);
-    border-color: var(--md-sys-color-primary);
-}
-
-.encomenda-info strong { 
-    font-weight: 500; 
-    color: var(--md-sys-color-on-surface); 
+/* Ajuste para o empty-state */
+.empty-state small {
     display: block;
-    margin-bottom: var(--md-space-xxs);
+    margin-top: 5px;
+    font-size: 0.8rem;
 }
-.encomenda-info small { color: var(--md-sys-color-on-surface-variant); font-size: 0.85rem; }
-.encomenda-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px;}
-.encomenda-actions .badge { 
-    font-weight: 500; 
-    padding: 0px 0px;
-border-radius: 10px;
-    font-size: 0.5rem;
-    color: white;
-    float: none;
-    text-align: center;
-}
-.badge.pendente { background-color: var(--md-sys-color-tertiary); }
-.badge.confirmacao { background-color: var(--md-sys-color-primary); }
-.badge.retirado { background-color: var(--md-sys-color-success); }
-.search-results-count { padding: 0 16px 10px; color: var(--md-sys-color-on-surface-variant); font-size: 0.9em; text-align: right;}
 
-/* ESTADO VAZIO */
-.empty-state { 
-    text-align: center; 
-    padding: var(--md-space-xxl) var(--md-space-md);
-    background-color: transparent !important;
-    border: 2px dashed var(--md-sys-color-surface-variant);
-}
-.empty-state .icon { font-size: 4rem; color: var(--md-sys-color-outline); margin-bottom: var(--md-space-md); }
-.empty-state p { color: var(--md-sys-color-on-surface-variant); font-size: 1.1rem; }
-
-/* MODAIS */
-.modal { 
-    background-color: var(--md-sys-color-surface); 
-    border-radius: var(--md-shape-corner-large); 
-    max-width: 600px; 
-    padding: var(--md-space-lg);
-    box-shadow: var(--md-elevation-level-3);
-}
-.modal .modal-content { color: var(--md-sys-color-on-surface); padding: 0; }
-.modal .modal-content h4 { margin-bottom: var(--md-space-md); color: var(--md-sys-color-on-surface); font-weight: 500;}
-.modal .modal-footer { 
-    background-color: transparent; 
-    padding: var(--md-space-md) 0 0 0;
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--md-space-xs);
-}
-#detalhes-log-list .log-item {
-    font-size: 0.9em;
-    padding: 8px;
-    border-bottom: 1px solid var(--md-sys-color-surface-variant);
-}
-#detalhes-log-list .log-item:last-child { border-bottom: none; }
-#detalhes-log-list .log-item strong { color: var(--md-sys-color-primary); }
-
-/* LOADING */
-#loadingIndicator {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-#loadingIndicator .preloader-wrapper { color: var(--md-sys-color-primary); }
-
-/* Responsividade */
-@media (max-width: 992px) {
-    .stats-dashboard { gap: var(--md-space-sm); }
-    .stat-card { min-width: calc(50% - var(--md-space-sm)); }
-}
-@media (max-width: 600px) {
-    .header-bar { flex-direction: column; align-items: flex-start; }
-    .header-actions { width: 100%; justify-content: space-between; }
-    .stats-dashboard { flex-direction: column; }
-    .modal { width: 95%; max-width: 95%; }
-}
-    
     </style>
 </head>
 <body>
+    <!-- Loading Indicator -->
     <div id="loadingIndicator">
         <div class="preloader-wrapper big active">
             <div class="spinner-layer spinner-blue-only">
-                <div class="circle-clipper left"><div class="circle"></div></div>
-                <div class="gap-patch"><div class="circle"></div></div>
-                <div class="circle-clipper right"><div class="circle"></div></div>
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
             </div>
         </div>
     </div>
-
-    <header class="header-bar">
-        <div class="header-welcome">
-            <h5 id="welcomeMessage">Olá, <span id="userName">Porteiro</span>!</h5>
-            <p>Bem-vindo ao Sistema de Encomendas</p>
-        </div>
-        <div class="header-actions">
-            <button id="btnThemeToggle" class="btn-floating waves-effect waves-light" title="Alternar Tema">
-                <i class="material-icons-round">dark_mode</i>
-            </button>
-            <button id="btnLogout" class="btn-floating waves-effect waves-light" title="Sair do Sistema">
-                <i class="material-icons-round">exit_to_app</i>
-            </button>
-        </div>
-    </header>
 
     <div class="container">
-        <section class="stats-dashboard">
-            <div class="stat-card tertiary">
-                <div class="stat-label">Total Pendente</div>
-                <div id="statPendente" class="stat-value">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Registradas Hoje</div>
-                <div id="statRegistradasHoje" class="stat-value">0</div>
-            </div>
-            <div class="stat-card success">
-                <div class="stat-label">Retiradas Hoje</div>
-                <div id="statRetiradasHoje" class="stat-value">0</div>
-            </div>
-        </section>
-
         <div class="row">
-            <div class="col s12 l5">
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title"><i class="material-icons-round">add_box</i> Registrar Encomenda</span>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <i class="material-icons prefix">location_city</i>
-                                <input id="blocoEncomenda" type="text" placeholder=" " required>
-                                <label for="blocoEncomenda">Bloco</label>
+            <div class="col s12 right-align">
+                <button id="btnLogout" class="btn waves-effect waves-light red darken-2">
+                    <i class="material-icons left">exit_to_app</i> Sair
+                </button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title"><h5>Registrar Encomenda</h5></span>
+                            
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">home</i>
+                                    <input id="blocoEncomenda" type="text" class="validate" required>
+                                    <label for="blocoEncomenda">--->Bloco</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">meeting_room</i>
+                                    <input id="apartamentoEncomenda" type="text" class="validate" required>
+                                    <label for="apartamentoEncomenda">--->Apartamento</label>
+                                </div>
                             </div>
-                            <div class="input-field col s6">
-                                <i class="material-icons prefix">meeting_room</i>
-                                <input id="apartamentoEncomenda" type="text" placeholder=" " required>
-                                <label for="apartamentoEncomenda">Apartamento</label>
+                            
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">local_shipping</i>
+                                    <input id="quantidadeEncomenda" type="number" class="validate" min="1" value="1" required>
+                                    <label for="quantidadeEncomenda">Quantidade</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix">inventory_2</i>
-                                <input id="quantidadeEncomenda" type="number" class="validate" min="1" value="1" placeholder=" " required>
-                                <label for="quantidadeEncomenda">Quantidade</label>
+                            
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">description</i>
+                                    <textarea id="descricaoEncomenda" class="materialize-textarea"></textarea>
+                                    <label for="descricaoEncomenda">Descrição (opcional)</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix">description</i>
-                                <textarea id="descricaoEncomenda" class="materialize-textarea" placeholder=" "></textarea>
-                                <label for="descricaoEncomenda">Descrição (opcional)</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col s12 center-align">
-                                <button id="btnRegistrarEncomenda" class="btn waves-effect waves-light">Registrar
-                                    <i class="material-icons-round right">send</i>
-                                </button>
+                            
+                            <div class="row">
+                                <div class="col s12 center-align">
+                                    <button id="btnRegistrarEncomenda" class="btn waves-effect waves-light blue darken-3">Registrar
+                                        <i class="material-icons right">send</i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col s12 l7">
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title"><i class="material-icons-round">local_shipping</i> Encomendas Pendentes</span>
-                        <div class="input-field">
-                            <i class="material-icons prefix">search</i>
-                            <input type="text" id="searchInput" placeholder=" ">
-                            <label for="searchInput">Buscar por bloco e apartamento (ex: A 101)</label>
-                        </div>
-                        <div id="searchResultsInfo"></div>
-                        <ul class="collection" id="listaEncomendasPortaria">
+                
+                <div class="col s12 m6">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title"><h5>Encomendas Pendentes</h5></span>
+                            <br>
+                            
+                            <div class="row search-container">
+                                <div class="col s12">
+                                    <div class="input-field">
+                                        <i class="material-icons prefix">search</i>
+                                        <input type="text" id="searchInput" placeholder="Buscar por bloco e apartamento (ex: A 101)">
+                                        <label for="searchInput">Buscar Encomendas</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <ul class="collection" id="listaEncomendasPortaria">
+                                <li class="collection-item empty-state">
+                                    <div class="center-align grey-text">
+                                        <i class="material-icons large">local_shipping</i>
+                                        <p>Nenhuma encomenda pendente</p>
+                                    </div>
+                                </li>
                             </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal de Entrega de Encomenda -->
     <div id="modalEntrega" class="modal">
         <div class="modal-content">
-            <h4>Registrar Entrega de Encomenda</h4>
-            <p>Confirme os dados da pessoa que está retirando a encomenda. Uma notificação será enviada ao morador para confirmação final.</p>
-            <div class="input-field">
-                <i class="material-icons prefix">person</i>
-                <input id="nomeRetirante" type="text" class="validate" required placeholder=" ">
-                <label for="nomeRetirante">Nome de quem está retirando</label>
+            <h4>Registrar Entrega</h4>
+            <div class="row">
+                <div class="col s12">
+                    <p>Confirmar entrega da encomenda para:</p>
+                    <div class="input-field">
+                        <i class="material-icons prefix">person</i>
+                        <input id="nomeRetirante" type="text" class="validate" required>
+                        <label for="nomeRetirante">Nome de quem está retirando</label>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect btn-flat">Cancelar</a>
-            <button class="waves-effect waves-light btn" id="btnConfirmarEntrega">Confirmar Retirada</button>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a href="#!" class="waves-effect waves-light btn blue darken-3" id="btnConfirmarEntrega">Confirmar</a>
         </div>
     </div>
 
+    <!-- Modal de Detalhes da Encomenda -->
     <div id="modalDetalhes" class="modal">
         <div class="modal-content">
             <h4>Detalhes da Encomenda</h4>
             <div class="row">
-                <div class="col s12 m6">
-                    <p><strong><i class="material-icons-round tiny">apartment</i> Bloco/Apto:</strong> <span id="detalhesBlocoApto"></span></p>
-                    <p><strong><i class="material-icons-round tiny">event</i> Data/Hora:</strong> <span id="detalhesData"></span></p>
-                    <p><strong><i class="material-icons-round tiny">person_pin</i> Registrado por:</strong> <span id="detalhesPorteiro"></span></p>
+                <div class="col s6">
+                    <p><strong>Bloco/Apartamento:</strong> <span id="detalhesBlocoApto"></span></p>
+                    <p><strong>Data/Hora:</strong> <span id="detalhesData"></span></p>
+                    <p><strong>Registrado por:</strong> <span id="detalhesPorteiro"></span></p>
                 </div>
-                <div class="col s12 m6">
-                    <p><strong><i class="material-icons-round tiny">inventory</i> Quantidade:</strong> <span id="detalhesQuantidade"></span></p>
-                    <p><strong><i class="material-icons-round tiny">bookmark</i> Status:</strong> <span id="detalhesStatus" class="badge"></span></p>
-                    <p><strong><i class="material-icons-round tiny">notes</i> Descrição:</strong> <span id="detalhesDescricao"></span></p>
-                </div>
-            </div>
-            <div class="row hide" id="detalhesRetiradaSection">
-                <div class="col s12">
-                    <hr style="border-top: 1px solid var(--md-sys-color-outline); margin: 16px 0;">
-                    <p><strong><i class="material-icons-round tiny">how_to_reg</i> Retirado por:</strong> <span id="detalhesRetiradoPor"></span></p>
-                    <p><strong><i class="material-icons-round tiny">update</i> Data da Retirada:</strong> <span id="detalhesDataRetirada"></span></p>
+                <div class="col s6">
+                    <p><strong>Quantidade:</strong> <span id="detalhesQuantidade"></span></p>
+                    <p><strong>Status:</strong> <span id="detalhesStatus" class="badge"></span></p>
+                    <p><strong>Descrição:</strong> <span id="detalhesDescricao"></span></p>
                 </div>
             </div>
-             <div class="row" id="detalhesLogSection">
+            <div class="row" id="detalhesRetiradaSection">
                 <div class="col s12">
-                    <h6 style="font-weight: 500; margin-top: 20px;">Histórico de Eventos</h6>
-                    <ul id="detalhes-log-list" class="collection" style="border-color: var(--md-sys-color-surface-variant);">
-                        </ul>
+                    <p><strong>Retirado por:</strong> <span id="detalhesRetiradoPor"></span></p>
+                    <p><strong>Data da Retirada:</strong> <span id="detalhesDataRetirada"></span></p>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect btn-flat">Fechar</a>
-            <button class="waves-effect waves-light btn hide" id="btnEntregarDetalhes">Registrar Entrega</button>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+            <a href="#!" class="waves-effect waves-light btn blue darken-3 hide" id="btnEntregarDetalhes">Registrar Entrega</a>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-        // Configuração do Firebase (mantenha a sua)
+        // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
             authDomain: "rifas-c414b.firebaseapp.com",
@@ -624,386 +566,530 @@ border-radius: 10px;
             messagingSenderId: "770195193538",
             appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
         };
+
+        // Inicializa o Firebase
         firebase.initializeApp(firebaseConfig);
 
-        // --- VARIÁVEIS GLOBAIS ---
+        // Variáveis globais
         let todasEncomendas = [];
-        let currentUserInfo = null;
+        let detalhesListener = null;
         let encomendasListener = null;
 
-        // --- FUNÇÕES AUXILIARES ---
-        const mostrarCarregamento = (mostrar) => document.getElementById('loadingIndicator').style.display = mostrar ? 'flex' : 'none';
-        const formatarData = (timestamp) => timestamp ? new Date(timestamp).toLocaleString('pt-BR') : 'N/A';
-
-        // --- TEMA (LIGHT/DARK) ---
-        const themeToggle = document.getElementById('btnThemeToggle');
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            themeToggle.innerHTML = `<i class="material-icons-round">${isDarkMode ? 'light_mode' : 'dark_mode'}</i>`;
-            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-        });
-
-        const aplicarTemaSalvo = () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-                themeToggle.innerHTML = '<i class="material-icons-round">light_mode</i>';
+        // Função para mostrar/ocultar loading
+        function mostrarCarregamento(mostrar) {
+            const loader = document.getElementById('loadingIndicator');
+            if (mostrar) {
+                loader.style.display = 'flex';
+            } else {
+                loader.style.display = 'none';
             }
-        };
-
-        // --- AUTENTICAÇÃO E INICIALIZAÇÃO ---
-        document.addEventListener('DOMContentLoaded', () => {
-            M.Modal.init(document.querySelectorAll('.modal'));
-            aplicarTemaSalvo();
-
-            firebase.auth().onAuthStateChanged(async user => {
-                if (user) {
-                    try {
-                        const userSnapshot = await firebase.database().ref(`users/${user.uid}`).once('value');
-                        
-                        // =================== INÍCIO DA CORREÇÃO ===================
-                        // Garante que o objeto currentUserInfo sempre tenha o UID e um nome.
-                        currentUserInfo = userSnapshot.val() || {}; // Começa com objeto vazio se não existir no DB
-                        currentUserInfo.uid = user.uid; // Garante que o UID do usuário autenticado seja SEMPRE atribuído
-                        
-                        if (!currentUserInfo.nome) {
-                            currentUserInfo.nome = 'Usuário'; // Define um nome padrão se não houver um no DB
-                        }
-                        // ==================== FIM DA CORREÇÃO =====================
-                        
-                        document.getElementById('userName').textContent = currentUserInfo.nome.split(' ')[0];
-                        
-                        iniciarMonitoramentoDeEncomendas();
-                        configurarEventListeners();
-
-                    } catch (error) {
-                        console.error("Erro ao buscar dados do usuário:", error);
-                        M.toast({html: 'Erro ao carregar dados do usuário.', classes: 'red'});
-                    }
-                } else {
-                    window.location.href = 'login.html';
-                }
-            });
-        });
-
-        // --- LÓGICA PRINCIPAL ---
-        function iniciarMonitoramentoDeEncomendas() {
-            mostrarCarregamento(true);
-            if (encomendasListener) firebase.database().ref('encomendas').off('value', encomendasListener);
-
-            encomendasListener = firebase.database().ref('encomendas').orderByChild('data').on('value', snapshot => {
-                const hoje = new Date().setHours(0, 0, 0, 0);
-                let pendentesCount = 0, registradasHojeCount = 0, retiradasHojeCount = 0;
-                
-                todasEncomendas = [];
-                if (snapshot.exists()) {
-                    snapshot.forEach(child => {
-                        const encomenda = { id: child.key, ...child.val() };
-                        todasEncomendas.push(encomenda);
-
-                        if (new Date(encomenda.data).setHours(0, 0, 0, 0) === hoje) registradasHojeCount++;
-                        if (encomenda.status === 'pendente') pendentesCount++;
-                        if (encomenda.status === 'retirado' && new Date(encomenda.dataRetirada).setHours(0, 0, 0, 0) === hoje) retiradasHojeCount++;
-                    });
-                }
-                
-                // Atualiza Dashboard e Lista
-                atualizarDashboard(pendentesCount, registradasHojeCount, retiradasHojeCount);
-                filtrarEncomendas(); // Usa a busca atual para exibir
-                mostrarCarregamento(false);
-            }, error => {
-                console.error('Erro ao carregar encomendas:', error);
-                M.toast({html: 'Erro crítico ao carregar dados.', classes: 'red'});
-                mostrarCarregamento(false);
-            });
-        }
-        
-        function atualizarDashboard(pendentes, registradas, retiradas) {
-            document.getElementById('statPendente').textContent = pendentes;
-            document.getElementById('statRegistradasHoje').textContent = registradas;
-            document.getElementById('statRetiradasHoje').textContent = retiradas;
         }
 
-        function exibirEncomendas(encomendasParaExibir) {
-            const listaEl = document.getElementById('listaEncomendasPortaria');
-            const searchInfoEl = document.getElementById('searchResultsInfo');
-            listaEl.innerHTML = '';
-            searchInfoEl.innerHTML = '';
-
-            const termoBusca = document.getElementById('searchInput').value.trim();
-
-            if (encomendasParaExibir.length === 0) {
-                const icone = termoBusca ? 'search_off' : 'inbox';
-                const mensagem = termoBusca ? `Nenhuma encomenda encontrada para "${termoBusca}"` : 'Nenhuma encomenda pendente no momento.';
-                listaEl.innerHTML = `
-                    <li class="collection-item empty-state">
-                        <i class="material-icons-round icon">${icone}</i>
-                        <p>${mensagem}</p>
-                    </li>`;
-                return;
-            }
-
-            if (termoBusca) {
-                 searchInfoEl.innerHTML = `<div class="search-results-count">${encomendasParaExibir.length} resultado(s)</div>`;
-            }
-
-            encomendasParaExibir.sort((a, b) => b.data - a.data); // Ordena da mais nova para a mais antiga
-
-            encomendasParaExibir.forEach(encomenda => {
-                const li = document.createElement('li');
-                li.className = 'collection-item';
-                li.onclick = () => abrirModalDetalhes(encomenda.id);
-                
-                let statusBadge = `<span class="badge pendente">Pendente</span>`;
-                if(encomenda.status === 'aguardando_confirmacao') {
-                    statusBadge = `<span class="badge confirmacao">Aguardando Conf.</span>`
-                }
-                
-                li.innerHTML = `
-                    <div class="row valign-wrapper" style="margin-bottom:0;">
-                        <div class="col s8 encomenda-info">
-                            <strong>Bloco ${encomenda.bloco}, Apto ${encomenda.apartamento}</strong>
-                            <small>${encomenda.quantidade} item(s) - ${formatarData(encomenda.data)}</small>
-                        </div>
-                        <div class="col s4 right-align encomenda-actions">
-                            ${statusBadge}
-                            <button class="btn-floating waves-effect waves-light btn-entregar" data-id="${encomenda.id}">
-                                <i class="material-icons">check</i>
-                            </button>
-                        </div>
-                    </div>`;
-
-                const btnEntregar = li.querySelector('.btn-entregar');
-                btnEntregar.onclick = (e) => {
-                    e.stopPropagation();
-                    abrirModalEntrega(encomenda.id);
-                };
-                listaEl.appendChild(li);
-            });
-        }
-        
-        function filtrarEncomendas() {
-            const termoBusca = document.getElementById('searchInput').value.toLowerCase().trim();
-            const encomendasPendentes = todasEncomendas.filter(enc => enc.status === 'pendente' || enc.status === 'aguardando_confirmacao');
-
-            if (!termoBusca) {
-                exibirEncomendas(encomendasPendentes);
-                return;
-            }
-            
-            const encomendasFiltradas = encomendasPendentes.filter(enc => 
-                (enc.blocoApto || '').toLowerCase().includes(termoBusca)
-            );
-            exibirEncomendas(encomendasFiltradas);
+        // Função para formatar data
+        function formatarData(timestamp) {
+            if (!timestamp) return 'N/A';
+            const date = new Date(timestamp);
+            return date.toLocaleString('pt-BR');
         }
 
-        async function registrarNovaEncomenda() {
-            const bloco = document.getElementById('blocoEncomenda').value.trim().toUpperCase();
-            const apartamento = document.getElementById('apartamentoEncomenda').value.trim();
-            const quantidade = document.getElementById('quantidadeEncomenda').value;
-            const descricao = document.getElementById('descricaoEncomenda').value.trim();
-            
-            if (!bloco || !apartamento || !quantidade) {
-                M.toast({html: 'Preencha Bloco, Apartamento e Quantidade.', classes: 'red'});
-                return;
-            }
-            
-            mostrarCarregamento(true);
+        // Função para fazer logout
+        async function fazerLogout() {
             try {
-                const novaEncomenda = {
-                    bloco, apartamento, quantidade, descricao,
-                    status: 'pendente',
-                    data: firebase.database.ServerValue.TIMESTAMP,
-                    registradoPor: currentUserInfo.uid,
-                    registradoPorNome: currentUserInfo.nome,
-                    blocoApto: `Bloco ${bloco}, Apto ${apartamento}`
-                };
-                
-                const encomendaRef = firebase.database().ref('encomendas').push();
-                await encomendaRef.set(novaEncomenda);
-                
-                // Adiciona log de criação
-                await firebase.database().ref(`encomendas/${encomendaRef.key}/logs`).push({
-                    evento: 'Criação',
-                    detalhes: `Registrado por ${currentUserInfo.nome}`,
-                    data: firebase.database.ServerValue.TIMESTAMP
-                });
-                
-                M.toast({html: 'Encomenda registrada com sucesso!', classes: 'green'});
-                document.getElementById('blocoEncomenda').value = '';
-                document.getElementById('apartamentoEncomenda').value = '';
-                document.getElementById('quantidadeEncomenda').value = '1';
-                document.getElementById('descricaoEncomenda').value = '';
-                M.updateTextFields(); // Atualiza labels do Materialize
-                
-                enviarNotificacaoPorEmail(encomendaRef.key, novaEncomenda);
-
+                await firebase.auth().signOut();
+                window.location.href = 'login.html';
             } catch (error) {
-                console.error('Erro ao registrar encomenda:', error);
-                M.toast({html: 'Erro ao registrar. Tente novamente.', classes: 'red'});
-            } finally {
-                mostrarCarregamento(false);
+                console.error('Erro ao fazer logout:', error);
+                M.toast({html: 'Erro ao fazer logout', classes: 'red'});
             }
         }
+
+        // Função para carregar encomendas em tempo real
+        function carregarEncomendasPendentes() {
+            mostrarCarregamento(true);
+            
+            // Remove listener anterior se existir
+            if (encomendasListener) {
+                firebase.database().ref('encomendas').off('value', encomendasListener);
+            }
+            
+            // Configura novo listener
+            encomendasListener = firebase.database().ref('encomendas')
+                .orderByChild('status')
+                .equalTo('pendente')
+                .on('value', snapshot => {
+                    const listaEncomendas = document.getElementById('listaEncomendasPortaria');
+                    
+                    if (!snapshot.exists()) {
+                        listaEncomendas.innerHTML = `
+                            <li class="collection-item empty-state">
+                                <div class="center-align grey-text">
+                                    <i class="material-icons large">local_shipping</i>
+                                    <p>Nenhuma encomenda pendente</p>
+                                </div>
+                            </li>
+                        `;
+                        todasEncomendas = [];
+                        mostrarCarregamento(false);
+                        return;
+                    }
+                    
+                    todasEncomendas = [];
+                    snapshot.forEach(child => {
+                        const encomenda = child.val();
+                        encomenda.id = child.key;
+                        
+                        if (!encomenda.solicitacaoRetirada || 
+                            encomenda.solicitacaoRetirada.solicitadoPor === firebase.auth().currentUser.uid) {
+                            todasEncomendas.push(encomenda);
+                        }
+                    });
+                    
+                    exibirEncomendas(todasEncomendas);
+                    mostrarCarregamento(false);
+                }, error => {
+                    console.error('Erro ao carregar encomendas:', error);
+                    M.toast({html: 'Erro ao carregar encomendas', classes: 'red'});
+                    mostrarCarregamento(false);
+                });
+        }
+        // Função para filtrar encomendas (substitua a função existente)
+function filtrarEncomendas() {
+    const termoBusca = document.getElementById('searchInput').value.toLowerCase().trim();
+    const listaEncomendas = document.getElementById('listaEncomendasPortaria');
+    
+    if (!termoBusca) {
+        exibirEncomendas(todasEncomendas);
+        return;
+    }
+    
+    const partesBusca = termoBusca.split(' ');
+    const blocoBusca = partesBusca[0];
+    const aptoBusca = partesBusca.length > 1 ? partesBusca[1] : '';
+    
+    const encomendasFiltradas = todasEncomendas.filter(encomenda => {
+        const blocoMatch = encomenda.bloco.toLowerCase().includes(blocoBusca);
+        const aptoMatch = aptoBusca ? encomenda.apartamento.toLowerCase().includes(aptoBusca) : true;
+        return blocoMatch && aptoMatch;
+    });
+    
+    // Remove qualquer estado vazio existente
+    const emptyState = listaEncomendas.querySelector('.empty-state');
+    if (emptyState) {
+        emptyState.remove();
+    }
+    
+    if (encomendasFiltradas.length === 0) {
+        // Se não encontrou nada, mostra mensagem específica de busca
+        listaEncomendas.innerHTML = `
+            <li class="collection-item empty-state">
+                <div class="center-align grey-text">
+                    <i class="material-icons large">search_off</i>
+                    <p>Nenhuma encomenda encontrada para "${termoBusca}"</p>
+                    <small>Tente buscar por "Bloco X" ou "X 101"</small>
+                </div>
+            </li>
+        `;
+    } else {
+        // Exibe os resultados encontrados
+        exibirEncomendas(encomendasFiltradas);
         
-        async function enviarNotificacaoPorEmail(encomendaId, encomendaData) {
+        // Opcional: Mostra contador de resultados
+        const resultados = document.createElement('div');
+        resultados.className = 'grey-text right-align';
+        resultados.style.padding = '0 20px 10px';
+        resultados.textContent = `${encomendasFiltradas.length} ${encomendasFiltradas.length === 1 ? 'encomenda encontrada' : 'encomendas encontradas'}`;
+        
+        // Insere antes da lista
+        listaEncomendas.insertBefore(resultados, listaEncomendas.firstChild);
+    }
+}
+
+// Modifique também a função exibirEncomendas para limpar o estado vazio
+function exibirEncomendas(encomendas) {
+    const listaEncomendas = document.getElementById('listaEncomendasPortaria');
+    const termoBusca = document.getElementById('searchInput').value.trim();
+    
+    // Limpa completamente a lista antes de recriar
+    listaEncomendas.innerHTML = '';
+    
+    if (encomendas.length === 0) {
+        // Exibe mensagem de estado vazio apropriada
+        const mensagem = termoBusca 
+            ? `Nenhuma encomenda encontrada para "${termoBusca}"` 
+            : 'Nenhuma encomenda pendente';
+        
+        const icone = termoBusca ? 'search_off' : 'local_shipping';
+        
+        listaEncomendas.innerHTML = `
+            <li class="collection-item empty-state">
+                <div class="center-align grey-text">
+                    <i class="material-icons large">${icone}</i>
+                    <p>${mensagem}</p>
+                    ${termoBusca ? '<small>Tente buscar por "Bloco X" ou "X 101"</small>' : ''}
+                </div>
+            </li>
+        `;
+        return;
+    }
+    
+    // Adiciona contador de resultados apenas se houver busca ativa
+    if (termoBusca) {
+        const resultados = document.createElement('div');
+        resultados.className = 'search-results-count grey-text';
+        resultados.textContent = `${encomendas.length} ${encomendas.length === 1 ? 'encomenda encontrada' : 'encomendas encontradas'}`;
+        listaEncomendas.appendChild(resultados);
+    }
+    
+    // Adiciona cada encomenda à lista
+    encomendas.forEach(encomenda => {
+        const li = document.createElement('li');
+        li.className = 'collection-item encomenda-item';
+        li.setAttribute('data-bloco', encomenda.bloco.toLowerCase());
+        li.setAttribute('data-apto', encomenda.apartamento.toLowerCase());
+        li.setAttribute('data-id', encomenda.id);
+        
+        let badgeClass = '';
+        let badgeText = `${encomenda.quantidade} item(s)`;
+        let showDeliveryButton = true;
+        
+        if (encomenda.status === 'aguardando_confirmacao') {
+            badgeClass = 'blue';
+            badgeText = 'Aguardando confirmação';
+            showDeliveryButton = false;
+        }
+        
+        li.innerHTML = `
+            <div class="row valign-wrapper">
+                <div class="col s8">
+                    <strong>Bloco ${encomenda.bloco}, Apt ${encomenda.apartamento}</strong><br>
+                    <small>${formatarData(encomenda.data)}</small>
+                    ${encomenda.descricao ? `<p>${encomenda.descricao}</p>` : ''}
+                </div>
+                <div class="col s4 right-align">
+                    <span class="badge ${badgeClass}">${badgeText}</span>
+                    ${showDeliveryButton ? 
+                        `<a href="#!" class="btn-floating blue darken-3 btn-entregar" data-id="${encomenda.id}">
+                            <i class="material-icons">check</i>
+                        </a>` : ''}
+                </div>
+            </div>
+        `;
+        
+        // Adiciona evento ao botão de entregar
+        const btn = li.querySelector('.btn-entregar');
+        if (btn) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const encomendaId = this.getAttribute('data-id');
+                abrirModalEntrega(encomendaId);
+            });
+        }
+        
+        // Adiciona evento para abrir detalhes
+        li.addEventListener('click', function() {
+            const encomendaId = this.getAttribute('data-id');
+            abrirModalDetalhes(encomendaId);
+        });
+        
+        listaEncomendas.appendChild(li);
+    });
+}
+
+        // Função para filtrar encomendas
+
+
+        // Função para abrir modal de entrega
+        function abrirModalEntrega(encomendaId) {
+            const modal = M.Modal.getInstance(document.getElementById('modalEntrega'));
+            document.getElementById('btnConfirmarEntrega').setAttribute('data-id', encomendaId);
+            document.getElementById('nomeRetirante').value = '';
+            modal.open();
+        }
+
+        // Função para abrir modal de detalhes
+        async function abrirModalDetalhes(encomendaId) {
             try {
-                const moradorSnapshot = await firebase.database().ref('users').orderByChild('blocoApto').equalTo(`${encomendaData.bloco}-${encomendaData.apartamento}`).once('value');
-                
-                if (!moradorSnapshot.exists()) {
-                    console.warn(`Morador para ${encomendaData.blocoApto} não encontrado para notificação.`);
-                    return;
+                // Remove listener anterior se existir
+                if (detalhesListener) {
+                    firebase.database().ref(`encomendas/${encomendaId}`).off('value', detalhesListener);
                 }
                 
+                // Configura novo listener
+                detalhesListener = firebase.database().ref(`encomendas/${encomendaId}`)
+                    .on('value', async (snapshot) => {
+                        const encomenda = snapshot.val();
+                        
+                        if (!encomenda) {
+                            M.toast({html: 'Encomenda não encontrada', classes: 'red'});
+                            return;
+                        }
+                        
+                        // Preenche os dados no modal
+                        document.getElementById('detalhesBlocoApto').textContent = `Bloco ${encomenda.bloco}, Apt ${encomenda.apartamento}`;
+                        document.getElementById('detalhesData').textContent = formatarData(encomenda.data);
+                        document.getElementById('detalhesQuantidade').textContent = encomenda.quantidade;
+                        document.getElementById('detalhesDescricao').textContent = encomenda.descricao || 'Nenhuma descrição';
+                        
+                        // Obtém o nome do porteiro que registrou
+                        if (encomenda.registradoPor) {
+                            const porteiroSnapshot = await firebase.database().ref(`users/${encomenda.registradoPor}`).once('value');
+                            const porteiroData = porteiroSnapshot.val();
+                            document.getElementById('detalhesPorteiro').textContent = porteiroData?.nome || 'Porteiro';
+                        } else {
+                            document.getElementById('detalhesPorteiro').textContent = 'N/A';
+                        }
+                        
+                        const statusBadge = document.getElementById('detalhesStatus');
+                        let statusText = 'Pendente';
+                        let statusClass = 'orange';
+                        
+                        if (encomenda.status === 'aguardando_confirmacao') {
+                            statusText = 'Aguardando Confirmação';
+                            statusClass = 'blue';
+                        } else if (encomenda.status === 'retirado') {
+                            statusText = 'Retirada';
+                            statusClass = 'green';
+                        }
+                        
+                        statusBadge.textContent = statusText;
+                        statusBadge.className = `badge ${statusClass}`;
+                        
+                        const retiradaSection = document.getElementById('detalhesRetiradaSection');
+                        const btnEntregar = document.getElementById('btnEntregarDetalhes');
+                        
+                        if (encomenda.status === 'pendente') {
+                            retiradaSection.classList.add('hide');
+                            btnEntregar.classList.remove('hide');
+                            btnEntregar.setAttribute('data-id', encomendaId);
+                        } else if (encomenda.status === 'aguardando_confirmacao') {
+                            retiradaSection.classList.remove('hide');
+                            document.getElementById('detalhesRetiradoPor').textContent = encomenda.solicitacaoRetirada?.nomeRetirante || 'N/A';
+                            document.getElementById('detalhesDataRetirada').textContent = formatarData(encomenda.solicitacaoRetirada?.data);
+                            btnEntregar.classList.add('hide');
+                        } else {
+                            document.getElementById('detalhesRetiradoPor').textContent = encomenda.retiradoPorNome || encomenda.retiradoPor || 'N/A';
+                            document.getElementById('detalhesDataRetirada').textContent = formatarData(encomenda.dataRetirada);
+                            retiradaSection.classList.remove('hide');
+                            btnEntregar.classList.add('hide');
+                        }
+                    });
+                
+                // Abre o modal
+                const modal = M.Modal.getInstance(document.getElementById('modalDetalhes'));
+                modal.open();
+                
+            } catch (error) {
+                console.error('Erro ao carregar detalhes:', error);
+                M.toast({html: 'Erro ao carregar detalhes', classes: 'red'});
+            }
+        }
+
+        // Função para registrar nova encomenda
+async function registrarNovaEncomenda() {
+    const bloco = document.getElementById('blocoEncomenda').value.trim();
+    const apartamento = document.getElementById('apartamentoEncomenda').value.trim();
+    const quantidade = document.getElementById('quantidadeEncomenda').value;
+    const descricao = document.getElementById('descricaoEncomenda').value.trim();
+    const user = firebase.auth().currentUser;
+    
+    if (!bloco || !apartamento || !quantidade || !user) {
+        M.toast({html: 'Preencha todos os campos obrigatórios', classes: 'red'});
+        return;
+    }
+    
+    try {
+        mostrarCarregamento(true);
+        
+        // Obtém o nome do porteiro
+        const userSnapshot = await firebase.database().ref(`users/${user.uid}`).once('value');
+        const userData = userSnapshot.val();
+        
+        const novaEncomenda = {
+            bloco: bloco,
+            apartamento: apartamento,
+            quantidade: quantidade,
+            descricao: descricao,
+            status: 'pendente',
+            data: firebase.database.ServerValue.TIMESTAMP,
+            registradoPor: user.uid,
+            registradoPorNome: userData.nome,
+            blocoApto: `Bloco ${bloco}, Apt ${apartamento}`
+        };
+        
+        // Salva a encomenda no Firebase
+        const encomendaRef = await firebase.database().ref('encomendas').push(novaEncomenda);
+        
+        M.toast({html: 'Encomenda registrada com sucesso', classes: 'green'});
+        
+        // Limpa o formulário
+        document.getElementById('blocoEncomenda').value = '';
+        document.getElementById('apartamentoEncomenda').value = '';
+        document.getElementById('quantidadeEncomenda').value = '1';
+        document.getElementById('descricaoEncomenda').value = '';
+        
+        // Tenta enviar email de notificação
+        try {
+            // Busca o email do morador no Firebase
+            const moradorSnapshot = await firebase.database().ref('users')
+                .orderByChild('blocoApto')
+                .equalTo(`${bloco}-${apartamento}`)
+                .once('value');
+            
+            if (moradorSnapshot.exists()) {
                 moradorSnapshot.forEach(child => {
                     const morador = child.val();
-                    if (!morador.email) return;
-
+                    
+                    // Configura os parâmetros do email
                     const templateParams = {
-                        to_name: morador.nome || 'Morador',
+                        to_name: morador.nome,
                         to_email: morador.email,
-                        bloco: encomendaData.bloco,
-                        apartamento: encomendaData.apartamento,
-                        quantidade: encomendaData.quantidade,
-                        porteiro: currentUserInfo.nome,
-                        data: new Date().toLocaleString('pt-BR')
+                        bloco: bloco,
+                        apartamento: apartamento,
+                        quantidade: quantidade,
+                        descricao: descricao || 'Não informada',
+                        data: new Date().toLocaleString('pt-BR'),
+                        porteiro: userData.nome
                     };
-
+                    
+                    // Envia o email usando EmailJS
                     emailjs.send('service_qeqs8rl', 'template_gi6qr3o', templateParams)
                         .then(response => {
-                            console.log('Email enviado!', response.status, response.text);
-                            firebase.database().ref(`encomendas/${encomendaId}/logs`).push({
-                                evento: 'Notificação por E-mail',
-                                detalhes: `Enviado com sucesso para ${morador.email}`,
-                                data: firebase.database.ServerValue.TIMESTAMP
+                            console.log('Email enviado com sucesso!', response.status, response.text);
+                            
+                            // Registra no log que o email foi enviado
+                            firebase.database().ref(`encomendas/${encomendaRef.key}/logs`).push({
+                                evento: 'email_notificacao_enviado',
+                                data: firebase.database.ServerValue.TIMESTAMP,
+                                status: 'sucesso',
+                                destinatario: morador.email
                             });
                         })
-                        .catch(err => {
-                            console.error('Falha ao enviar e-mail:', err);
-                            firebase.database().ref(`encomendas/${encomendaId}/logs`).push({
-                                evento: 'Falha na Notificação',
-                                detalhes: `Erro ao enviar e-mail para ${morador.email}`,
-                                data: firebase.database.ServerValue.TIMESTAMP
+                        .catch(error => {
+                            console.error('Falha ao enviar email:', error);
+                            
+                            // Registra o erro no log
+                            firebase.database().ref(`encomendas/${encomendaRef.key}/logs`).push({
+                                evento: 'email_notificacao_falhou',
+                                data: firebase.database.ServerValue.TIMESTAMP,
+                                status: 'erro',
+                                erro: error.toString(),
+                                destinatario: morador.email
                             });
                         });
                 });
-            } catch (error) {
-                console.error("Erro ao buscar morador para notificação:", error);
+            } else {
+                console.log('Morador não encontrado para enviar notificação');
             }
+        } catch (emailError) {
+            console.error('Erro ao tentar enviar email:', emailError);
         }
+        
+        mostrarCarregamento(false);
+        
+    } catch (error) {
+        console.error('Erro ao registrar encomenda:', error);
+        M.toast({html: 'Erro ao registrar encomenda', classes: 'red'});
+        mostrarCarregamento(false);
+    }
+}
 
+        // Função para confirmar entrega de encomenda
         async function confirmarEntregaEncomenda() {
             const encomendaId = this.getAttribute('data-id');
             const nomeRetirante = document.getElementById('nomeRetirante').value.trim();
-            if (!nomeRetirante) {
-                M.toast({html: 'Informe o nome de quem está retirando.', classes: 'red'});
+            const user = firebase.auth().currentUser;
+            
+            if (!encomendaId || !nomeRetirante || !user) {
+                M.toast({html: 'Por favor, informe o nome de quem está retirando', classes: 'red'});
                 return;
             }
 
-            mostrarCarregamento(true);
             try {
-                const updates = {
-                    status: 'aguardando_confirmacao',
-                    retiradoPorNome: nomeRetirante,
-                    dataRetirada: firebase.database.ServerValue.TIMESTAMP,
-                    porteiroRetiradaNome: currentUserInfo.nome
-                };
-                await firebase.database().ref(`encomendas/${encomendaId}`).update(updates);
+                mostrarCarregamento(true);
                 
-                M.toast({html: 'Aguardando confirmação do morador.', classes: 'blue'});
-                M.Modal.getInstance(document.getElementById('modalEntrega')).close();
-            } catch (error) {
-                console.error('Erro ao confirmar entrega:', error);
-                M.toast({html: 'Erro ao enviar solicitação.', classes: 'red'});
-            } finally {
-                mostrarCarregamento(false);
-            }
-        }
-
-        // --- MODAIS ---
-        const abrirModalEntrega = (encomendaId) => {
-            document.getElementById('btnConfirmarEntrega').setAttribute('data-id', encomendaId);
-            document.getElementById('nomeRetirante').value = '';
-            M.updateTextFields();
-            M.Modal.getInstance(document.getElementById('modalEntrega')).open();
-        };
-
-        const abrirModalDetalhes = async (encomendaId) => {
-            mostrarCarregamento(true);
-            try {
-                const snapshot = await firebase.database().ref(`encomendas/${encomendaId}`).once('value');
-                if (!snapshot.exists()) {
-                    M.toast({html: 'Encomenda não encontrada.', classes: 'red'});
+                const userSnapshot = await firebase.database().ref(`users/${user.uid}`).once('value');
+                const userData = userSnapshot.val();
+                
+                // Verifica se já existe uma solicitação pendente
+                const encomendaSnapshot = await firebase.database().ref(`encomendas/${encomendaId}`).once('value');
+                const encomenda = encomendaSnapshot.val();
+                
+                if (encomenda.status === 'aguardando_confirmacao') {
+                    M.toast({html: 'Já existe uma solicitação de confirmação pendente para esta encomenda', classes: 'orange'});
+                    mostrarCarregamento(false);
                     return;
                 }
-                const encomenda = snapshot.val();
                 
-                // Preenche dados básicos
-                document.getElementById('detalhesBlocoApto').textContent = encomenda.blocoApto;
-                document.getElementById('detalhesData').textContent = formatarData(encomenda.data);
-                document.getElementById('detalhesPorteiro').textContent = encomenda.registradoPorNome || 'N/A';
-                document.getElementById('detalhesQuantidade').textContent = encomenda.quantidade;
-                document.getElementById('detalhesDescricao').textContent = encomenda.descricao || 'Nenhuma';
+                // Atualiza para status 'aguardando_confirmacao'
+                await firebase.database().ref(`encomendas/${encomendaId}`).update({
+                    status: 'aguardando_confirmacao',
+                    retiradoPor: nomeRetirante,
+                    retiradoPorNome: nomeRetirante,
+                    dataRetirada: firebase.database.ServerValue.TIMESTAMP,
+                    porteiroRetiradaNome: userData.nome,
+                    solicitacaoRetirada: {
+                        porteiro: userData.nome,
+                        data: firebase.database.ServerValue.TIMESTAMP,
+                        nomeRetirante: nomeRetirante,
+                        solicitadoPor: user.uid
+                    }
+                });
+
+                M.toast({html: 'Solicitação de retirada enviada para confirmação', classes: 'green'});
                 
-                // Status
-                const statusBadge = document.getElementById('detalhesStatus');
-                statusBadge.textContent = encomenda.status.replace('_', ' ').replace('aguardando confirmacao', 'Aguardando Confirmação').replace('pendente', 'Pendente').replace('retirado', 'Retirada');
-                statusBadge.className = `badge ${encomenda.status === 'pendente' ? 'pendente' : encomenda.status === 'aguardando_confirmacao' ? 'confirmacao' : 'retirado'}`;
-
-                // Seção de Retirada
-                const retiradaSection = document.getElementById('detalhesRetiradaSection');
-                if (encomenda.status !== 'pendente') {
-                    document.getElementById('detalhesRetiradoPor').textContent = encomenda.retiradoPorNome || 'N/A';
-                    document.getElementById('detalhesDataRetirada').textContent = formatarData(encomenda.dataRetirada);
-                    retiradaSection.classList.remove('hide');
-                } else {
-                    retiradaSection.classList.add('hide');
-                }
-
-                // Botão de Entregar no Modal
-                const btnEntregar = document.getElementById('btnEntregarDetalhes');
-                if(encomenda.status === 'pendente') {
-                    btnEntregar.classList.remove('hide');
-                    btnEntregar.setAttribute('data-id', encomendaId);
-                } else {
-                    btnEntregar.classList.add('hide');
-                }
-
-                // Logs
-                const logList = document.getElementById('detalhes-log-list');
-                logList.innerHTML = '<li class="collection-item">Nenhum evento registrado.</li>';
-                if (encomenda.logs) {
-                    logList.innerHTML = '';
-                    Object.values(encomenda.logs).reverse().forEach(log => {
-                        logList.innerHTML += `<li class="collection-item log-item"><strong>${log.evento}:</strong> ${log.detalhes} <span class="grey-text right">${formatarData(log.data)}</span></li>`;
-                    });
-                }
+                const modalEntrega = M.Modal.getInstance(document.getElementById('modalEntrega'));
+                modalEntrega.close();
                 
-                M.Modal.getInstance(document.getElementById('modalDetalhes')).open();
+                mostrarCarregamento(false);
 
             } catch (error) {
-                console.error('Erro ao carregar detalhes:', error);
-                M.toast({html: 'Erro ao carregar detalhes.', classes: 'red'});
-            } finally {
+                console.error('Erro ao confirmar entrega:', error);
+                M.toast({html: 'Erro ao enviar solicitação', classes: 'red'});
                 mostrarCarregamento(false);
             }
-        };
-        
-        // --- EVENT LISTENERS ---
-        function configurarEventListeners() {
+        }
+
+        // Inicialização quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializa modais
+            const modals = document.querySelectorAll('.modal');
+            M.Modal.init(modals);
+            
+            // Configura listeners de tempo real
+            carregarEncomendasPendentes();
+            
+            // Monitora estado da conexão
+            firebase.database().ref('.info/connected').on('value', (snapshot) => {
+                if (snapshot.val() === true) {
+                    console.log('Conectado ao Firebase em tempo real');
+                } else {
+                    console.log('Desconectado do Firebase');
+                    M.toast({html: 'Não esqueça de lançar todos as encomendas recebidas.', classes: 'orange'});
+                }
+            });
+            
+            // Configura botões
             document.getElementById('btnRegistrarEncomenda').addEventListener('click', registrarNovaEncomenda);
             document.getElementById('btnConfirmarEntrega').addEventListener('click', confirmarEntregaEncomenda);
-            document.getElementById('searchInput').addEventListener('input', filtrarEncomendas);
             document.getElementById('btnEntregarDetalhes').addEventListener('click', function() {
-                M.Modal.getInstance(document.getElementById('modalDetalhes')).close();
-                abrirModalEntrega(this.getAttribute('data-id'));
+                const encomendaId = this.getAttribute('data-id');
+                abrirModalEntrega(encomendaId);
             });
-            document.getElementById('btnLogout').addEventListener('click', async () => {
-                await firebase.auth().signOut();
-                window.location.href = 'login.html';
+            
+            // Configura campo de busca
+            document.getElementById('searchInput').addEventListener('input', filtrarEncomendas);
+            
+            // Configura botão de logout
+            document.getElementById('btnLogout').addEventListener('click', fazerLogout);
+            
+            // Limpa listeners quando o modal de detalhes é fechado
+            document.getElementById('modalDetalhes').addEventListener('modal-close', function() {
+                if (detalhesListener) {
+                    firebase.database().ref(`encomendas/${encomendaId}`).off('value', detalhesListener);
+                    detalhesListener = null;
+                }
             });
-        }
+        });
     </script>
 </body>
 </html>
