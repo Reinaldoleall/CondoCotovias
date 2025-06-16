@@ -256,25 +256,57 @@
         }
     }
 
-    async function enviarNotificacaoEmail(encomenda) {
-        try {
-            const userSnapshot = await firebase.database().ref('users').orderByChild('blocoApto').equalTo(`Bloco ${encomenda.bloco}, Apt ${encomenda.apartamento}`).limitToFirst(1).once('value');
-            if (!userSnapshot.exists()) return;
+async function enviarNotificacaoEmail(encomenda) {
+    try {
+        // Primeiro, formatamos o blocoApto da mesma forma que está armazenado no Firebase
+        const blocoAptoFormatado = `Bloco ${encomenda.bloco}, Apt ${encomenda.apartamento}`;
+        
+        // Buscamos o usuário correspondente ao bloco/apto
+        const userSnapshot = await firebase.database().ref('users')
+            .orderByChild('blocoApto')
+            .equalTo(blocoAptoFormatado)
+            .once('value');
 
-            const morador = Object.values(userSnapshot.val())[0];
-            const templateParams = {
-                to_name: morador.nome, to_email: morador.email,
-                bloco: encomenda.bloco, apartamento: encomenda.apartamento,
-                descricao: encomenda.descricao || 'Não informada',
-                porteiro: state.currentUser.nome
-            };
-
-            await emailjs.send('service_qeqs8rl', 'template_gi6qr3o', templateParams); // Substitua por seu Service ID e Template ID
-        } catch (error) {
-            console.error("Falha ao enviar e-mail:", error);
-            showToast('Aviso: Falha ao notificar morador por e-mail.', 'warning');
+        if (!userSnapshot.exists()) {
+            console.log("Nenhum morador encontrado para este bloco/apto");
+            return;
         }
+
+        // Pegamos o primeiro usuário encontrado (deveria ser único por bloco/apto)
+        const userId = Object.keys(userSnapshot.val())[0];
+        const morador = userSnapshot.val()[userId];
+
+        if (!morador.email) {
+            console.log("Morador não tem email cadastrado");
+            return;
+        }
+
+        // Preparamos os parâmetros do email
+        const templateParams = {
+            to_name: morador.nome,
+            to_email: morador.email,
+            bloco: encomenda.bloco,
+            apartamento: encomenda.apartamento,
+            quantidade: encomenda.quantidade,
+            descricao: encomenda.descricao || 'Não informada',
+            porteiro: state.currentUser.nome,
+            data: new Date(encomenda.data).toLocaleString('pt-BR')
+        };
+
+        // Enviamos o email usando EmailJS
+        await emailjs.send(
+            'service_qeqs8rl',  // Substitua pelo seu Service ID do EmailJS
+            'template_gi6qr3o', // Substitua pelo seu Template ID do EmailJS
+            templateParams
+        );
+
+        console.log("Email de notificação enviado com sucesso para:", morador.email);
+
+    } catch (error) {
+        console.error("Falha ao enviar e-mail de notificação:", error);
+        showToast('Aviso: Falha ao notificar morador por e-mail.', 'warning');
     }
+}
     
     function fazerLogout() {
         firebase.auth().signOut().catch(error => console.error("Erro ao sair:", error));
