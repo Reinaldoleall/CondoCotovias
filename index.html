@@ -29,9 +29,516 @@
     <!-- Android meta tags -->
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/inicio.css">
+   
     
 </head>
+<style>
+    /* ==========================================================================
+   1. CSS Variables / Variáveis CSS (Design System)
+   ========================================================================== */
+
+:root {
+    /* Colors / Cores */
+    --primary-color: #2c3e50;
+    --primary-color-dark: #1a252f;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --background-color: #ecf0f1;
+    --surface-color: #ffffff;
+    --text-primary-color: #2c3e50;
+    --text-secondary-color: #7f8c8d;
+    --text-on-primary-color: #ffffff;
+    --divider-color: #bdc3c7;
+
+    /* Typography / Tipografia */
+    --font-family: 'Roboto', sans-serif;
+    --font-size-base: 16px;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+
+    /* Spacing / Espaçamento */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    /* Borders / Bordas */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 16px;
+
+    /* Transitions / Transições */
+    --transition-fast: 0.2s ease-in-out;
+    --transition-medium: 0.3s ease-in-out;
+
+    /* Shadows / Sombras (Material Design) */
+    --shadow-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    --shadow-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    --shadow-3: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+
+/* ==========================================================================
+   2. Base Styles / Estilos Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* Remove highlight de toque no mobile */
+}
+
+html {
+    font-size: var(--font-size-base);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-primary-color);
+    overflow: hidden; /* Evita rolagem do body */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+    color: inherit;
+}
+
+/* ==========================================================================
+   3. App Layout / Layout do App
+   ========================================================================== */
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.app-bar {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-sm);
+    height: 56px;
+    background-color: var(--primary-color);
+    color: var(--text-on-primary-color);
+    box-shadow: var(--shadow-2);
+    z-index: 100;
+    flex-shrink: 0;
+}
+
+.app-bar__button {
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-fast);
+}
+.app-bar__button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.app-bar__title {
+    flex-grow: 1;
+    margin: 0;
+    padding: 0 var(--spacing-md);
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-medium);
+    text-align: left;
+}
+
+.drawer-container {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+}
+
+.app-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: var(--background-color);
+    padding: var(--spacing-md);
+}
+
+.content-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius-md);
+}
+
+
+/* ==========================================================================
+   4. Navigation Drawer / Menu Lateral
+   ========================================================================== */
+
+.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-medium), visibility 0s var(--transition-medium);
+    z-index: 200;
+}
+
+.drawer-overlay--visible {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    background-color: var(--surface-color);
+    box-shadow: var(--shadow-3);
+    transform: translateX(-100%);
+    transition: transform var(--transition-medium);
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer--open {
+    transform: translateX(0);
+}
+
+.drawer__header {
+    padding: var(--spacing-lg) var(--spacing-md);
+    background-color: var(--primary-color);
+    color: var(--text-on-primary-color);
+    flex-shrink: 0;
+}
+
+.drawer__title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-bold);
+}
+
+.drawer__subtitle {
+    margin: var(--spacing-xs) 0 0;
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-light);
+    opacity: 0.9;
+}
+
+.drawer__list {
+    padding: var(--spacing-sm) 0;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.drawer__item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    cursor: pointer;
+    color: var(--text-primary-color);
+    font-weight: var(--font-weight-medium);
+    transition: background-color var(--transition-fast);
+    border-left: 4px solid transparent;
+}
+
+.drawer__item:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.drawer__item--active {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: var(--secondary-color);
+    border-left-color: var(--secondary-color);
+}
+
+.drawer__icon {
+    margin-right: var(--spacing-xl);
+    color: var(--text-secondary-color);
+    transition: color var(--transition-fast);
+}
+
+.drawer__item--active .drawer__icon {
+    color: var(--secondary-color);
+}
+
+
+/* ==========================================================================
+   5. Modals / Modais
+   ========================================================================== */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    transition: opacity var(--transition-medium);
+}
+
+.modal--visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal__content {
+    background: var(--surface-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-3);
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95);
+    transition: transform var(--transition-medium);
+}
+
+.modal--visible .modal__content {
+    transform: scale(1);
+}
+
+.modal__header {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--divider-color);
+}
+
+.modal__header-icon {
+    font-size: 1.8rem;
+    margin-right: var(--spacing-md);
+    color: var(--secondary-color);
+}
+
+.modal__header-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-medium);
+}
+
+.modal__body {
+    padding: var(--spacing-lg);
+    line-height: 1.6;
+    color: var(--text-secondary-color);
+}
+
+.modal__body p {
+    margin: 0 0 var(--spacing-md);
+}
+
+.modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--divider-color);
+}
+
+
+/* ==========================================================================
+   6. Forms, Inputs & Buttons / Formulários, Entradas e Botões
+   ========================================================================== */
+
+.input-container {
+    margin-bottom: var(--spacing-md);
+}
+
+.input-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--divider-color);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.input-field:focus-within {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.input-field__icon {
+    padding: 0 var(--spacing-md);
+    color: var(--text-secondary-color);
+}
+
+.input-field__input {
+    width: 100%;
+    border: none;
+    background: none;
+    padding: var(--spacing-md) 0;
+    font-size: 1rem;
+    color: var(--text-primary-color);
+    outline: none;
+}
+.input-field__input::placeholder {
+    color: var(--text-secondary-color);
+    opacity: 0.8;
+}
+
+.error-message {
+    display: none; /* Escondido por padrão */
+    align-items: center;
+    color: var(--accent-color);
+    font-size: 0.85rem;
+    margin-top: var(--spacing-sm);
+}
+
+.error-message__icon {
+    font-size: 1.2rem;
+    margin-right: var(--spacing-sm);
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+    outline: none;
+    user-select: none;
+}
+
+.button__icon {
+    margin-right: var(--spacing-sm);
+    font-size: 1.2em;
+}
+
+/* Botão de texto (sem fundo) */
+.button--text {
+    background-color: transparent;
+    color: var(--secondary-color);
+}
+.button--text:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+/* Botão contido (com fundo) */
+.button--contained {
+    background-color: var(--secondary-color);
+    color: var(--text-on-primary-color);
+    box-shadow: var(--shadow-1);
+}
+.button--contained:hover {
+    background-color: var(--secondary-color-dark, #2980b9);
+    box-shadow: var(--shadow-2);
+}
+
+
+/* ==========================================================================
+   7. Loading Spinner / Spinner de Carregamento
+   ========================================================================== */
+
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-fast), visibility 0s var(--transition-fast);
+}
+
+.loading--visible {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.loading__spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--divider-color);
+    border-top-color: var(--secondary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ==========================================================================
+   8. Responsive Design / Design Responsivo (Desktop)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+    .app-bar {
+        height: 64px;
+    }
+
+    /* Oculta o botão de menu e o overlay no desktop */
+    .app-bar__button#menuButton,
+    .drawer-overlay {
+        display: none;
+    }
+
+    /* Transforma o drawer em um menu lateral fixo */
+    .drawer {
+        position: static;
+        transform: translateX(0);
+        box-shadow: var(--shadow-1);
+        flex-shrink: 0; /* Impede que o drawer encolha */
+        border-right: 1px solid var(--divider-color);
+    }
+
+    .app-content {
+        padding: var(--spacing-lg);
+    }
+}
+
+</style>
 <body>
     <div class="app-container">
         <!-- App Bar -->
@@ -185,6 +692,247 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     
-    <script src="js/inicial.js"></script>
+  <script>
+    // Envolve todo o código em um evento que garante que o DOM foi carregado.
+document.addEventListener('DOMContentLoaded', () => {
+
+    // ==========================================================================
+    // 1. Firebase Configuration / Configuração do Firebase
+    // ==========================================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCwTNcpr_r75HH0igBtNyEbKvfuLkVFHiU",
+        authDomain: "rifalidiane-fde3b.firebaseapp.com",
+        databaseURL: "https://rifalidiane-fde3b-default-rtdb.firebaseio.com",
+        projectId: "rifalidiane-fde3b",
+        storageBucket: "rifalidiane-fde3b.appspot.com",
+        messagingSenderId: "649359518677",
+        appId: "1:649359518677:web:879b4ed9fa5150d24d2b5c"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // ==========================================================================
+    // 2. DOM Elements / Elementos do DOM
+    // ==========================================================================
+    const menuButton = document.getElementById('menuButton');
+    const drawer = document.getElementById('drawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const contentFrame = document.getElementById('contentFrame');
+    const pageTitle = document.getElementById('pageTitle');
+    const loading = document.getElementById('loading');
+    const helpButton = document.getElementById('helpButton');
+
+    // Admin Modal Elements
+    const adminModal = document.getElementById('adminModal');
+    const adminPasswordInput = document.getElementById('adminPassword');
+    const submitAdminBtn = document.getElementById('submitAdmin');
+    const cancelAdminBtn = document.getElementById('cancelAdmin');
+    const adminErrorMsg = document.getElementById('adminError');
+    const adminMenuItem = document.getElementById('adminMenuItem');
+
+    // Store Login Modal Elements
+    const storeLoginModal = document.getElementById('storeLoginModal');
+    const storeUsernameInput = document.getElementById('storeUsername');
+    const storePasswordInput = document.getElementById('storePassword');
+    const rememberMeCheckbox = document.getElementById('rememberMe');
+    const storeLoginErrorMsg = document.getElementById('storeLoginError');
+    const submitStoreLoginBtn = document.getElementById('submitStoreLogin');
+    const cancelStoreLoginBtn = document.getElementById('cancelStoreLogin');
+    const createStoreBtn = document.getElementById('createStoreBtn');
+
+    // ==========================================================================
+    // 3. State & Data / Estado e Dados
+    // ==========================================================================
+    let isMenuOpen = false;
+
+    // Definição de usuários autorizados. Em um app real, isso viria de um backend seguro.
+    const authorizedUsers = {
+        admin: { password: "R3inald0" }, // Senha para o administrador
+        storeCreators: [
+            { username: "reinaldoleal.la@gmail.com", password: "R3inald0", name: "Administrador" },
+            { username: "loja1", password: "1234567890", name: "Proprietário da Loja 1" }
+        ]
+    };
+
+    // ==========================================================================
+    // 4. Session Management / Gerenciamento de Sessão
+    // ==========================================================================
+    const saveSession = (username, remember) => {
+        const storage = remember ? localStorage : sessionStorage;
+        storage.setItem('storeUser', JSON.stringify({ username, loggedIn: true }));
+    };
+
+    const clearSession = () => {
+        localStorage.removeItem('storeUser');
+        sessionStorage.removeItem('storeUser');
+    };
+
+    const getSavedUser = () => {
+        const sessionUser = JSON.parse(sessionStorage.getItem('storeUser'));
+        const localUser = JSON.parse(localStorage.getItem('storeUser'));
+        return sessionUser || localUser;
+    };
+
+    const isUserLoggedIn = () => {
+        const user = getSavedUser();
+        return user && user.loggedIn === true;
+    };
+
+    // ==========================================================================
+    // 5. Core Functions / Funções Principais
+    // ==========================================================================
+
+    const toggleMenu = () => {
+        isMenuOpen = !isMenuOpen;
+        drawer.classList.toggle('drawer--open', isMenuOpen);
+        drawerOverlay.classList.toggle('drawer-overlay--visible', isMenuOpen);
+    };
+
+    const loadPage = (pageUrl, pageName) => {
+        loading.classList.add('loading--visible');
+        pageTitle.textContent = pageName;
+        document.title = `${pageName} | Condomínio Cotovias`;
+
+        document.querySelectorAll('.drawer__item').forEach(item => {
+            const itemPage = item.getAttribute('data-page');
+            item.classList.toggle('drawer__item--active', itemPage === pageUrl);
+        });
+        
+        contentFrame.src = pageUrl;
+
+        if (isMenuOpen) {
+            toggleMenu();
+        }
+    };
+    
+    contentFrame.onload = () => {
+        loading.classList.remove('loading--visible');
+        const isStorePage = contentFrame.contentWindow.location.href.includes('criarlojas.html');
+        updateLogoutButton(isStorePage && isUserLoggedIn());
+    };
+
+    const updateLogoutButton = (shouldShow) => {
+        let logoutBtn = document.getElementById('logoutBtn');
+        if (shouldShow) {
+            if (!logoutBtn) {
+                logoutBtn = document.createElement('button');
+                logoutBtn.id = 'logoutBtn';
+                logoutBtn.className = 'button button--text';
+                logoutBtn.innerHTML = `<span class="material-icons button__icon">logout</span> Sair`;
+                Object.assign(logoutBtn.style, {
+                    position: 'fixed',
+                    bottom: 'var(--spacing-md)',
+                    left: 'var(--spacing-md)',
+                    zIndex: '1000',
+                    backgroundColor: 'var(--surface-color)',
+                    boxShadow: 'var(--shadow-2)',
+                    color: 'var(--accent-color)'
+                });
+                
+                logoutBtn.addEventListener('click', () => {
+                    clearSession();
+                    loadPage('aviso.html', 'Avisos');
+                });
+                document.body.appendChild(logoutBtn);
+            }
+        } else {
+            if (logoutBtn) {
+                logoutBtn.remove();
+            }
+        }
+    };
+
+    const toggleModal = (modal, show) => {
+        modal.classList.toggle('modal--visible', show);
+        if(show){
+            const input = modal.querySelector('input:not([type="checkbox"])');
+            if(input) input.focus();
+        } else {
+            modal.querySelectorAll('input:not([type="checkbox"])').forEach(input => input.value = '');
+            modal.querySelectorAll('.error-message').forEach(err => err.style.display = 'none');
+        }
+    };
+
+    // ==========================================================================
+    // 6. Event Listeners / "Ouvintes" de Eventos
+    // ==========================================================================
+
+    menuButton.addEventListener('click', toggleMenu);
+    drawerOverlay.addEventListener('click', toggleMenu);
+    helpButton.addEventListener('click', () => alert('Ajuda: Entre em contato com o administrador do condomínio para suporte técnico.'));
+
+    document.querySelectorAll('.drawer__item[data-page]').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageUrl = item.getAttribute('data-page');
+            const pageName = item.querySelector('.drawer__text').textContent;
+            loadPage(pageUrl, pageName);
+        });
+    });
+
+    adminMenuItem.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleModal(adminModal, true);
+        if (isMenuOpen) toggleMenu();
+    });
+
+    submitAdminBtn.addEventListener('click', () => {
+        const password = adminPasswordInput.value;
+        if (password === authorizedUsers.admin.password) {
+            toggleModal(adminModal, false);
+            loadPage('admin.html', 'Administração');
+        } else {
+            adminErrorMsg.style.display = 'flex';
+        }
+    });
+
+    cancelAdminBtn.addEventListener('click', () => toggleModal(adminModal, false));
+    adminPasswordInput.addEventListener('keypress', (e) => e.key === 'Enter' && submitAdminBtn.click());
+
+    createStoreBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (isUserLoggedIn()) {
+            loadPage('criarlojas.html', 'Crie sua loja');
+        } else {
+            toggleModal(storeLoginModal, true);
+        }
+        if (isMenuOpen) toggleMenu();
+    });
+
+    submitStoreLoginBtn.addEventListener('click', () => {
+        const username = storeUsernameInput.value.trim();
+        const password = storePasswordInput.value;
+        const user = authorizedUsers.storeCreators.find(u => u.username === username && u.password === password);
+
+        if (user) {
+            saveSession(username, rememberMeCheckbox.checked);
+            toggleModal(storeLoginModal, false);
+            loadPage('criarlojas.html', 'Crie sua Loja');
+        } else {
+            storeLoginErrorMsg.style.display = 'flex';
+        }
+    });
+
+    cancelStoreLoginBtn.addEventListener('click', () => toggleModal(storeLoginModal, false));
+    storePasswordInput.addEventListener('keypress', (e) => e.key === 'Enter' && submitStoreLoginBtn.click());
+
+    window.addEventListener('click', (e) => {
+        if (e.target === adminModal) toggleModal(adminModal, false);
+        if (e.target === storeLoginModal) toggleModal(storeLoginModal, false);
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1024 && isMenuOpen) {
+            toggleMenu();
+        }
+    });
+
+    // Carga inicial
+    loadPage('aviso.html', 'Avisos');
+});
+
+  </script>
 </body>
 </html>
