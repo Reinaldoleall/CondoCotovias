@@ -3,690 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Morador - Sistema de Encomendas</title>
+    <title>Minhas Encomendas - Sistema de Condomínio</title>
+    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    
+    <link rel="stylesheet" href="css/usuario.css">
+    
     <meta name="theme-color" content="#6750A4">
-    <meta name="description" content="Sistema de gerenciamento de encomendas para moradores">
-    <style>
-        :root {
-            /* Cores MD3 atualizadas */
-            --md-ref-palette-primary: #6750A4;
-            --md-ref-palette-primary-container: #EADDFF;
-            --md-ref-palette-secondary: #625B71;
-            --md-ref-palette-secondary-container: #E8DEF8;
-            --md-ref-palette-tertiary: #7D5260;
-            --md-ref-palette-tertiary-container: #FFD8E4;
-            --md-ref-palette-error: #B3261E;
-            --md-ref-palette-error-container: #F9DEDC;
-            --md-ref-palette-surface: #FFFBFE;
-            --md-ref-palette-surface-variant: #E7E0EC;
-            --md-ref-palette-outline: #79747E;
-            
-            /* Tokens de cores */
-            --md-sys-color-primary: var(--md-ref-palette-primary);
-            --md-sys-color-on-primary: #FFFFFF;
-            --md-sys-color-primary-container: var(--md-ref-palette-primary-container);
-            --md-sys-color-on-primary-container: #21005D;
-            --md-sys-color-secondary: var(--md-ref-palette-secondary);
-            --md-sys-color-on-secondary: #FFFFFF;
-            --md-sys-color-secondary-container: var(--md-ref-palette-secondary-container);
-            --md-sys-color-on-secondary-container: #1D192B;
-            --md-sys-color-error: var(--md-ref-palette-error);
-            --md-sys-color-error-container: var(--md-ref-palette-error-container);
-            --md-sys-color-on-error: #FFFFFF;
-            --md-sys-color-on-error-container: #410E0B;
-            --md-sys-color-surface: var(--md-ref-palette-surface);
-            --md-sys-color-on-surface: #1C1B1F;
-            --md-sys-color-surface-variant: var(--md-ref-palette-surface-variant);
-            --md-sys-color-on-surface-variant: #49454F;
-            --md-sys-color-outline: var(--md-ref-palette-outline);
-            
-            /* Tipografia MD3 */
-            --md-sys-typescale-display-font: 'Roboto', sans-serif;
-            --md-sys-typescale-headline-font: 'Roboto', sans-serif;
-            --md-sys-typescale-title-font: 'Roboto', sans-serif;
-            --md-sys-typescale-label-font: 'Roboto', sans-serif;
-            --md-sys-typescale-body-font: 'Roboto', sans-serif;
-            
-            /* Elevação */
-            --md-elevation-level-0: none;
-            --md-elevation-level-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
-            --md-elevation-level-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
-            --md-elevation-level-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.30);
-            
-            /* Bordas */
-            --md-shape-corner-none: 0px;
-            --md-shape-corner-extra-small: 4px;
-            --md-shape-corner-extra-small-top: 4px 4px 0px 0px;
-            --md-shape-corner-small: 8px;
-            --md-shape-corner-medium: 12px;
-            --md-shape-corner-large: 16px;
-            --md-shape-corner-extra-large: 28px;
-            --md-shape-corner-full: 9999px;
-        }
+    <meta name="description" content="Sistema de gerenciamento de encomendas para moradores de condomínio.">
 
-        /* Reset e Base */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
 
-        body {
-            font-family: var(--md-sys-typescale-body-font);
-            background-color: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
-            line-height: 1.5;
-            display: flex;
-            min-height: 100vh;
-            flex-direction: column;
-            background-image: url('img/IMG-20250529-WA0015.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
-
-        /* Container Principal */
-        .container {
-            width: 95%;
-            max-width: 1400px;
-            margin: 20px auto;
-            padding: 0 16px;
-            flex: 1;
-        }
-
-        /* Cards atualizados para MD3 */
-        .card {
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--md-shape-corner-medium);
-            box-shadow: var(--md-elevation-level-1);
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-            border: none;
-            overflow: hidden;
-            margin-bottom: 24px;
-        }
-
-        .card:hover {
-            box-shadow: var(--md-elevation-level-2);
-            transform: translateY(-2px);
-        }
-
-        .card-title {
-            font-family: var(--md-sys-typescale-title-font);
-            font-size: 1.25rem;
-            font-weight: 500;
-            line-height: 1.6;
-            letter-spacing: 0.009375rem;
-            color: var(--md-sys-color-on-surface);
-            padding: 16px;
-            margin: 0;
-            background-color: var(--md-sys-color-surface-variant);
-            display: flex;
-            align-items: center;
-        }
-
-        .card-title h5 {
-            margin: 0;
-            font-size: inherit;
-            font-weight: inherit;
-        }
-
-        .card-title i.material-icons-round {
-            margin-right: 12px;
-            color: var(--md-sys-color-primary);
-        }
-
-        .card-content {
-            padding: 16px;
-        }
-
-        /* Lista de Encomendas */
-        .collapsible {
-            border: none;
-            box-shadow: none;
-            margin: 0;
-        }
-
-        .collapsible li {
-            margin-bottom: 12px;
-            border-radius: var(--md-shape-corner-small);
-            overflow: hidden;
-            box-shadow: var(--md-elevation-level-1);
-            border: 1px solid var(--md-sys-color-surface-variant);
-            transition: all 0.3s ease;
-            background-color: var(--md-sys-color-surface);
-        }
-
-        .collapsible li.updated {
-            animation: highlight 1.5s ease;
-        }
-
-        @keyframes highlight {
-            0% { background-color: rgba(103, 80, 164, 0.1); }
-            100% { background-color: transparent; }
-        }
-
-        .collapsible-header {
-            padding: 16px;
-            border-bottom: none;
-            background-color: var(--md-sys-color-surface);
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .collapsible-header i {
-            margin-right: 16px;
-            color: var(--md-sys-color-primary);
-        }
-
-        .collapsible-body {
-            border-bottom: none;
-            padding: 16px;
-            background-color: var(--md-sys-color-surface-variant);
-        }
-
-        .collapsible-body p {
-            margin-bottom: 12px;
-            color: var(--md-sys-color-on-surface-variant);
-        }
-
-        /* Badges */
-        .badge {
-            font-size: 0.75rem;
-            padding: 6px 12px;
-            border-radius: var(--md-shape-corner-full);
-            font-weight: 500;
-            text-transform: uppercase;
-        }
-
-        .badge.orange {
-            background-color: var(--md-ref-palette-tertiary-container);
-            color: var(--md-ref-palette-tertiary);
-        }
-
-        .badge.blue {
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-primary);
-        }
-
-        .badge.green {
-            background-color: var(--md-ref-palette-secondary-container);
-            color: var(--md-sys-color-secondary);
-        }
-
-        /* Botões */
-        .btn {
-            text-transform: none;
-            font-weight: 500;
-            letter-spacing: normal;
-            border-radius: var(--md-shape-corner-full);
-            padding: 0 24px;
-            height: 40px;
-            line-height: 40px;
-            box-shadow: none;
-            transition: all 0.3s ease;
-            font-family: var(--md-sys-typescale-label-font);
-            font-size: 0.875rem;
-            font-weight: 500;
-            letter-spacing: 0.00625rem;
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--md-elevation-level-1);
-        }
-
-        .btn.blue {
-            background-color: var(--md-sys-color-primary);
-        }
-
-        .btn.green {
-            background-color: var(--md-sys-color-secondary);
-        }
-
-        .btn.red {
-            background-color: var(--md-sys-color-error);
-            color: var(--md-sys-color-on-error);
-        }
-
-        .btn i.left {
-            margin-right: 8px;
-        }
-
-        .btn-detalhes, .btn-retirar {
-            margin-left: 8px;
-            margin-bottom: 8px;
-        }
-
-        /* Modais */
-        .modal {
-            border-radius: var(--md-shape-corner-large);
-            overflow: hidden;
-            max-width: 600px;
-            box-shadow: var(--md-elevation-level-3);
-        }
-
-        .modal-content {
-            padding: 24px;
-        }
-
-        .modal-content h4 {
-            color: var(--md-sys-color-on-surface);
-            margin-bottom: 16px;
-            font-family: var(--md-sys-typescale-headline-font);
-            font-size: 1.5rem;
-            font-weight: 400;
-            line-height: 1.6;
-        }
-
-        .modal-footer {
-            background-color: var(--md-sys-color-surface-variant);
-            padding: 16px 24px;
-            border-top: 1px solid var(--md-sys-color-surface-variant);
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-        }
-
-        .modal-close {
-            color: var(--md-sys-color-on-surface-variant);
-            text-transform: none;
-        }
-
-        /* Estados Vazios */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            color: var(--md-sys-color-surface-variant);
-            margin-bottom: 16px;
-        }
-
-        .empty-state p {
-            color: var(--md-sys-color-on-surface-variant);
-            font-size: 1.1rem;
-        }
-
-        /* Loading Spinner */
-        .md-loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(2px);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .md-loading-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .md-loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .md-loading-text {
-            font-family: var(--md-sys-typescale-body-font);
-            color: var(--md-sys-color-on-surface);
-            font-size: 1rem;
-        }
-
-        .md-loading-spinner {
-            width: 48px;
-            height: 48px;
-            position: relative;
-        }
-
-        .md-spinner-layer {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            animation: md-rotate 1568.2352941176ms linear infinite;
-        }
-
-        .md-spinner-blue {
-            border-color: var(--md-sys-color-primary);
-        }
-
-        .md-spinner-circle-clipper {
-            width: 50%;
-            height: 100%;
-            position: absolute;
-            overflow: hidden;
-        }
-
-        .md-spinner-circle {
-            width: 200%;
-            height: 100%;
-            border-width: 3px;
-            border-style: solid;
-            border-color: inherit;
-            border-bottom-color: transparent !important;
-            border-radius: 50%;
-            animation: none;
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-        }
-
-        .left .md-spinner-circle {
-            left: 0;
-            border-right-color: transparent;
-            transform: rotate(129deg);
-            animation: md-left-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
-        }
-
-        .right .md-spinner-circle {
-            left: -100%;
-            border-left-color: transparent;
-            transform: rotate(-129deg);
-            animation: md-right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
-        }
-
-        @keyframes md-rotate {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes md-left-spin {
-            from { transform: rotate(130deg); }
-            50% { transform: rotate(-5deg); }
-            to { transform: rotate(130deg); }
-        }
-
-        @keyframes md-right-spin {
-            from { transform: rotate(-130deg); }
-            50% { transform: rotate(5deg); }
-            to { transform: rotate(-130deg); }
-        }
-
-        /* Toasts */
-        .md-toast {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            min-width: 288px;
-            max-width: 568px;
-            background-color: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
-            border-radius: var(--md-shape-corner-small);
-            box-shadow: var(--md-elevation-level-3);
-            padding: 16px;
-            z-index: 1100;
-            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
-        }
-
-        .md-toast-show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .md-toast-hide {
-            transform: translateX(-50%) translateY(100px);
-        }
-
-        .md-toast-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .md-toast-icon {
-            font-size: 24px;
-        }
-
-        .md-toast-success .md-toast-icon {
-            color: var(--md-sys-color-primary);
-        }
-
-        .md-toast-error .md-toast-icon {
-            color: var(--md-sys-color-error);
-        }
-
-        .md-toast-warning .md-toast-icon {
-            color: var(--md-sys-color-tertiary);
-        }
-
-        .md-toast-message {
-            flex: 1;
-            font-size: 0.875rem;
-            line-height: 1.5;
-        }
-
-        .md-toast-close {
-            background: none;
-            border: none;
-            color: inherit;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.2s ease;
-            padding: 0;
-            margin-left: 8px;
-        }
-
-        .md-toast-close:hover {
-            opacity: 1;
-        }
-
-        /* Status de Conexão */
-        .connection-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 12px 16px;
-            border-radius: var(--md-shape-corner-small);
-            color: white;
-            font-weight: 500;
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: var(--md-elevation-level-2);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .connection-status.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .connection-status.online {
-            background-color: var(--md-sys-color-primary);
-        }
-
-        .connection-status.offline {
-            background-color: var(--md-sys-color-error);
-        }
-
-        /* Seção de Informações do Usuário */
-        .user-info {
-            margin-bottom: 24px;
-        }
-
-        #nomeUsuario {
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface);
-        }
-
-        #blocoApto {
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-            padding: 4px 12px;
-            border-radius: var(--md-shape-corner-full);
-            font-size: 0.875rem;
-            display: inline-block;
-            margin-left: 8px;
-        }
-
-        /* Botão de Atualizar */
-        .rotate {
-            animation: rotate 1s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Responsividade */
-        @media (max-width: 600px) {
-            .container {
-                width: 100%;
-                padding: 16px;
-            }
-            
-            .collapsible-header {
-                padding: 12px;
-            }
-            
-            .collapsible-body {
-                padding: 12px;
-            }
-            
-            .btn-detalhes, .btn-retirar {
-                width: 100%;
-                margin-left: 0;
-                margin-top: 8px;
-            }
-            
-            .right-align {
-                text-align: left;
-            }
-            
-            .modal-content {
-                padding: 16px;
-            }
-            
-            .modal-footer {
-                padding: 16px;
-            }
-        }
-
-        /* Animações */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(103, 80, 164, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(103, 80, 164, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(103, 80, 164, 0); }
-        }
-
-        .card.updated {
-            animation: pulse 1.5s ease;
-        }
-    </style>
 </head>
 <body>
-    <!-- Loading Indicator -->
+
     <div id="loadingIndicator" class="md-loading-overlay">
-        <div class="md-loading-container">
-            <div class="md-loading-spinner">
-                <div class="md-spinner-layer md-spinner-blue">
-                    <div class="md-spinner-circle-clipper left">
-                        <div class="md-spinner-circle"></div>
-                    </div>
-                    <div class="md-spinner-gap-patch">
-                        <div class="md-spinner-circle"></div>
-                    </div>
-                    <div class="md-spinner-circle-clipper right">
-                        <div class="md-spinner-circle"></div>
-                    </div>
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
                 </div>
             </div>
-            <div class="md-loading-text">Processando...</div>
         </div>
     </div>
 
     <div class="container">
-        <div class="row">
-            <div class="col s12 right-align">
-                <button id="btnAtualizar" class="btn waves-effect waves-light" onclick="window.location.href='usuario.html'">
+        
+        <div class="header-controls">
+            <div class="user-info">
+                <h4 id="welcomeMessage">Minhas Encomendas</h4>
+                <p>Bem-vindo, <strong id="nomeUsuario">...</strong> <span id="blocoApto"></span></p>
+            </div>
+            <div class="actions-toolbar">
+                <a class="waves-effect waves-light btn-flat tooltipped" data-position="bottom" data-tooltip="Modo Escuro/Claro" id="theme-toggle-btn"><i class="material-icons-round">brightness_6</i></a>
+                <a id="btnAtualizar" class="waves-effect waves-light btn tooltipped" data-position="bottom" data-tooltip="Atualizar a lista">
                     <i class="material-icons-round left">refresh</i> Atualizar
-                </button>
-                <button id="btnLogout" class="btn waves-effect waves-light red" aria-label="Sair do sistema">
+                </a>
+                <a id="btnLogout" class="waves-effect waves-light btn red tooltipped" data-position="bottom" data-tooltip="Sair do sistema" aria-label="Sair do sistema">
                     <i class="material-icons-round left">exit_to_app</i> Sair
-                </button>
+                </a>
             </div>
         </div>
+
+        <div class="search-wrapper">
+            <i class="material-icons-round">search</i>
+            <input type="search" id="searchInput" placeholder="Buscar por ID, descrição, data..." autocomplete="off">
+        </div>
         
-        <div class="section">
-            <div class="user-info">
-                <h4>Minhas Encomendas</h4>
-                <p>Bem-vindo, <span id="nomeUsuario"></span> <span id="blocoApto"></span></p>
-            </div>
-            
-            <div class="card" id="cardPendentes">
-                <div class="card-content">
-                    <span class="card-title">
+        <div class="row">
+            <div class="col s12 m12 l6">
+                <div class="card" id="cardPendentes">
+                    <div class="card-title">
                         <i class="material-icons-round">local_shipping</i>
-                        <h5>Encomendas Pendentes</h5>
-                    </span>
-                    <ul class="collapsible" id="listaEncomendasPendentes">
-                        <li class="empty-state">
-                            <div class="center-align">
-                                <i class="material-icons-round large">local_shipping</i>
+                        <h5>Pendentes</h5>
+                    </div>
+                    <div class="card-content">
+                        <ul class="collapsible" id="listaEncomendasPendentes">
+                            <li class="empty-state">
+                                <i class="material-icons-round large icon">inventory_2</i>
                                 <p>Carregando encomendas...</p>
-                            </div>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <div class="card" id="cardFinalizadas">
-                <div class="card-content">
-                    <span class="card-title">
+            <div class="col s12 m12 l6">
+                <div class="card" id="cardFinalizadas">
+                    <div class="card-title">
                         <i class="material-icons-round">assignment_turned_in</i>
-                        <h5>Encomendas Finalizadas</h5>
-                    </span>
-                    <ul class="collapsible" id="listaEncomendasFinalizadas">
-                        <li class="empty-state">
-                            <div class="center-align">
-                                <i class="material-icons-round large">assignment_turned_in</i>
-                                <p>Nenhuma encomenda finalizada</p>
-                            </div>
-                        </li>
-                    </ul>
+                        <h5>Finalizadas</h5>
+                    </div>
+                    <div class="card-content">
+                        <ul class="collapsible" id="listaEncomendasFinalizadas">
+                            <li class="empty-state">
+                                <i class="material-icons-round large icon">archive</i>
+                                <p>Nenhuma encomenda finalizada.</p>
+                            </li>
+                        </ul>
+                        <div class="center-align" id="loadMoreContainer" style="display: none; padding: 16px;">
+                            <a class="waves-effect waves-light btn-flat" id="btnLoadMore">Carregar Mais</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Detalhes da Encomenda -->
-    <div id="modalEncomenda" class="modal" aria-modal="true" role="dialog" aria-labelledby="modalEncomendaTitle">
+    <div id="modalEncomenda" class="modal" role="dialog" aria-labelledby="modalEncomendaTitle">
         <div class="modal-content">
             <h4 id="modalEncomendaTitle">Detalhes da Encomenda</h4>
             <div class="row">
-                <div class="col s6">
+                <div class="col s12 m6">
                     <p><strong>Data/Hora Recebimento:</strong> <span id="modalData"></span></p>
                     <p><strong>Recebido por:</strong> <span id="modalPorteiro"></span></p>
                     <p><strong>Quantidade:</strong> <span id="modalQuantidade"></span></p>
                 </div>
-                <div class="col s6">
+                <div class="col s12 m6">
                     <p><strong>Status:</strong> <span id="modalStatus" class="badge"></span></p>
                     <p><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
                 </div>
             </div>
-            <div class="row" id="modalRetiradaSection">
+            <div class="row" id="modalRetiradaSection" style="display: none;">
                 <div class="col s12">
                     <p><strong>Retirado por:</strong> <span id="modalRetiradoPor"></span></p>
                     <p><strong>Data da Retirada:</strong> <span id="modalDataRetirada"></span></p>
@@ -695,680 +119,39 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat" aria-label="Fechar detalhes">Fechar</a>
-            <a href="#!" class="waves-effect waves-light btn" id="btnConfirmarRetirada">Confirmar Retirada</a>
+            <a href="#!" class="modal-close waves-effect btn-flat">Fechar</a>
+            <a href="#!" class="waves-effect waves-green btn" id="btnConfirmarRetirada" style="display: none;">Confirmar Retirada</a>
         </div>
     </div>
     
-    <!-- Modal de Confirmação de Retirada -->
-    <div id="modalConfirmacaoRetirada" class="modal" aria-modal="true" role="dialog" aria-labelledby="modalConfirmacaoTitle">
+    <div id="modalConfirmacaoRetirada" class="modal" role="dialog" aria-labelledby="modalConfirmacaoTitle">
         <div class="modal-content">
             <h4 id="modalConfirmacaoTitle">Confirmação de Retirada</h4>
-            <p>O porteiro <span id="confirmacaoPorteiroNome"></span> registrou a retirada desta encomenda por <span id="confirmacaoRetiranteNome"></span>.</p>
-            <p>Deseja confirmar esta retirada?</p>
+            <p>O porteiro <strong id="confirmacaoPorteiroNome"></strong> registrou a retirada desta encomenda por <strong id="confirmacaoRetiranteNome"></strong>.</p>
+            <p>Por favor, confirme se esta informação está correta.</p>
             <div class="row">
                 <div class="col s12">
-                    <p><strong>Data/Hora:</strong> <span id="confirmacaoData"></span></p>
-                    <p><strong>Descrição:</strong> <span id="confirmacaoDescricao"></span></p>
+                    <p><strong>Data/Hora da Solicitação:</strong> <span id="confirmacaoData"></span></p>
+                    <p><strong>Descrição da Encomenda:</strong> <span id="confirmacaoDescricao"></span></p>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-red btn-flat" id="btnRejeitarRetirada">Rejeitar</a>
-            <a href="#!" class="modal-close waves-effect waves-green btn" id="btnConfirmarRetiradaModal">Confirmar</a>
+            <a href="#!" class="modal-close waves-effect btn-flat" id="btnRejeitarRetirada">Rejeitar</a>
+            <a href="#!" class="modal-close waves-effect btn" id="btnConfirmarRetiradaModal">Confirmar Retirada</a>
         </div>
     </div>
 
-    <!-- Status de Conexão -->
-    <div id="connectionStatus" class="connection-status">
-        <i class="material-icons-round">wifi</i>
+    <div id="connectionStatus">
+        <i class="material-icons-round icon">wifi</i>
         <span id="connectionText">Conectado</span>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
-    <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
-            authDomain: "rifas-c414b.firebaseapp.com",
-            databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
-            projectId: "rifas-c414b",
-            storageBucket: "rifas-c414b.firebasestorage.app",
-            messagingSenderId: "770195193538",
-            appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
-        };
-        
-        // Inicializa o Firebase
-        firebase.initializeApp(firebaseConfig);
-        
-        // Variáveis globais
-        let userData = null;
-        let encomendasListener = null;
-        let solicitacoesVerificadas = false;
-        let lastUpdateTime = 0;
-        
-        // Objeto para cache local
-        const localCache = {
-            encomendas: null,
-            userData: null,
-            lastUpdated: 0
-        };
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inicializa componentes do Materialize
-            const modals = document.querySelectorAll('.modal');
-            M.Modal.init(modals, {
-                onOpenStart: manageFocus
-            });
-            
-            M.Collapsible.init(document.querySelectorAll('.collapsible'));
-            
-            // Configura botões
-            document.getElementById('btnConfirmarRetiradaModal').addEventListener('click', confirmarRetiradaSolicitada);
-            document.getElementById('btnRejeitarRetirada').addEventListener('click', rejeitarRetiradaSolicitada);
-            document.getElementById('btnConfirmarRetirada').addEventListener('click', confirmarRetiradaEncomenda);
-            document.getElementById('btnLogout').addEventListener('click', fazerLogout);
-            
-            const btnAtualizar = document.getElementById('btnAtualizar');
-            btnAtualizar.addEventListener('click', function(e) {
-                e.preventDefault();
-                atualizarEncomendas();
-            });
-            
-            // Monitora estado da conexão
-            monitorarConexao();
-            
-            // Monitora autenticação e carrega encomendas
-            firebase.auth().onAuthStateChanged(user => {
-                if (!user) {
-                    window.location.href = 'login.html';
-                    return;
-                }
-                
-                // Tenta carregar do cache local primeiro
-                if (localCache.userData && Date.now() - localCache.lastUpdated < 300000) { // 5 minutos
-                    userData = localCache.userData;
-                    atualizarInterfaceUsuario();
-                    carregarEncomendasDoCache();
-                } else {
-                    // Carrega dados do usuário do Firebase
-                    mostrarCarregamento(true);
-                    firebase.database().ref('users/' + user.uid).once('value').then(snapshot => {
-                        userData = snapshot.val();
-                        localCache.userData = userData;
-                        localCache.lastUpdated = Date.now();
-                        atualizarInterfaceUsuario();
-                        
-                        if (userData.tipo !== 'morador') {
-                            window.location.href = 'index1.html';
-                            return;
-                        }
-                        
-                        // Configura listener em tempo real para as encomendas
-                        configurarListenerEncomendas();
-                        mostrarCarregamento(false);
-                    }).catch(error => {
-                        console.error('Erro ao carregar dados do usuário:', error);
-                        showToast('Erro ao carregar dados do usuário', 'error');
-                        mostrarCarregamento(false);
-                    });
-                }
-            });
-        });
-        
-        // Função para mostrar/ocultar loading
-        function mostrarCarregamento(mostrar) {
-            const loader = document.getElementById('loadingIndicator');
-            if (mostrar) {
-                loader.classList.add('active');
-            } else {
-                loader.classList.remove('active');
-            }
-        }
-        
-        // Função para mostrar toast
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `md-toast md-toast-${type}`;
-            toast.innerHTML = `
-                <div class="md-toast-content">
-                    <span class="md-toast-icon material-icons-round">
-                        ${type === 'success' ? 'check_circle' : 
-                          type === 'error' ? 'error' : 
-                          type === 'warning' ? 'warning' : 'info'}
-                    </span>
-                    <span class="md-toast-message">${message}</span>
-                    <button class="md-toast-close material-icons-round" aria-label="Fechar notificação">close</button>
-                </div>
-            `;
-            
-            document.body.appendChild(toast);
-            
-            // Animação de entrada
-            setTimeout(() => {
-                toast.classList.add('md-toast-show');
-            }, 10);
-            
-            // Fechar após timeout
-            const autoClose = setTimeout(() => {
-                closeToast(toast);
-            }, 5000);
-            
-            // Fechar ao clicar
-            toast.querySelector('.md-toast-close').addEventListener('click', () => {
-                clearTimeout(autoClose);
-                closeToast(toast);
-            });
-        }
-
-        function closeToast(toastElement) {
-            toastElement.classList.remove('md-toast-show');
-            toastElement.classList.add('md-toast-hide');
-            
-            setTimeout(() => {
-                toastElement.remove();
-            }, 300);
-        }
-        
-        // Gerenciamento de foco em modais
-        function manageFocus() {
-            const modal = document.querySelector('.modal.open');
-            
-            if (modal) {
-                const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-                const focusableContent = modal.querySelectorAll(focusableElements);
-                
-                if (focusableContent.length > 0) {
-                    const firstFocusableElement = focusableContent[0];
-                    const lastFocusableElement = focusableContent[focusableContent.length - 1];
-                    
-                    // Foca no primeiro elemento
-                    firstFocusableElement.focus();
-                    
-                    // Trap de foco dentro do modal
-                    modal.addEventListener('keydown', function(e) {
-                        if (e.key === 'Tab') {
-                            if (e.shiftKey) {
-                                if (document.activeElement === firstFocusableElement) {
-                                    e.preventDefault();
-                                    lastFocusableElement.focus();
-                                }
-                            } else {
-                                if (document.activeElement === lastFocusableElement) {
-                                    e.preventDefault();
-                                    firstFocusableElement.focus();
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        }
-        
-        // Função para forçar atualização das encomendas
-        function atualizarEncomendas() {
-            const btnAtualizar = document.getElementById('btnAtualizar');
-            const icon = btnAtualizar.querySelector('i');
-            
-            // Adiciona animação de carregamento
-            icon.classList.add('rotate');
-            btnAtualizar.disabled = true;
-            
-            // Força uma nova leitura do banco de dados
-            if (userData) {
-                const blocoApto = `Bloco ${userData.bloco}, Apt ${userData.apartamento}`;
-                
-                firebase.database().ref('encomendas')
-                    .orderByChild('blocoApto')
-                    .equalTo(blocoApto)
-                    .once('value')
-                    .then(snapshot => {
-                        processarEncomendas(snapshot.val());
-                        showToast('Encomendas atualizadas com sucesso!', 'success');
-                    })
-                    .catch(error => {
-                        console.error('Erro ao atualizar encomendas:', error);
-                        showToast('Erro ao atualizar encomendas', 'error');
-                    })
-                    .finally(() => {
-                        // Remove animação de carregamento
-                        icon.classList.remove('rotate');
-                        btnAtualizar.disabled = false;
-                    });
-            } else {
-                // Remove animação de carregamento
-                icon.classList.remove('rotate');
-                btnAtualizar.disabled = false;
-                showToast('Dados do usuário não carregados', 'warning');
-            }
-        }
-        
-        function monitorarConexao() {
-            const connectionStatus = document.getElementById('connectionStatus');
-            const connectionText = document.getElementById('connectionText');
-            
-            firebase.database().ref('.info/connected').on('value', function(snapshot) {
-                if (snapshot.val() === true) {
-                    connectionStatus.className = 'connection-status online show';
-                    connectionText.textContent = 'Conectado';
-                    
-                    // Esconde após 3 segundos
-                    setTimeout(() => {
-                        connectionStatus.classList.remove('show');
-                    }, 3000);
-                } else {
-                    connectionStatus.className = 'connection-status offline show';
-                    connectionText.textContent = 'Offline - Tentando reconectar...';
-                }
-            });
-        }
-        
-        function atualizarInterfaceUsuario() {
-            document.getElementById('nomeUsuario').textContent = userData.nome;
-            document.getElementById('blocoApto').textContent = `${userData.bloco}/${userData.apartamento}`;
-        }
-        
-        function carregarEncomendasDoCache() {
-            if (localCache.encomendas) {
-                processarEncomendas(localCache.encomendas);
-            }
-        }
-        
-        function configurarListenerEncomendas() {
-            const blocoApto = `Bloco ${userData.bloco}, Apt ${userData.apartamento}`;
-            
-            // Remove listener anterior se existir
-            if (encomendasListener) {
-                encomendasListener();
-            }
-            
-            encomendasListener = firebase.database().ref('encomendas')
-                .orderByChild('blocoApto')
-                .equalTo(blocoApto)
-                .on('value', snapshot => {
-                    const now = Date.now();
-                    
-                    // Evita atualizações muito rápidas (debounce)
-                    if (now - lastUpdateTime < 500) return;
-                    lastUpdateTime = now;
-                    
-                    // Atualiza cache local
-                    localCache.encomendas = snapshot.val();
-                    localCache.lastUpdated = now;
-                    
-                    processarEncomendas(snapshot.val());
-                    
-                    // Verifica solicitações pendentes apenas uma vez
-                    if (!solicitacoesVerificadas) {
-                        verificarSolicitacoesPendentes(snapshot);
-                        solicitacoesVerificadas = true;
-                    }
-                }, error => {
-                    console.error('Erro no listener de encomendas:', error);
-                    showToast('Erro ao carregar encomendas', 'error');
-                });
-        }
-        
-        function processarEncomendas(encomendasData) {
-            const listaPendentes = document.getElementById('listaEncomendasPendentes');
-            const listaFinalizadas = document.getElementById('listaEncomendasFinalizadas');
-            
-            // Limpa as listas
-            listaPendentes.innerHTML = '';
-            listaFinalizadas.innerHTML = '';
-            
-            if (!encomendasData) {
-                listaPendentes.innerHTML = criarEstadoVazio('local_shipping', 'Nenhuma encomenda pendente');
-                listaFinalizadas.innerHTML = criarEstadoVazio('assignment_turned_in', 'Nenhuma encomenda finalizada');
-                return;
-            }
-            
-            let temPendentes = false;
-            let temFinalizadas = false;
-            
-            // Processa cada encomenda
-            Object.entries(encomendasData).forEach(([id, encomenda]) => {
-                const li = document.createElement('li');
-                li.className = 'updated'; // Adiciona classe para animação
-                li.setAttribute('data-id', id);
-                li.setAttribute('role', 'button');
-                li.setAttribute('tabindex', '0');
-                
-                li.innerHTML = criarItemEncomenda(id, encomenda);
-                
-                if (encomenda.status === 'pendente' || encomenda.status === 'aguardando_confirmacao') {
-                    listaPendentes.appendChild(li);
-                    temPendentes = true;
-                } else {
-                    listaFinalizadas.appendChild(li);
-                    temFinalizadas = true;
-                }
-                
-                // Remove a classe de animação após 1.5s
-                setTimeout(() => {
-                    li.classList.remove('updated');
-                }, 1500);
-            });
-            
-            // Adiciona estados vazios se necessário
-            if (!temPendentes) {
-                listaPendentes.innerHTML = criarEstadoVazio('local_shipping', 'Nenhuma encomenda pendente');
-            }
-            
-            if (!temFinalizadas) {
-                listaFinalizadas.innerHTML = criarEstadoVazio('assignment_turned_in', 'Nenhuma encomenda finalizada');
-            }
-            
-            // Adiciona animação aos cards
-            document.getElementById('cardPendentes').classList.add('updated');
-            document.getElementById('cardFinalizadas').classList.add('updated');
-            setTimeout(() => {
-                document.getElementById('cardPendentes').classList.remove('updated');
-                document.getElementById('cardFinalizadas').classList.remove('updated');
-            }, 1500);
-            
-            // Re-inicializa collapsible para os novos itens
-            M.Collapsible.init(document.querySelectorAll('.collapsible'));
-            
-            // Adiciona eventos aos botões
-            document.querySelectorAll('.btn-detalhes').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const encomendaId = this.getAttribute('data-id');
-                    abrirModalEncomenda(encomendaId);
-                });
-            });
-            
-            document.querySelectorAll('.btn-retirar').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const encomendaId = this.getAttribute('data-id');
-                    retirarEncomenda(encomendaId);
-                });
-            });
-            
-            // Adiciona eventos de teclado
-            document.querySelectorAll('.collapsible li').forEach(item => {
-                item.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        const encomendaId = this.getAttribute('data-id');
-                        abrirModalEncomenda(encomendaId);
-                    }
-                });
-            });
-        }
-        
-        function criarItemEncomenda(id, encomenda) {
-            return `
-                <div class="collapsible-header">
-                    <i class="material-icons-round">${encomenda.status === 'pendente' ? 'local_shipping' : 'assignment_turned_in'}</i>
-                    Encomenda #${id.substring(0, 8)}
-                    <span class="badge ${getBadgeClass(encomenda)}">
-                        ${getStatusText(encomenda)}
-                    </span>
-                </div>
-                <div class="collapsible-body">
-                    <p><strong>Data:</strong> ${formatarData(encomenda.data)}</p>
-                    <p><strong>Recebido por:</strong> ${encomenda.registradoPorNome || 'Porteiro'}</p>
-                    <p><strong>Quantidade:</strong> ${encomenda.quantidade}</p>
-                    ${encomenda.descricao ? `<p><strong>Descrição:</strong> ${encomenda.descricao}</p>` : ''}
-                    <div class="right-align">
-                        <a href="#!" class="btn btn-detalhes" data-id="${id}" aria-label="Ver detalhes da encomenda">
-                            <i class="material-icons-round left">info</i> Detalhes
-                        </a>
-                        ${encomenda.status === 'pendente' ? 
-                            `<a href="#!" class="btn green btn-retirar" data-id="${id}" aria-label="Retirar encomenda">
-                                <i class="material-icons-round left">check</i> Retirar
-                            </a>` : ''}
-                    </div>
-                </div>
-            `;
-        }
-        
-        function criarEstadoVazio(icone, mensagem) {
-            return `
-                <li class="empty-state">
-                    <div class="center-align">
-                        <i class="material-icons-round large">${icone}</i>
-                        <p>${mensagem}</p>
-                    </div>
-                </li>
-            `;
-        }
-        
-        function getBadgeClass(encomenda) {
-            if (encomenda.status === 'pendente') return 'orange';
-            if (encomenda.status === 'aguardando_confirmacao') return 'blue';
-            return 'green';
-        }
-        
-        function getStatusText(encomenda) {
-            if (encomenda.status === 'pendente') return 'Pendente';
-            if (encomenda.status === 'aguardando_confirmacao') return 'Aguardando Confirmação';
-            return 'Retirada';
-        }
-        
-        function verificarSolicitacoesPendentes(snapshot) {
-            const user = firebase.auth().currentUser;
-            if (!user) return;
-            
-            snapshot.forEach(item => {
-                const encomenda = item.val();
-                if (encomenda.status === 'aguardando_confirmacao' && 
-                    (!encomenda.confirmacoes || !encomenda.confirmacoes[user.uid])) {
-                    abrirModalConfirmacaoRetirada(item.key, encomenda);
-                }
-            });
-        }
-        
-        function abrirModalConfirmacaoRetirada(encomendaId, encomenda) {
-            document.getElementById('confirmacaoPorteiroNome').textContent = encomenda.solicitacaoRetirada.porteiro;
-            document.getElementById('confirmacaoRetiranteNome').textContent = encomenda.solicitacaoRetirada.nomeRetirante;
-            document.getElementById('confirmacaoData').textContent = formatarData(encomenda.solicitacaoRetirada.data);
-            document.getElementById('confirmacaoDescricao').textContent = encomenda.descricao || 'Nenhuma descrição';
-            
-            document.getElementById('btnConfirmarRetiradaModal').setAttribute('data-id', encomendaId);
-            document.getElementById('btnRejeitarRetirada').setAttribute('data-id', encomendaId);
-            
-            const modal = M.Modal.getInstance(document.getElementById('modalConfirmacaoRetirada'));
-            modal.open();
-        }
-        
-        async function fazerLogout() {
-            try {
-                if (encomendasListener) {
-                    encomendasListener();
-                }
-                await firebase.auth().signOut();
-                window.location.href = 'login.html';
-            } catch (error) {
-                console.error('Erro ao fazer logout:', error);
-                showToast('Erro ao fazer logout', 'error');
-            }
-        }
-        
-        async function confirmarRetiradaSolicitada() {
-            const encomendaId = this.getAttribute('data-id');
-            const user = firebase.auth().currentUser;
-            
-            try {
-                mostrarCarregamento(true);
-                const snapshot = await firebase.database().ref(`encomendas/${encomendaId}`).once('value');
-                const encomenda = snapshot.val();
-                
-                if (encomenda.status !== 'aguardando_confirmacao') {
-                    showToast('Esta encomenda já foi processada', 'warning');
-                    mostrarCarregamento(false);
-                    return;
-                }
-                
-                const updates = {
-                    status: 'retirado',
-                    confirmadoPor: user.uid,
-                    confirmadoPorNome: userData.nome,
-                    dataConfirmacao: firebase.database.ServerValue.TIMESTAMP,
-                    [`confirmacoes/${user.uid}`]: true,
-                    retiradoPor: encomenda.solicitacaoRetirada.nomeRetirante,
-                    retiradoPorNome: encomenda.solicitacaoRetirada.nomeRetirante,
-                    porteiroRetiradaNome: encomenda.solicitacaoRetirada.porteiro,
-                    dataRetirada: encomenda.solicitacaoRetirada.data
-                };
-                
-                await firebase.database().ref(`encomendas/${encomendaId}`).update(updates);
-                showToast('Retirada confirmada com sucesso!', 'success');
-                mostrarCarregamento(false);
-                
-            } catch (error) {
-                console.error('Erro ao confirmar retirada:', error);
-                showToast('Erro ao confirmar retirada', 'error');
-                mostrarCarregamento(false);
-            }
-        }
-        
-        async function rejeitarRetiradaSolicitada() {
-            const encomendaId = this.getAttribute('data-id');
-            const user = firebase.auth().currentUser;
-            
-            try {
-                mostrarCarregamento(true);
-                const snapshot = await firebase.database().ref(`encomendas/${encomendaId}`).once('value');
-                const encomenda = snapshot.val();
-                
-                if (encomenda.status !== 'aguardando_confirmacao') {
-                    showToast('Esta encomenda já foi processada', 'warning');
-                    mostrarCarregamento(false);
-                    return;
-                }
-                
-                const updates = {
-                    status: 'pendente',
-                    solicitacaoRetirada: null,
-                    [`confirmacoes/${user.uid}`]: false
-                };
-                
-                await firebase.database().ref(`encomendas/${encomendaId}`).update(updates);
-                showToast('Retirada rejeitada', 'warning');
-                mostrarCarregamento(false);
-                
-            } catch (error) {
-                console.error('Erro ao rejeitar retirada:', error);
-                showToast('Erro ao rejeitar retirada', 'error');
-                mostrarCarregamento(false);
-            }
-        }
-        
-        function retirarEncomenda(encomendaId) {
-            const user = firebase.auth().currentUser;
-            if (!user) return;
-            
-            mostrarCarregamento(true);
-            firebase.database().ref('encomendas/' + encomendaId).once('value').then(snapshot => {
-                const encomenda = snapshot.val();
-                
-                if (!encomenda || encomenda.status !== 'pendente') {
-                    showToast('Esta encomenda já foi retirada', 'warning');
-                    mostrarCarregamento(false);
-                    return;
-                }
-                
-                const updates = {
-                    status: 'retirado',
-                    retiradoPor: user.uid,
-                    retiradoPorNome: userData.nome,
-                    dataRetirada: firebase.database.ServerValue.TIMESTAMP,
-                    porteiroRetiradaNome: 'Morador'
-                };
-                
-                firebase.database().ref('encomendas/' + encomendaId).update(updates)
-                    .then(() => {
-                        showToast('Encomenda retirada com sucesso!', 'success');
-                        mostrarCarregamento(false);
-                    })
-                    .catch(error => {
-                        console.error('Erro ao retirar encomenda:', error);
-                        showToast('Erro ao retirar encomenda', 'error');
-                        mostrarCarregamento(false);
-                    });
-            }).catch(error => {
-                console.error('Erro ao verificar encomenda:', error);
-                showToast('Erro ao verificar encomenda', 'error');
-                mostrarCarregamento(false);
-            });
-        }
-        
-        function abrirModalEncomenda(encomendaId) {
-            mostrarCarregamento(true);
-            firebase.database().ref('encomendas/' + encomendaId).once('value').then(snapshot => {
-                const encomenda = snapshot.val();
-                
-                if (!encomenda) {
-                    showToast('Encomenda não encontrada', 'error');
-                    mostrarCarregamento(false);
-                    return;
-                }
-                
-                // Preenche os dados no modal
-                document.getElementById('modalEncomendaTitle').textContent = `Encomenda #${encomendaId.substring(0, 8)}`;
-                document.getElementById('modalData').textContent = formatarData(encomenda.data);
-                document.getElementById('modalPorteiro').textContent = encomenda.registradoPorNome || 'Porteiro';
-                document.getElementById('modalQuantidade').textContent = encomenda.quantidade;
-                document.getElementById('modalDescricao').textContent = encomenda.descricao || 'Nenhuma descrição';
-                
-                const statusBadge = document.getElementById('modalStatus');
-                statusBadge.textContent = getStatusText(encomenda);
-                statusBadge.className = `badge ${getBadgeClass(encomenda)}`;
-                
-                const retiradaSection = document.getElementById('modalRetiradaSection');
-                const btnConfirmar = document.getElementById('btnConfirmarRetirada');
-                
-                if (encomenda.status === 'pendente') {
-                    retiradaSection.classList.add('hide');
-                    btnConfirmar.classList.remove('hide');
-                    btnConfirmar.setAttribute('data-id', encomendaId);
-                } else {
-                    document.getElementById('modalRetiradoPor').textContent = encomenda.retiradoPorNome || 'N/A';
-                    document.getElementById('modalDataRetirada').textContent = formatarData(encomenda.dataRetirada);
-                    document.getElementById('modalPorteiroRetirada').textContent = encomenda.porteiroRetiradaNome || 'Porteiro';
-                    retiradaSection.classList.remove('hide');
-                    btnConfirmar.classList.add('hide');
-                }
-                
-                // Abre o modal
-                const modal = M.Modal.getInstance(document.getElementById('modalEncomenda'));
-                modal.open();
-                mostrarCarregamento(false);
-            }).catch(error => {
-                console.error('Erro ao carregar detalhes:', error);
-                showToast('Erro ao carregar detalhes', 'error');
-                mostrarCarregamento(false);
-            });
-        }
-        
-        function confirmarRetiradaEncomenda() {
-            const encomendaId = this.getAttribute('data-id');
-            retirarEncomenda(encomendaId);
-            
-            // Fecha o modal
-            const modal = M.Modal.getInstance(document.getElementById('modalEncomenda'));
-            modal.close();
-        }
-        
-        function formatarData(timestamp) {
-            if (!timestamp) return 'N/A';
-            const date = new Date(timestamp);
-            return date.toLocaleString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-    </script>
+    <script src= "js/usuario.js"></script>
 </body>
 </html>
