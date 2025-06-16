@@ -1,667 +1,364 @@
- // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
-            authDomain: "rifas-c414b.firebaseapp.com",
-            databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
-            projectId: "rifas-c414b",
-            storageBucket: "rifas-c414b.firebasestorage.app",
-            messagingSenderId: "770195193538",
-            appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
+    /*
+    ============================================
+    |           JAVASCRIPT LOGIC               |
+    ============================================
+    */
+
+    // =================================================================
+    //  ATENÇÃO: CONFIGURAÇÃO DO FIREBASE E SEGURANÇA
+    // =================================================================
+    // **É ESSENCIAL E CRUCIAL** configurar as Regras de Segurança
+    // (Security Rules) no seu painel do Firebase para proteger os dados.
+    // A interface da Portaria precisa de permissões de escrita.
+    // 
+    // Exemplo de Regras de Segurança para a Portaria:
+    // {
+    //   "rules": {
+    //     "users": { /* ... */ },
+    //     "encomendas": {
+    //       ".read": "auth.uid != null && root.child('users/' + auth.uid).child('tipo').val() === 'portaria'",
+    //       ".write": "auth.uid != null && root.child('users/' + auth.uid).child('tipo').val() === 'portaria'",
+    //       "$encomendaId": {
+    //         // Permite que o morador também leia sua própria encomenda
+    //         ".read": "auth.uid != null && (root.child('users/' + auth.uid).child('tipo').val() === 'portaria' || root.child('users/' + auth.uid).child('blocoApto').val() === data.child('blocoApto').val())"
+    //       }
+    //     }
+    //   }
+    // }
+    // =================================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc", // Substitua por sua chave
+        authDomain: "rifas-c414b.firebaseapp.com",
+        databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
+        projectId: "rifas-c414b",
+        storageBucket: "rifas-c414b.appspot.com",
+        messagingSenderId: "770195193538",
+        appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // --- ESTADO GLOBAL DA APLICAÇÃO ---
+    const state = {
+        currentUser: null,
+        allEncomendas: {},
+        activeTab: 'pendentes' // 'pendentes' ou 'finalizadas'
+    };
+
+    // --- INICIALIZAÇÃO ---
+    document.addEventListener('DOMContentLoaded', () => {
+        M.Modal.init(document.querySelectorAll('.modal'));
+        M.Tooltip.init(document.querySelectorAll('.tooltipped'));
+        M.Tabs.init(document.querySelector('.tabs'), {
+            onShow: (el) => {
+                state.activeTab = el.id.includes('pendentes') ? 'pendentes' : 'finalizadas';
+                renderLists();
+            }
+        });
+
+        setupEventListeners();
+        applyInitialTheme();
+        monitorarAutenticacao();
+    });
+
+    function setupEventListeners() {
+        document.getElementById('btnLogout').addEventListener('click', fazerLogout);
+        document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+        document.getElementById('btnRegistrarEncomenda').addEventListener('click', registrarNovaEncomenda);
+        document.getElementById('btnConfirmarEntrega').addEventListener('click', confirmarEntregaEncomenda);
+        document.getElementById('searchInput').addEventListener('input', renderLists);
+    }
+    
+    function monitorarAutenticacao() {
+        firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            carregarDadosUsuario(user);
+        });
+    }
+
+    async function carregarDadosUsuario(user) {
+        try {
+            const snapshot = await firebase.database().ref(`users/${user.uid}`).once('value');
+            state.currentUser = snapshot.val();
+
+            if (!state.currentUser || state.currentUser.tipo !== 'portaria') {
+                alert('Acesso negado. Esta área é restrita para a portaria.');
+                fazerLogout();
+                return;
+            }
+            
+            document.getElementById('porteiroNome').textContent = state.currentUser.nome.split(' ')[0];
+            configurarListenerEncomendas();
+
+        } catch (error) {
+            console.error("Erro ao carregar dados do usuário:", error);
+            showToast('Falha ao carregar dados do usuário.', 'error');
+        }
+    }
+
+    function configurarListenerEncomendas() {
+        mostrarCarregamento(true);
+        const umMesAtras = new Date();
+        umMesAtras.setMonth(umMesAtras.getMonth() - 1);
+        
+        firebase.database().ref('encomendas').orderByChild('data').startAt(umMesAtras.getTime())
+            .on('value', snapshot => {
+                state.allEncomendas = snapshot.val() || {};
+                renderLists();
+                updateDashboard();
+                mostrarCarregamento(false);
+            }, error => {
+                console.error("Erro ao carregar encomendas:", error);
+                showToast('Falha ao carregar lista de encomendas.', 'error');
+                mostrarCarregamento(false);
+            });
+    }
+
+    // --- RENDERIZAÇÃO DA UI ---
+    function renderLists() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const encomendasArray = Object.entries(state.allEncomendas).map(([id, data]) => ({ id, ...data }));
+        
+        const filtered = !searchTerm ? encomendasArray : encomendasArray.filter(enc =>
+            enc.id.toLowerCase().includes(searchTerm) ||
+            `${enc.bloco} ${enc.apartamento}`.toLowerCase().includes(searchTerm) ||
+            (enc.descricao && enc.descricao.toLowerCase().includes(searchTerm))
+        );
+
+        const pendentes = filtered
+            .filter(e => ['pendente', 'aguardando_confirmacao'].includes(e.status))
+            .sort((a, b) => b.data - a.data);
+
+        const finalizadas = filtered
+            .filter(e => e.status === 'retirado')
+            .sort((a, b) => (b.dataRetirada || b.data) - (a.dataRetirada || a.data));
+
+        populateList('listaEncomendasPendentes', pendentes);
+        populateList('listaEncomendasFinalizadas', finalizadas);
+    }
+    
+    function populateList(listId, data) {
+        const listElement = document.getElementById(listId);
+        listElement.innerHTML = ''; // Limpa a lista
+
+        if (data.length === 0) {
+            const message = listId.includes('Pendente') 
+                ? 'Nenhuma encomenda pendente.' 
+                : 'Nenhuma entrega recente encontrada.';
+            listElement.innerHTML = criarEstadoVazio('inbox', message);
+            return;
+        }
+
+        data.forEach(encomenda => {
+            const li = document.createElement('li');
+            li.className = 'collection-item';
+            li.innerHTML = criarItemEncomenda(encomenda);
+            li.addEventListener('click', () => abrirModalDetalhes(encomenda.id));
+            listElement.appendChild(li);
+        });
+    }
+
+    function criarItemEncomenda(encomenda) {
+        let statusBadge;
+        if (encomenda.status === 'pendente') statusBadge = `<span class="badge new pendente" data-badge-caption="">Pendente</span>`;
+        else if (encomenda.status === 'aguardando_confirmacao') statusBadge = `<span class="badge new confirmacao" data-badge-caption="">Aguardando</span>`;
+        else statusBadge = `<span class="badge retirado">${encomenda.retiradoPor || 'Retirado'}</span>`;
+        
+        return `
+            <div class="row valign-wrapper" style="margin-bottom:0;">
+                <div class="col s8 encomenda-info">
+                    <strong>Bloco ${encomenda.bloco} / Apto ${encomenda.apartamento}</strong>
+                    <small>${encomenda.descricao || `ID: ...${encomenda.id.slice(-6)}`}</small>
+                </div>
+                <div class="col s4 right-align encomenda-actions">
+                    ${statusBadge}
+                </div>
+            </div>
+        `;
+    }
+
+    function criarEstadoVazio(icone, mensagem) {
+        return `<li class="collection-item empty-state" style="border: none;"><i class="material-icons-round large icon">${icone}</i><p>${mensagem}</p></li>`;
+    }
+
+    function updateDashboard() {
+        const encomendas = Object.values(state.allEncomendas);
+        const pendentesCount = encomendas.filter(e => e.status === 'pendente').length;
+        const aguardandoCount = encomendas.filter(e => e.status === 'aguardando_confirmacao').length;
+        document.getElementById('statPendentes').textContent = pendentesCount;
+        document.getElementById('statAguardando').textContent = aguardandoCount;
+    }
+    
+    // --- LÓGICA DE NEGÓCIO E FIREBASE ---
+    async function registrarNovaEncomenda() {
+        const bloco = document.getElementById('blocoEncomenda').value.trim();
+        const apto = document.getElementById('apartamentoEncomenda').value.trim();
+        const qtd = document.getElementById('quantidadeEncomenda').value;
+        if (!bloco || !apto || !qtd) {
+            showToast('Preencha Bloco, Apartamento e Quantidade.', 'error');
+            return;
+        }
+        mostrarCarregamento(true);
+
+        const novaEncomenda = {
+            bloco, apartamento: apto, quantidade: qtd,
+            descricao: document.getElementById('descricaoEncomenda').value.trim(),
+            status: 'pendente',
+            data: firebase.database.ServerValue.TIMESTAMP,
+            registradoPor: state.currentUser.nome,
+            blocoApto: `Bloco ${bloco}, Apt ${apto}`
         };
 
-        // Inicializa o Firebase
-        firebase.initializeApp(firebaseConfig);
+        try {
+            const ref = await firebase.database().ref('encomendas').push(novaEncomenda);
+            showToast('Encomenda registrada com sucesso!', 'success');
+            document.getElementById('blocoEncomenda').value = '';
+            document.getElementById('apartamentoEncomenda').value = '';
+            document.getElementById('descricaoEncomenda').value = '';
+            enviarNotificacaoEmail(novaEncomenda);
+        } catch (error) {
+            showToast('Erro ao registrar encomenda.', 'error');
+            console.error(error);
+        } finally {
+            mostrarCarregamento(false);
+        }
+    }
 
-        // Variáveis globais
-        let todasEncomendas = [];
-        let detalhesListener = null;
-        let encomendasListener = null;
-
-        // Função para mostrar/ocultar loading
-        function mostrarCarregamento(mostrar) {
-            const loader = document.getElementById('loadingIndicator');
-            if (mostrar) {
-                loader.classList.add('active');
-            } else {
-                loader.classList.remove('active');
-            }
+    async function confirmarEntregaEncomenda() {
+        const encomendaId = this.getAttribute('data-id');
+        const nomeRetirante = document.getElementById('nomeRetirante').value.trim();
+        if (!nomeRetirante) {
+            showToast('Informe o nome de quem está retirando.', 'error');
+            return;
         }
 
-        // Função para mostrar toast
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `md-toast md-toast-${type}`;
-            toast.innerHTML = `
-                <div class="md-toast-content">
-                    <span class="md-toast-icon material-icons-round">
-                        ${type === 'success' ? 'check_circle' : 
-                          type === 'error' ? 'error' : 
-                          type === 'warning' ? 'warning' : 'info'}
-                    </span>
-                    <span class="md-toast-message">${message}</span>
-                    <button class="md-toast-close material-icons-round" aria-label="Fechar notificação">close</button>
-                </div>
-            `;
-            
-            document.body.appendChild(toast);
-            
-            // Animação de entrada
-            setTimeout(() => {
-                toast.classList.add('md-toast-show');
-            }, 10);
-            
-            // Fechar após timeout
-            const autoClose = setTimeout(() => {
-                closeToast(toast);
-            }, 5000);
-            
-            // Fechar ao clicar
-            toast.querySelector('.md-toast-close').addEventListener('click', () => {
-                clearTimeout(autoClose);
-                closeToast(toast);
-            });
+        const updates = {
+            status: 'aguardando_confirmacao',
+            solicitacaoRetirada: {
+                porteiro: state.currentUser.nome,
+                data: firebase.database.ServerValue.TIMESTAMP,
+                nomeRetirante: nomeRetirante,
+            }
+        };
+        
+        mostrarCarregamento(true);
+        try {
+            await firebase.database().ref(`encomendas/${encomendaId}`).update(updates);
+            showToast('Solicitação enviada para o morador confirmar.', 'success');
+            M.Modal.getInstance(document.getElementById('modalEntrega')).close();
+        } catch (error) {
+            showToast('Erro ao enviar solicitação.', 'error');
+            console.error(error);
+        } finally {
+            mostrarCarregamento(false);
+        }
+    }
+
+    async function enviarNotificacaoEmail(encomenda) {
+        try {
+            const userSnapshot = await firebase.database().ref('users').orderByChild('blocoApto').equalTo(`Bloco ${encomenda.bloco}, Apt ${encomenda.apartamento}`).limitToFirst(1).once('value');
+            if (!userSnapshot.exists()) return;
+
+            const morador = Object.values(userSnapshot.val())[0];
+            const templateParams = {
+                to_name: morador.nome, to_email: morador.email,
+                bloco: encomenda.bloco, apartamento: encomenda.apartamento,
+                descricao: encomenda.descricao || 'Não informada',
+                porteiro: state.currentUser.nome
+            };
+
+            await emailjs.send('service_qeqs8rl', 'template_gi6qr3o', templateParams); // Substitua por seu Service ID e Template ID
+        } catch (error) {
+            console.error("Falha ao enviar e-mail:", error);
+            showToast('Aviso: Falha ao notificar morador por e-mail.', 'warning');
+        }
+    }
+    
+    function fazerLogout() {
+        firebase.auth().signOut().catch(error => console.error("Erro ao sair:", error));
+    }
+
+    // --- MODAIS E UTILITÁRIOS ---
+    function abrirModalDetalhes(encomendaId) {
+        const encomenda = state.allEncomendas[encomendaId];
+        if (!encomenda) return;
+        
+        document.getElementById('modalDetalhesTitle').textContent = `Encomenda #${encomendaId.slice(-6)}`;
+        document.getElementById('detalhesBlocoApto').textContent = `Bloco ${encomenda.bloco}, Apto ${encomenda.apartamento}`;
+        document.getElementById('detalhesData').textContent = new Date(encomenda.data).toLocaleString('pt-BR');
+        document.getElementById('detalhesPorteiro').textContent = encomenda.registradoPor || 'N/A';
+        document.getElementById('detalhesQuantidade').textContent = encomenda.quantidade;
+        document.getElementById('detalhesDescricao').textContent = encomenda.descricao || 'Nenhuma';
+
+        const statusBadge = document.getElementById('detalhesStatus');
+        const retiradaSection = document.getElementById('detalhesRetiradaSection');
+        
+        if (encomenda.status === 'pendente') {
+            statusBadge.className = 'badge pendente'; statusBadge.textContent = 'Pendente';
+            retiradaSection.style.display = 'none';
+        } else if (encomenda.status === 'aguardando_confirmacao') {
+            statusBadge.className = 'badge confirmacao'; statusBadge.textContent = 'Aguardando Confirmação';
+            retiradaSection.style.display = 'block';
+            document.getElementById('detalhesRetiradoPor').textContent = `${encomenda.solicitacaoRetirada.nomeRetirante} (Aguardando)`;
+            document.getElementById('detalhesDataRetirada').textContent = new Date(encomenda.solicitacaoRetirada.data).toLocaleString('pt-BR');
+        } else {
+            statusBadge.className = 'badge retirado'; statusBadge.textContent = 'Retirado';
+            retiradaSection.style.display = 'block';
+            document.getElementById('detalhesRetiradoPor').textContent = encomenda.retiradoPor || 'N/A';
+            document.getElementById('detalhesDataRetirada').textContent = new Date(encomenda.dataRetirada).toLocaleString('pt-BR');
         }
 
-        function closeToast(toastElement) {
-            toastElement.classList.remove('md-toast-show');
-            toastElement.classList.add('md-toast-hide');
-            
-            setTimeout(() => {
-                toastElement.remove();
-            }, 300);
+        const modalInstance = M.Modal.getInstance(document.getElementById('modalDetalhes'));
+        // Special logic for entrega button
+        if (encomenda.status === 'pendente') {
+            const btnConfirmar = document.createElement('a');
+            btnConfirmar.id = "btnModalEntregar";
+            btnConfirmar.className = "btn waves-effect";
+            btnConfirmar.textContent = "Registrar Entrega";
+            btnConfirmar.onclick = () => {
+                modalInstance.close();
+                const entregaModal = M.Modal.getInstance(document.getElementById('modalEntrega'));
+                document.getElementById('btnConfirmarEntrega').setAttribute('data-id', encomendaId);
+                entregaModal.open();
+            };
+            const footer = modalInstance.el.querySelector('.modal-footer');
+            if(footer.querySelector("#btnModalEntregar")) footer.querySelector("#btnModalEntregar").remove();
+            footer.appendChild(btnConfirmar);
+        } else {
+             const footer = modalInstance.el.querySelector('.modal-footer');
+             if(footer.querySelector("#btnModalEntregar")) footer.querySelector("#btnModalEntregar").remove();
         }
 
-        // Função para formatar data
-        function formatarData(timestamp) {
-            if (!timestamp) return 'N/A';
-            const date = new Date(timestamp);
-            return date.toLocaleString('pt-BR');
+        modalInstance.open();
+    }
+
+    function mostrarCarregamento(mostrar) {
+        document.getElementById('loadingIndicator').classList.toggle('active', mostrar);
+    }
+    
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `md-toast ${type}`;
+        const iconName = type === 'error' ? 'error' : (type === 'warning' ? 'warning' : 'check_circle');
+        toast.innerHTML = `<i class="material-icons-round icon">${iconName}</i><span>${message}</span>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 100);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 500);
+        }, 5000);
+    }
+
+    // --- LÓGICA DO TEMA (DARK MODE) ---
+    function applyInitialTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.body.classList.add('dark-mode');
         }
-
-        // Função para fazer logout
-        async function fazerLogout() {
-            try {
-                await firebase.auth().signOut();
-                window.location.href = 'login.html';
-            } catch (error) {
-                console.error('Erro ao fazer logout:', error);
-                showToast('Erro ao fazer logout', 'error');
-            }
-        }
-
-        // Função para carregar encomendas em tempo real
-        function carregarEncomendasPendentes() {
-            mostrarCarregamento(true);
-            
-            // Remove listener anterior se existir
-            if (encomendasListener) {
-                firebase.database().ref('encomendas').off('value', encomendasListener);
-            }
-            
-            // Configura novo listener
-            encomendasListener = firebase.database().ref('encomendas')
-                .orderByChild('status')
-                .equalTo('pendente')
-                .on('value', snapshot => {
-                    const listaEncomendas = document.getElementById('listaEncomendasPortaria');
-                    
-                    if (!snapshot.exists()) {
-                        listaEncomendas.innerHTML = `
-                            <li class="collection-item empty-state">
-                                <div class="center-align">
-                                    <i class="material-icons-round large">local_shipping</i>
-                                    <p>Nenhuma encomenda pendente</p>
-                                </div>
-                            </li>
-                        `;
-                        todasEncomendas = [];
-                        mostrarCarregamento(false);
-                        return;
-                    }
-                    
-                    todasEncomendas = [];
-                    snapshot.forEach(child => {
-                        const encomenda = child.val();
-                        encomenda.id = child.key;
-                        
-                        if (!encomenda.solicitacaoRetirada || 
-                            encomenda.solicitacaoRetirada.solicitadoPor === firebase.auth().currentUser.uid) {
-                            todasEncomendas.push(encomenda);
-                        }
-                    });
-                    
-                    exibirEncomendas(todasEncomendas);
-                    mostrarCarregamento(false);
-                }, error => {
-                    console.error('Erro ao carregar encomendas:', error);
-                    showToast('Erro ao carregar encomendas', 'error');
-                    mostrarCarregamento(false);
-                });
-        }
-
-        // Função para exibir encomendas
-        function exibirEncomendas(encomendas) {
-            const listaEncomendas = document.getElementById('listaEncomendasPortaria');
-            const termoBusca = document.getElementById('searchInput').value.trim();
-            
-            // Limpa completamente a lista antes de recriar
-            listaEncomendas.innerHTML = '';
-            
-            if (encomendas.length === 0) {
-                // Exibe mensagem de estado vazio apropriada
-                const mensagem = termoBusca 
-                    ? `Nenhuma encomenda encontrada para "${termoBusca}"` 
-                    : 'Nenhuma encomenda pendente';
-                
-                const icone = termoBusca ? 'search_off' : 'local_shipping';
-                
-                listaEncomendas.innerHTML = `
-                    <li class="collection-item empty-state">
-                        <div class="center-align">
-                            <i class="material-icons-round large">${icone}</i>
-                            <p>${mensagem}</p>
-                            ${termoBusca ? '<small>Tente buscar por "Bloco X" ou "X 101"</small>' : ''}
-                        </div>
-                    </li>
-                `;
-                return;
-            }
-            
-            // Adiciona contador de resultados apenas se houver busca ativa
-            if (termoBusca) {
-                const resultados = document.createElement('div');
-                resultados.className = 'search-results-count';
-                resultados.textContent = `${encomendas.length} ${encomendas.length === 1 ? 'encomenda encontrada' : 'encomendas encontradas'}`;
-                listaEncomendas.appendChild(resultados);
-            }
-            
-            // Adiciona cada encomenda à lista
-            encomendas.forEach(encomenda => {
-                const li = document.createElement('li');
-                li.className = 'collection-item encomenda-item';
-                li.setAttribute('data-bloco', encomenda.bloco.toLowerCase());
-                li.setAttribute('data-apto', encomenda.apartamento.toLowerCase());
-                li.setAttribute('data-id', encomenda.id);
-                li.setAttribute('role', 'button');
-                li.setAttribute('tabindex', '0');
-                
-                let badgeClass = '';
-                let badgeText = `${encomenda.quantidade} item(s)`;
-                let showDeliveryButton = true;
-                
-                if (encomenda.status === 'aguardando_confirmacao') {
-                    badgeClass = 'blue';
-                    badgeText = 'Aguardando confirmação';
-                    showDeliveryButton = false;
-                }
-                
-                li.innerHTML = `
-                    <div class="row valign-wrapper">
-                        <div class="col s8">
-                            <strong>Bloco ${encomenda.bloco}, Apt ${encomenda.apartamento}</strong><br>
-                            <small>${formatarData(encomenda.data)}</small>
-                            ${encomenda.descricao ? `<p>${encomenda.descricao}</p>` : ''}
-                        </div>
-                        <div class="col s4 right-align">
-                            <span class="badge ${badgeClass}">${badgeText}</span>
-                            ${showDeliveryButton ? 
-                                `<a href="#!" class="btn-floating btn-entregar" data-id="${encomenda.id}" aria-label="Registrar entrega">
-                                    <i class="material-icons-round">check</i>
-                                </a>` : ''}
-                        </div>
-                    </div>
-                `;
-                
-                // Adiciona evento ao botão de entregar
-                const btn = li.querySelector('.btn-entregar');
-                if (btn) {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const encomendaId = this.getAttribute('data-id');
-                        abrirModalEntrega(encomendaId);
-                    });
-                }
-                
-                // Adiciona evento para abrir detalhes
-                li.addEventListener('click', function() {
-                    const encomendaId = this.getAttribute('data-id');
-                    abrirModalDetalhes(encomendaId);
-                });
-                
-                // Adiciona suporte a teclado
-                li.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        const encomendaId = this.getAttribute('data-id');
-                        abrirModalDetalhes(encomendaId);
-                    }
-                });
-                
-                listaEncomendas.appendChild(li);
-            });
-        }
-
-        // Função para filtrar encomendas
-        function filtrarEncomendas() {
-            const termoBusca = document.getElementById('searchInput').value.toLowerCase().trim();
-            const listaEncomendas = document.getElementById('listaEncomendasPortaria');
-            
-            if (!termoBusca) {
-                exibirEncomendas(todasEncomendas);
-                return;
-            }
-            
-            const partesBusca = termoBusca.split(' ');
-            const blocoBusca = partesBusca[0];
-            const aptoBusca = partesBusca.length > 1 ? partesBusca[1] : '';
-            
-            const encomendasFiltradas = todasEncomendas.filter(encomenda => {
-                const blocoMatch = encomenda.bloco.toLowerCase().includes(blocoBusca);
-                const aptoMatch = aptoBusca ? encomenda.apartamento.toLowerCase().includes(aptoBusca) : true;
-                return blocoMatch && aptoMatch;
-            });
-            
-            exibirEncomendas(encomendasFiltradas);
-        }
-
-        // Função para abrir modal de entrega
-        function abrirModalEntrega(encomendaId) {
-            const modal = M.Modal.getInstance(document.getElementById('modalEntrega'));
-            document.getElementById('btnConfirmarEntrega').setAttribute('data-id', encomendaId);
-            document.getElementById('nomeRetirante').value = '';
-            modal.open();
-            
-            // Foco no campo de nome
-            setTimeout(() => {
-                document.getElementById('nomeRetirante').focus();
-            }, 300);
-        }
-
-        // Função para abrir modal de detalhes
-        async function abrirModalDetalhes(encomendaId) {
-            try {
-                // Remove listener anterior se existir
-                if (detalhesListener) {
-                    firebase.database().ref(`encomendas/${encomendaId}`).off('value', detalhesListener);
-                }
-                
-                // Configura novo listener
-                detalhesListener = firebase.database().ref(`encomendas/${encomendaId}`)
-                    .on('value', async (snapshot) => {
-                        const encomenda = snapshot.val();
-                        
-                        if (!encomenda) {
-                            showToast('Encomenda não encontrada', 'error');
-                            return;
-                        }
-                        
-                        // Preenche os dados no modal
-                        document.getElementById('detalhesBlocoApto').textContent = `Bloco ${encomenda.bloco}, Apt ${encomenda.apartamento}`;
-                        document.getElementById('detalhesData').textContent = formatarData(encomenda.data);
-                        document.getElementById('detalhesQuantidade').textContent = encomenda.quantidade;
-                        document.getElementById('detalhesDescricao').textContent = encomenda.descricao || 'Nenhuma descrição';
-                        
-                        // Obtém o nome do porteiro que registrou
-                        if (encomenda.registradoPor) {
-                            const porteiroSnapshot = await firebase.database().ref(`users/${encomenda.registradoPor}`).once('value');
-                            const porteiroData = porteiroSnapshot.val();
-                            document.getElementById('detalhesPorteiro').textContent = porteiroData?.nome || 'Porteiro';
-                        } else {
-                            document.getElementById('detalhesPorteiro').textContent = 'N/A';
-                        }
-                        
-                        const statusBadge = document.getElementById('detalhesStatus');
-                        let statusText = 'Pendente';
-                        let statusClass = 'orange';
-                        
-                        if (encomenda.status === 'aguardando_confirmacao') {
-                            statusText = 'Aguardando Confirmação';
-                            statusClass = 'blue';
-                        } else if (encomenda.status === 'retirado') {
-                            statusText = 'Retirada';
-                            statusClass = 'green';
-                        }
-                        
-                        statusBadge.textContent = statusText;
-                        statusBadge.className = `badge ${statusClass}`;
-                        
-                        const retiradaSection = document.getElementById('detalhesRetiradaSection');
-                        const btnEntregar = document.getElementById('btnEntregarDetalhes');
-                        
-                        if (encomenda.status === 'pendente') {
-                            retiradaSection.classList.add('hide');
-                            btnEntregar.classList.remove('hide');
-                            btnEntregar.setAttribute('data-id', encomendaId);
-                        } else if (encomenda.status === 'aguardando_confirmacao') {
-                            retiradaSection.classList.remove('hide');
-                            document.getElementById('detalhesRetiradoPor').textContent = encomenda.solicitacaoRetirada?.nomeRetirante || 'N/A';
-                            document.getElementById('detalhesDataRetirada').textContent = formatarData(encomenda.solicitacaoRetirada?.data);
-                            btnEntregar.classList.add('hide');
-                        } else {
-                            document.getElementById('detalhesRetiradoPor').textContent = encomenda.retiradoPorNome || encomenda.retiradoPor || 'N/A';
-                            document.getElementById('detalhesDataRetirada').textContent = formatarData(encomenda.dataRetirada);
-                            retiradaSection.classList.remove('hide');
-                            btnEntregar.classList.add('hide');
-                        }
-                    });
-                
-                // Abre o modal
-                const modal = M.Modal.getInstance(document.getElementById('modalDetalhes'));
-                modal.open();
-                
-            } catch (error) {
-                console.error('Erro ao carregar detalhes:', error);
-                showToast('Erro ao carregar detalhes', 'error');
-            }
-        }
-
-        // Função para registrar nova encomenda
-        async function registrarNovaEncomenda() {
-            const bloco = document.getElementById('blocoEncomenda').value.trim();
-            const apartamento = document.getElementById('apartamentoEncomenda').value.trim();
-            const quantidade = document.getElementById('quantidadeEncomenda').value;
-            const descricao = document.getElementById('descricaoEncomenda').value.trim();
-            const user = firebase.auth().currentUser;
-            
-            if (!bloco || !apartamento || !quantidade || !user) {
-                showToast('Preencha todos os campos obrigatórios', 'error');
-                return;
-            }
-            
-            try {
-                mostrarCarregamento(true);
-                
-                // Obtém o nome do porteiro
-                const userSnapshot = await firebase.database().ref(`users/${user.uid}`).once('value');
-                const userData = userSnapshot.val();
-                
-                const novaEncomenda = {
-                    bloco: bloco,
-                    apartamento: apartamento,
-                    quantidade: quantidade,
-                    descricao: descricao,
-                    status: 'pendente',
-                    data: firebase.database.ServerValue.TIMESTAMP,
-                    registradoPor: user.uid,
-                    registradoPorNome: userData.nome,
-                    blocoApto: `Bloco ${bloco}, Apt ${apartamento}`
-                };
-                
-                // Salva a encomenda no Firebase
-                const encomendaRef = await firebase.database().ref('encomendas').push(novaEncomenda);
-                
-                showToast('Encomenda registrada com sucesso', 'success');
-                
-                // Limpa o formulário
-                document.getElementById('blocoEncomenda').value = '';
-                document.getElementById('apartamentoEncomenda').value = '';
-                document.getElementById('quantidadeEncomenda').value = '1';
-                document.getElementById('descricaoEncomenda').value = '';
-                
-                // Tenta enviar email de notificação
-                try {
-                    // Busca o email do morador no Firebase
-                    const moradorSnapshot = await firebase.database().ref('users')
-                        .orderByChild('blocoApto')
-                        .equalTo(`${bloco}-${apartamento}`)
-                        .once('value');
-                    
-                    if (moradorSnapshot.exists()) {
-                        moradorSnapshot.forEach(child => {
-                            const morador = child.val();
-                            
-                            // Configura os parâmetros do email
-                            const templateParams = {
-                                to_name: morador.nome,
-                                to_email: morador.email,
-                                bloco: bloco,
-                                apartamento: apartamento,
-                                quantidade: quantidade,
-                                descricao: descricao || 'Não informada',
-                                data: new Date().toLocaleString('pt-BR'),
-                                porteiro: userData.nome
-                            };
-                            
-                            // Envia o email usando EmailJS
-                            emailjs.send('service_qeqs8rl', 'template_gi6qr3o', templateParams)
-                                .then(response => {
-                                    console.log('Email enviado com sucesso!', response.status, response.text);
-                                    
-                                    // Registra no log que o email foi enviado
-                                    firebase.database().ref(`encomendas/${encomendaRef.key}/logs`).push({
-                                        evento: 'email_notificacao_enviado',
-                                        data: firebase.database.ServerValue.TIMESTAMP,
-                                        status: 'sucesso',
-                                        destinatario: morador.email
-                                    });
-                                })
-                                .catch(error => {
-                                    console.error('Falha ao enviar email:', error);
-                                    
-                                    // Registra o erro no log
-                                    firebase.database().ref(`encomendas/${encomendaRef.key}/logs`).push({
-                                        evento: 'email_notificacao_falhou',
-                                        data: firebase.database.ServerValue.TIMESTAMP,
-                                        status: 'erro',
-                                        erro: error.toString(),
-                                        destinatario: morador.email
-                                    });
-                                });
-                        });
-                    } else {
-                        console.log('Morador não encontrado para enviar notificação');
-                    }
-                } catch (emailError) {
-                    console.error('Erro ao tentar enviar email:', emailError);
-                }
-                
-                mostrarCarregamento(false);
-                
-            } catch (error) {
-                console.error('Erro ao registrar encomenda:', error);
-                showToast('Erro ao registrar encomenda', 'error');
-                mostrarCarregamento(false);
-            }
-        }
-
-        // Função para confirmar entrega de encomenda
-        async function confirmarEntregaEncomenda() {
-            const encomendaId = this.getAttribute('data-id');
-            const nomeRetirante = document.getElementById('nomeRetirante').value.trim();
-            const user = firebase.auth().currentUser;
-            
-            if (!encomendaId || !nomeRetirante || !user) {
-                showToast('Por favor, informe o nome de quem está retirando', 'error');
-                return;
-            }
-
-            try {
-                mostrarCarregamento(true);
-                
-                const userSnapshot = await firebase.database().ref(`users/${user.uid}`).once('value');
-                const userData = userSnapshot.val();
-                
-                // Verifica se já existe uma solicitação pendente
-                const encomendaSnapshot = await firebase.database().ref(`encomendas/${encomendaId}`).once('value');
-                const encomenda = encomendaSnapshot.val();
-                
-                if (encomenda.status === 'aguardando_confirmacao') {
-                    showToast('Já existe uma solicitação de confirmação pendente para esta encomenda', 'warning');
-                    mostrarCarregamento(false);
-                    return;
-                }
-                
-                // Atualiza para status 'aguardando_confirmacao'
-                await firebase.database().ref(`encomendas/${encomendaId}`).update({
-                    status: 'aguardando_confirmacao',
-                    retiradoPor: nomeRetirante,
-                    retiradoPorNome: nomeRetirante,
-                    dataRetirada: firebase.database.ServerValue.TIMESTAMP,
-                    porteiroRetiradaNome: userData.nome,
-                    solicitacaoRetirada: {
-                        porteiro: userData.nome,
-                        data: firebase.database.ServerValue.TIMESTAMP,
-                        nomeRetirante: nomeRetirante,
-                        solicitadoPor: user.uid
-                    }
-                });
-
-                showToast('Solicitação de retirada enviada para confirmação', 'success');
-                
-                const modalEntrega = M.Modal.getInstance(document.getElementById('modalEntrega'));
-                modalEntrega.close();
-                
-                mostrarCarregamento(false);
-
-            } catch (error) {
-                console.error('Erro ao confirmar entrega:', error);
-                showToast('Erro ao enviar solicitação', 'error');
-                mostrarCarregamento(false);
-            }
-        }
-
-        // Função para validar campos em tempo real
-        function setupRealTimeValidation() {
-            const fields = [
-                { id: 'blocoEncomenda', required: true, minLength: 1 },
-                { id: 'apartamentoEncomenda', required: true, minLength: 1 },
-                { id: 'quantidadeEncomenda', required: true, min: 1 }
-            ];
-
-            fields.forEach(field => {
-                const element = document.getElementById(field.id);
-                const label = element.nextElementSibling;
-                
-                element.addEventListener('input', () => {
-                    validateField(element, label, field);
-                });
-                
-                // Validação inicial
-                validateField(element, label, field);
-            });
-        }
-
-        function validateField(element, label, rules) {
-            const value = element.value.trim();
-            let isValid = true;
-            let errorMessage = '';
-            
-            if (rules.required && !value) {
-                isValid = false;
-                errorMessage = 'Campo obrigatório';
-            }
-            
-            if (rules.minLength && value.length < rules.minLength) {
-                isValid = false;
-                errorMessage = `Mínimo ${rules.minLength} caracteres`;
-            }
-            
-            if (rules.min && parseInt(value) < rules.min) {
-                isValid = false;
-                errorMessage = `Valor mínimo: ${rules.min}`;
-            }
-            
-            // Atualiza estado visual
-            if (isValid) {
-                element.classList.remove('invalid');
-                element.classList.add('valid');
-                label.classList.remove('red-text');
-                label.setAttribute('data-error', '');
-            } else {
-                element.classList.remove('valid');
-                element.classList.add('invalid');
-                label.classList.add('red-text');
-                label.setAttribute('data-error', errorMessage);
-            }
-            
-            return isValid;
-        }
-
-        // Gerenciamento de foco em modais
-        function manageFocus() {
-            const modal = document.querySelector('.modal.open');
-            
-            if (modal) {
-                const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-                const focusableContent = modal.querySelectorAll(focusableElements);
-                
-                if (focusableContent.length > 0) {
-                    const firstFocusableElement = focusableContent[0];
-                    const lastFocusableElement = focusableContent[focusableContent.length - 1];
-                    
-                    // Foca no primeiro elemento
-                    firstFocusableElement.focus();
-                    
-                    // Trap de foco dentro do modal
-                    modal.addEventListener('keydown', function(e) {
-                        if (e.key === 'Tab') {
-                            if (e.shiftKey) {
-                                if (document.activeElement === firstFocusableElement) {
-                                    e.preventDefault();
-                                    lastFocusableElement.focus();
-                                }
-                            } else {
-                                if (document.activeElement === lastFocusableElement) {
-                                    e.preventDefault();
-                                    firstFocusableElement.focus();
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        }
-
-        // Inicialização quando o DOM estiver carregado
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inicializa modais
-            const modals = document.querySelectorAll('.modal');
-            M.Modal.init(modals, {
-                onOpenStart: manageFocus
-            });
-            
-            // Configura listeners de tempo real
-            carregarEncomendasPendentes();
-            
-            // Monitora estado da conexão
-            firebase.database().ref('.info/connected').on('value', (snapshot) => {
-                if (snapshot.val() === true) {
-                    console.log('Conectado ao Firebase em tempo real');
-                } else {
-                    console.log('Desconectado do Firebase');
-                    showToast('Não esqueça de lançar todas as encomendas recebidas.', 'warning');
-                }
-            });
-            
-            // Configura botões
-            document.getElementById('btnRegistrarEncomenda').addEventListener('click', registrarNovaEncomenda);
-            document.getElementById('btnConfirmarEntrega').addEventListener('click', confirmarEntregaEncomenda);
-            document.getElementById('btnEntregarDetalhes').addEventListener('click', function() {
-                const encomendaId = this.getAttribute('data-id');
-                abrirModalEntrega(encomendaId);
-            });
-            
-            // Configura campo de busca
-            document.getElementById('searchInput').addEventListener('input', filtrarEncomendas);
-            
-            // Configura botão de logout
-            document.getElementById('btnLogout').addEventListener('click', fazerLogout);
-            
-            // Limpa listeners quando o modal de detalhes é fechado
-            document.getElementById('modalDetalhes').addEventListener('modal-close', function() {
-                if (detalhesListener) {
-                    firebase.database().ref(`encomendas/${encomendaId}`).off('value', detalhesListener);
-                    detalhesListener = null;
-                }
-            });
-            
-            // Configura validação em tempo real
-            setupRealTimeValidation();
-            
-            // Verifica autenticação
-            firebase.auth().onAuthStateChanged(user => {
-                if (!user) {
-                    window.location.href = 'login.html';
-                }
-            });
-        });
+    }
+    function toggleTheme() {
+        const isDark = document.body.classList.toggle('dark-mode');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
