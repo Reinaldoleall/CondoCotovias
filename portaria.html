@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/portaria.css">
     <meta name="theme-color" content="#2c3e50">
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
     <script>
@@ -17,7 +16,444 @@
             emailjs.init("u4fUcSd9Yi3exmOiv"); // Substitua pelo seu User ID do EmailJS
         })();
     </script>
+    <style>
+      
+      /*
+===================================================
+|                 STYLESHEET (CSS)                |
+===================================================
+| Design System baseado em Material 3 (MD3)       |
+| Versão 2.0 - Dashboard, Tema e Melhorias de UX  |
+---------------------------------------------------
+*/
 
+:root {
+    /* Paleta de Cores de Referência (Claro) */
+    --md-ref-palette-primary: #6750A4;
+    --md-ref-palette-primary-container: #EADDFF;
+    --md-ref-palette-secondary: #625B71;
+    --md-ref-palette-error: #B3261E;
+    --md-ref-palette-tertiary: #006874;
+    --md-ref-palette-tertiary-container: #97F0FF;
+    --md-ref-palette-surface: #FDF7FF;
+    --md-ref-palette-surface-variant: #E7E0EC;
+    --md-ref-palette-outline: #79747E;
+    --md-ref-palette-on-primary: #FFFFFF;
+    --md-ref-palette-on-primary-container: #21005D;
+    --md-ref-palette-on-secondary: #FFFFFF;
+    --md-ref-palette-on-error: #FFFFFF;
+    --md-ref-palette-on-surface: #1C1B1F;
+    --md-ref-palette-on-surface-variant: #49454F;
+    --md-ref-palette-on-tertiary-container: #001F24;
+    --md-ref-palette-background: #FDF7FF;
+    --md-ref-palette-success: #4CAF50;
+    --md-ref-palette-success-container: #C8E6C9;
+    --md-ref-palette-on-success-container: #1B5E20;
+
+
+    /* Tokens de Sistema (Cores) */
+    --md-sys-color-primary: var(--md-ref-palette-primary);
+    --md-sys-color-on-primary: var(--md-ref-palette-on-primary);
+    --md-sys-color-primary-container: var(--md-ref-palette-primary-container);
+    --md-sys-color-on-primary-container: var(--md-ref-palette-on-primary-container);
+    --md-sys-color-secondary: var(--md-ref-palette-secondary);
+    --md-sys-color-on-secondary: var(--md-ref-palette-on-secondary);
+    --md-sys-color-error: var(--md-ref-palette-error);
+    --md-sys-color-on-error: var(--md-ref-palette-on-error);
+    --md-sys-color-surface: var(--md-ref-palette-surface);
+    --md-sys-color-on-surface: var(--md-ref-palette-on-surface);
+    --md-sys-color-surface-variant: var(--md-ref-palette-surface-variant);
+    --md-sys-color-on-surface-variant: var(--md-ref-palette-on-surface-variant);
+    --md-sys-color-outline: var(--md-ref-palette-outline);
+    --md-sys-color-background: var(--md-ref-palette-background);
+    --md-sys-color-tertiary: var(--md-ref-palette-tertiary);
+    --md-sys-color-on-tertiary-container: var(--md-ref-palette-on-tertiary-container);
+    --md-sys-color-tertiary-container: var(--md-ref-palette-tertiary-container);
+    --md-sys-color-success: var(--md-ref-palette-success);
+    --md-sys-color-success-container: var(--md-ref-palette-success-container);
+    --md-sys-color-on-success-container: var(--md-ref-palette-on-success-container);
+
+    /* Elevação e Forma */
+    --md-elevation-level-1: 0 1px 2px rgba(0,0,0,.3), 0 1px 3px 1px rgba(0,0,0,.15);
+    --md-elevation-level-2: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15);
+    --md-elevation-level-3: 0 4px 8px 3px rgba(0,0,0,.15), 0 1px 3px rgba(0,0,0,.3);
+    --md-shape-corner-medium: 12px;
+    --md-shape-corner-large: 16px;
+    --md-shape-corner-full: 9999px;
+    
+    /* Tipografia */
+    --md-sys-typescale-body-font: 'Roboto', sans-serif;
+    --md-sys-typescale-body-weight: 400;
+    --md-sys-typescale-body-line-height: 1.5;
+    --md-sys-typescale-body-size: 1rem;
+    
+    /* Espaçamentos */
+    --md-space-xxs: 4px;
+    --md-space-xs: 8px;
+    --md-space-sm: 12px;
+    --md-space-md: 16px;
+    --md-space-lg: 24px;
+    --md-space-xl: 32px;
+    --md-space-xxl: 48px;
+}
+
+/* TEMA ESCURO (DARK MODE) */
+body.dark-mode {
+    --md-ref-palette-primary: #D0BCFF;
+    --md-ref-palette-primary-container: #4F378B;
+    --md-ref-palette-secondary: #CCC2DC;
+    --md-ref-palette-error: #F2B8B5;
+    --md-ref-palette-tertiary: #4FD8EB;
+    --md-ref-palette-tertiary-container: #004E58;
+    --md-ref-palette-surface: #141218;
+    --md-ref-palette-surface-variant: #49454F;
+    --md-ref-palette-outline: #938F99;
+    --md-ref-palette-on-primary: #381E72;
+    --md-ref-palette-on-primary-container: #EADDFF;
+    --md-ref-palette-on-secondary: #332D41;
+    --md-ref-palette-on-error: #601410;
+    --md-ref-palette-on-surface: #E6E1E5;
+    --md-ref-palette-on-surface-variant: #CAC4D0;
+    --md-ref-palette-on-tertiary-container: #97F0FF;
+    --md-ref-palette-background: #141218;
+    --md-ref-palette-success-container: #005305;
+    --md-ref-palette-on-success-container: #98FAB0;
+}
+
+/* BASE E RESET */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: var(--md-sys-typescale-body-font);
+    font-weight: var(--md-sys-typescale-body-weight);
+    font-size: var(--md-sys-typescale-body-size);
+    line-height: var(--md-sys-typescale-body-line-height);
+    background-color: var(--md-sys-color-background);
+    color: var(--md-sys-color-on-surface);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container { 
+    width: 100%; 
+    max-width: 1400px; 
+    margin: 0 auto;
+    padding: var(--md-space-md);
+    flex: 1;
+}
+
+/* CABEÇALHO E DASHBOARD */
+.header-bar {
+    background-color: var(--md-sys-color-surface);
+    padding: var(--md-space-md);
+    border-bottom: 1px solid var(--md-sys-color-outline);
+    margin-bottom: var(--md-space-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--md-space-md);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+.header-welcome h5 { 
+    font-size: 1.5rem; 
+    margin: 0; 
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface);
+}
+
+.header-welcome p { 
+    color: var(--md-sys-color-on-surface-variant); 
+    margin: 0; 
+    font-size: 0.9rem;
+}
+
+.header-actions { 
+    display: flex; 
+    align-items: center; 
+    gap: var(--md-space-xs); 
+}
+
+.stats-dashboard {
+    display: flex;
+    gap: var(--md-space-md);
+    margin-bottom: var(--md-space-lg);
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 180px;
+    background-color: var(--md-sys-color-surface);
+    padding: var(--md-space-md);
+    border-radius: var(--md-shape-corner-medium);
+    text-align: left;
+    box-shadow: var(--md-elevation-level-1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 5px solid var(--md-sys-color-primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.stat-card.tertiary { border-left-color: var(--md-sys-color-tertiary); }
+.stat-card.success { border-left-color: var(--md-sys-color-success); }
+
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--md-elevation-level-2);
+}
+
+.stat-card .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--md-sys-color-on-surface);
+    line-height: 1;
+}
+
+.stat-card .stat-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+/* CARDS E FORMULÁRIOS */
+.card {
+    width: 100%;
+    background-color: var(--md-sys-color-surface);
+    border-radius: var(--md-shape-corner-large);
+    box-shadow: var(--md-elevation-level-1);
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    margin-bottom: var(--md-space-md);
+    overflow: hidden;
+}
+
+.card:hover { box-shadow: var(--md-elevation-level-2); }
+.card .card-content { padding: var(--md-space-lg); width: 100%; }
+.card .card-title {
+    padding: 0;
+    margin-bottom: var(--md-space-md);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface);
+    display: flex;
+    align-items: center;
+    gap: var(--md-space-sm);
+}
+.card .card-title i { color: var(--md-sys-color-primary); font-size: 1.8rem; }
+
+/* Ajustes específicos para os campos do formulário de registro */
+#blocoEncomenda, #apartamentoEncomenda, #quantidadeEncomenda {
+    width: calc(85% - 3rem) !important;
+}
+
+/* Estilo dos campos de formulário */
+.input-field { margin-bottom: var(--md-space-md); position: relative; }
+.input-field input, .input-field textarea, .input-field select {
+    background-color: var(--md-sys-color-surface-variant) !important;
+    border: 1px solid var(--md-sys-color-outline) !important;
+    border-radius: 5px !important;
+    color: var(--md-sys-color-on-surface) !important;
+    padding: 0 var(--md-space-md) !important;
+    height: 56px !important;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-field textarea {
+    min-height: 120px !important;
+    padding-top: var(--md-space-sm) !important;
+    padding-bottom: var(--md-space-sm) !important;
+    resize: vertical;
+}
+
+.input-field input:focus, .input-field textarea:focus, .input-field select:focus {
+    border-color: var(--md-sys-color-primary) !important;
+    box-shadow: 0 0 0 2px var(--md-sys-color-primary) !important;
+    outline: none;
+}
+
+.input-field label {
+    color: var(--md-sys-color-on-surface-variant);
+    pointer-events: none;
+    position: absolute;
+    left: 16px;
+    top: 18px;
+    transition: all 0.2s ease-out;
+    background-color: transparent;
+    padding: 0 4px;
+}
+
+.input-field input:focus + label, .input-field input:not(:placeholder-shown) + label,
+.input-field textarea:focus + label, .input-field textarea:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 12px;
+    font-size: 0.8rem;
+    background-color: var(--md-sys-color-surface); /* MD3 style label */
+    color: var(--md-sys-color-primary);
+}
+
+.input-field .prefix {
+    color: var(--md-sys-color-on-surface-variant);
+    position: absolute;
+    font-size: 1.8rem;
+    top: 14px;
+    left: 12px;
+}
+
+.input-field .prefix ~ input,
+.input-field .prefix ~ textarea,
+.input-field .prefix ~ label {
+    margin-left: 40px !important;
+    width: calc(90% - 40px) !important;
+}
+.input-field .prefix ~ label { left: 52px; }
+
+/* BOTÕES */
+.btn, .btn-flat, .btn-floating {
+    border-radius: var(--md-shape-corner-full);
+    text-transform: none;
+    font-weight: 500;
+    letter-spacing: normal;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--md-space-xs);
+    border: none;
+}
+.btn { 
+    height: 48px; line-height: 48px; padding: 0 var(--md-space-lg);
+    background-color: var(--md-sys-color-primary); 
+    color: var(--md-sys-color-on-primary); 
+    box-shadow: var(--md-elevation-level-1);
+}
+.btn:hover, .btn:focus {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 90%, black);
+    box-shadow: var(--md-elevation-level-2);
+}
+.btn.red { background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error); }
+.btn-flat { color: var(--md-sys-color-primary); background-color: transparent; }
+.btn-flat:hover, .btn-flat:focus { background-color: rgba(var(--md-sys-color-primary), 0.08); }
+.btn i.material-icons-round { font-size: 1.2rem; }
+#btnLogout, #btnThemeToggle {
+    background-color: var(--md-sys-color-surface-variant);
+    color: var(--md-sys-color-on-surface-variant);
+    box-shadow: none;
+}
+#btnLogout:hover { background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error); }
+#btnThemeToggle:hover { background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+
+/* LISTA DE ENCOMENDAS */
+.collection { border: none; margin: 0; }
+.collection .collection-item {
+    background-color: var(--md-sys-color-surface-variant);
+    border-radius: var(--md-shape-corner-medium);
+    margin-bottom: var(--md-space-sm);
+    padding: var(--md-space-md);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+    list-style-type: none;
+}
+.collection .collection-item:hover {
+    box-shadow: var(--md-elevation-level-2);
+    transform: translateY(-2px);
+    border-color: var(--md-sys-color-primary);
+}
+
+.encomenda-info strong { 
+    font-weight: 500; 
+    color: var(--md-sys-color-on-surface); 
+    display: block;
+    margin-bottom: var(--md-space-xxs);
+}
+.encomenda-info small { color: var(--md-sys-color-on-surface-variant); font-size: 0.85rem; }
+.encomenda-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px;}
+.encomenda-actions .badge { 
+    font-weight: 500; 
+    padding: 0px 0px;
+border-radius: 10px;
+    font-size: 0.5rem;
+    color: white;
+    float: none;
+    text-align: center;
+}
+.badge.pendente { background-color: var(--md-sys-color-tertiary); }
+.badge.confirmacao { background-color: var(--md-sys-color-primary); }
+.badge.retirado { background-color: var(--md-sys-color-success); }
+.search-results-count { padding: 0 16px 10px; color: var(--md-sys-color-on-surface-variant); font-size: 0.9em; text-align: right;}
+
+/* ESTADO VAZIO */
+.empty-state { 
+    text-align: center; 
+    padding: var(--md-space-xxl) var(--md-space-md);
+    background-color: transparent !important;
+    border: 2px dashed var(--md-sys-color-surface-variant);
+}
+.empty-state .icon { font-size: 4rem; color: var(--md-sys-color-outline); margin-bottom: var(--md-space-md); }
+.empty-state p { color: var(--md-sys-color-on-surface-variant); font-size: 1.1rem; }
+
+/* MODAIS */
+.modal { 
+    background-color: var(--md-sys-color-surface); 
+    border-radius: var(--md-shape-corner-large); 
+    max-width: 600px; 
+    padding: var(--md-space-lg);
+    box-shadow: var(--md-elevation-level-3);
+}
+.modal .modal-content { color: var(--md-sys-color-on-surface); padding: 0; }
+.modal .modal-content h4 { margin-bottom: var(--md-space-md); color: var(--md-sys-color-on-surface); font-weight: 500;}
+.modal .modal-footer { 
+    background-color: transparent; 
+    padding: var(--md-space-md) 0 0 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--md-space-xs);
+}
+#detalhes-log-list .log-item {
+    font-size: 0.9em;
+    padding: 8px;
+    border-bottom: 1px solid var(--md-sys-color-surface-variant);
+}
+#detalhes-log-list .log-item:last-child { border-bottom: none; }
+#detalhes-log-list .log-item strong { color: var(--md-sys-color-primary); }
+
+/* LOADING */
+#loadingIndicator {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+#loadingIndicator .preloader-wrapper { color: var(--md-sys-color-primary); }
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .stats-dashboard { gap: var(--md-space-sm); }
+    .stat-card { min-width: calc(50% - var(--md-space-sm)); }
+}
+@media (max-width: 600px) {
+    .header-bar { flex-direction: column; align-items: flex-start; }
+    .header-actions { width: 100%; justify-content: space-between; }
+    .stats-dashboard { flex-direction: column; }
+    .modal { width: 95%; max-width: 95%; }
+}
+    
+    </style>
 </head>
 <body>
     <div id="loadingIndicator">
@@ -177,6 +613,397 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src= "js/portaria.js"></script>
+    <script>
+        // Configuração do Firebase (mantenha a sua)
+        const firebaseConfig = {
+            apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
+            authDomain: "rifas-c414b.firebaseapp.com",
+            databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
+            projectId: "rifas-c414b",
+            storageBucket: "rifas-c414b.firebasestorage.app",
+            messagingSenderId: "770195193538",
+            appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // --- VARIÁVEIS GLOBAIS ---
+        let todasEncomendas = [];
+        let currentUserInfo = null;
+        let encomendasListener = null;
+
+        // --- FUNÇÕES AUXILIARES ---
+        const mostrarCarregamento = (mostrar) => document.getElementById('loadingIndicator').style.display = mostrar ? 'flex' : 'none';
+        const formatarData = (timestamp) => timestamp ? new Date(timestamp).toLocaleString('pt-BR') : 'N/A';
+
+        // --- TEMA (LIGHT/DARK) ---
+        const themeToggle = document.getElementById('btnThemeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            themeToggle.innerHTML = `<i class="material-icons-round">${isDarkMode ? 'light_mode' : 'dark_mode'}</i>`;
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        });
+
+        const aplicarTemaSalvo = () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="material-icons-round">light_mode</i>';
+            }
+        };
+
+        // --- AUTENTICAÇÃO E INICIALIZAÇÃO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            M.Modal.init(document.querySelectorAll('.modal'));
+            aplicarTemaSalvo();
+
+            firebase.auth().onAuthStateChanged(async user => {
+                if (user) {
+                    try {
+                        const userSnapshot = await firebase.database().ref(`users/${user.uid}`).once('value');
+                        
+                        // =================== INÍCIO DA CORREÇÃO ===================
+                        // Garante que o objeto currentUserInfo sempre tenha o UID e um nome.
+                        currentUserInfo = userSnapshot.val() || {}; // Começa com objeto vazio se não existir no DB
+                        currentUserInfo.uid = user.uid; // Garante que o UID do usuário autenticado seja SEMPRE atribuído
+                        
+                        if (!currentUserInfo.nome) {
+                            currentUserInfo.nome = 'Usuário'; // Define um nome padrão se não houver um no DB
+                        }
+                        // ==================== FIM DA CORREÇÃO =====================
+                        
+                        document.getElementById('userName').textContent = currentUserInfo.nome.split(' ')[0];
+                        
+                        iniciarMonitoramentoDeEncomendas();
+                        configurarEventListeners();
+
+                    } catch (error) {
+                        console.error("Erro ao buscar dados do usuário:", error);
+                        M.toast({html: 'Erro ao carregar dados do usuário.', classes: 'red'});
+                    }
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+        // --- LÓGICA PRINCIPAL ---
+        function iniciarMonitoramentoDeEncomendas() {
+            mostrarCarregamento(true);
+            if (encomendasListener) firebase.database().ref('encomendas').off('value', encomendasListener);
+
+            encomendasListener = firebase.database().ref('encomendas').orderByChild('data').on('value', snapshot => {
+                const hoje = new Date().setHours(0, 0, 0, 0);
+                let pendentesCount = 0, registradasHojeCount = 0, retiradasHojeCount = 0;
+                
+                todasEncomendas = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach(child => {
+                        const encomenda = { id: child.key, ...child.val() };
+                        todasEncomendas.push(encomenda);
+
+                        if (new Date(encomenda.data).setHours(0, 0, 0, 0) === hoje) registradasHojeCount++;
+                        if (encomenda.status === 'pendente') pendentesCount++;
+                        if (encomenda.status === 'retirado' && new Date(encomenda.dataRetirada).setHours(0, 0, 0, 0) === hoje) retiradasHojeCount++;
+                    });
+                }
+                
+                // Atualiza Dashboard e Lista
+                atualizarDashboard(pendentesCount, registradasHojeCount, retiradasHojeCount);
+                filtrarEncomendas(); // Usa a busca atual para exibir
+                mostrarCarregamento(false);
+            }, error => {
+                console.error('Erro ao carregar encomendas:', error);
+                M.toast({html: 'Erro crítico ao carregar dados.', classes: 'red'});
+                mostrarCarregamento(false);
+            });
+        }
+        
+        function atualizarDashboard(pendentes, registradas, retiradas) {
+            document.getElementById('statPendente').textContent = pendentes;
+            document.getElementById('statRegistradasHoje').textContent = registradas;
+            document.getElementById('statRetiradasHoje').textContent = retiradas;
+        }
+
+        function exibirEncomendas(encomendasParaExibir) {
+            const listaEl = document.getElementById('listaEncomendasPortaria');
+            const searchInfoEl = document.getElementById('searchResultsInfo');
+            listaEl.innerHTML = '';
+            searchInfoEl.innerHTML = '';
+
+            const termoBusca = document.getElementById('searchInput').value.trim();
+
+            if (encomendasParaExibir.length === 0) {
+                const icone = termoBusca ? 'search_off' : 'inbox';
+                const mensagem = termoBusca ? `Nenhuma encomenda encontrada para "${termoBusca}"` : 'Nenhuma encomenda pendente no momento.';
+                listaEl.innerHTML = `
+                    <li class="collection-item empty-state">
+                        <i class="material-icons-round icon">${icone}</i>
+                        <p>${mensagem}</p>
+                    </li>`;
+                return;
+            }
+
+            if (termoBusca) {
+                 searchInfoEl.innerHTML = `<div class="search-results-count">${encomendasParaExibir.length} resultado(s)</div>`;
+            }
+
+            encomendasParaExibir.sort((a, b) => b.data - a.data); // Ordena da mais nova para a mais antiga
+
+            encomendasParaExibir.forEach(encomenda => {
+                const li = document.createElement('li');
+                li.className = 'collection-item';
+                li.onclick = () => abrirModalDetalhes(encomenda.id);
+                
+                let statusBadge = `<span class="badge pendente">Pendente</span>`;
+                if(encomenda.status === 'aguardando_confirmacao') {
+                    statusBadge = `<span class="badge confirmacao">Aguardando Conf.</span>`
+                }
+                
+                li.innerHTML = `
+                    <div class="row valign-wrapper" style="margin-bottom:0;">
+                        <div class="col s8 encomenda-info">
+                            <strong>Bloco ${encomenda.bloco}, Apto ${encomenda.apartamento}</strong>
+                            <small>${encomenda.quantidade} item(s) - ${formatarData(encomenda.data)}</small>
+                        </div>
+                        <div class="col s4 right-align encomenda-actions">
+                            ${statusBadge}
+                            <button class="btn-floating waves-effect waves-light btn-entregar" data-id="${encomenda.id}">
+                                <i class="material-icons">check</i>
+                            </button>
+                        </div>
+                    </div>`;
+
+                const btnEntregar = li.querySelector('.btn-entregar');
+                btnEntregar.onclick = (e) => {
+                    e.stopPropagation();
+                    abrirModalEntrega(encomenda.id);
+                };
+                listaEl.appendChild(li);
+            });
+        }
+        
+        function filtrarEncomendas() {
+            const termoBusca = document.getElementById('searchInput').value.toLowerCase().trim();
+            const encomendasPendentes = todasEncomendas.filter(enc => enc.status === 'pendente' || enc.status === 'aguardando_confirmacao');
+
+            if (!termoBusca) {
+                exibirEncomendas(encomendasPendentes);
+                return;
+            }
+            
+            const encomendasFiltradas = encomendasPendentes.filter(enc => 
+                (enc.blocoApto || '').toLowerCase().includes(termoBusca)
+            );
+            exibirEncomendas(encomendasFiltradas);
+        }
+
+        async function registrarNovaEncomenda() {
+            const bloco = document.getElementById('blocoEncomenda').value.trim().toUpperCase();
+            const apartamento = document.getElementById('apartamentoEncomenda').value.trim();
+            const quantidade = document.getElementById('quantidadeEncomenda').value;
+            const descricao = document.getElementById('descricaoEncomenda').value.trim();
+            
+            if (!bloco || !apartamento || !quantidade) {
+                M.toast({html: 'Preencha Bloco, Apartamento e Quantidade.', classes: 'red'});
+                return;
+            }
+            
+            mostrarCarregamento(true);
+            try {
+                const novaEncomenda = {
+                    bloco, apartamento, quantidade, descricao,
+                    status: 'pendente',
+                    data: firebase.database.ServerValue.TIMESTAMP,
+                    registradoPor: currentUserInfo.uid,
+                    registradoPorNome: currentUserInfo.nome,
+                    blocoApto: `Bloco ${bloco}, Apto ${apartamento}`
+                };
+                
+                const encomendaRef = firebase.database().ref('encomendas').push();
+                await encomendaRef.set(novaEncomenda);
+                
+                // Adiciona log de criação
+                await firebase.database().ref(`encomendas/${encomendaRef.key}/logs`).push({
+                    evento: 'Criação',
+                    detalhes: `Registrado por ${currentUserInfo.nome}`,
+                    data: firebase.database.ServerValue.TIMESTAMP
+                });
+                
+                M.toast({html: 'Encomenda registrada com sucesso!', classes: 'green'});
+                document.getElementById('blocoEncomenda').value = '';
+                document.getElementById('apartamentoEncomenda').value = '';
+                document.getElementById('quantidadeEncomenda').value = '1';
+                document.getElementById('descricaoEncomenda').value = '';
+                M.updateTextFields(); // Atualiza labels do Materialize
+                
+                enviarNotificacaoPorEmail(encomendaRef.key, novaEncomenda);
+
+            } catch (error) {
+                console.error('Erro ao registrar encomenda:', error);
+                M.toast({html: 'Erro ao registrar. Tente novamente.', classes: 'red'});
+            } finally {
+                mostrarCarregamento(false);
+            }
+        }
+        
+        async function enviarNotificacaoPorEmail(encomendaId, encomendaData) {
+            try {
+                const moradorSnapshot = await firebase.database().ref('users').orderByChild('blocoApto').equalTo(`${encomendaData.bloco}-${encomendaData.apartamento}`).once('value');
+                
+                if (!moradorSnapshot.exists()) {
+                    console.warn(`Morador para ${encomendaData.blocoApto} não encontrado para notificação.`);
+                    return;
+                }
+                
+                moradorSnapshot.forEach(child => {
+                    const morador = child.val();
+                    if (!morador.email) return;
+
+                    const templateParams = {
+                        to_name: morador.nome || 'Morador',
+                        to_email: morador.email,
+                        bloco: encomendaData.bloco,
+                        apartamento: encomendaData.apartamento,
+                        quantidade: encomendaData.quantidade,
+                        porteiro: currentUserInfo.nome,
+                        data: new Date().toLocaleString('pt-BR')
+                    };
+
+                    emailjs.send('service_qeqs8rl', 'template_gi6qr3o', templateParams)
+                        .then(response => {
+                            console.log('Email enviado!', response.status, response.text);
+                            firebase.database().ref(`encomendas/${encomendaId}/logs`).push({
+                                evento: 'Notificação por E-mail',
+                                detalhes: `Enviado com sucesso para ${morador.email}`,
+                                data: firebase.database.ServerValue.TIMESTAMP
+                            });
+                        })
+                        .catch(err => {
+                            console.error('Falha ao enviar e-mail:', err);
+                            firebase.database().ref(`encomendas/${encomendaId}/logs`).push({
+                                evento: 'Falha na Notificação',
+                                detalhes: `Erro ao enviar e-mail para ${morador.email}`,
+                                data: firebase.database.ServerValue.TIMESTAMP
+                            });
+                        });
+                });
+            } catch (error) {
+                console.error("Erro ao buscar morador para notificação:", error);
+            }
+        }
+
+        async function confirmarEntregaEncomenda() {
+            const encomendaId = this.getAttribute('data-id');
+            const nomeRetirante = document.getElementById('nomeRetirante').value.trim();
+            if (!nomeRetirante) {
+                M.toast({html: 'Informe o nome de quem está retirando.', classes: 'red'});
+                return;
+            }
+
+            mostrarCarregamento(true);
+            try {
+                const updates = {
+                    status: 'aguardando_confirmacao',
+                    retiradoPorNome: nomeRetirante,
+                    dataRetirada: firebase.database.ServerValue.TIMESTAMP,
+                    porteiroRetiradaNome: currentUserInfo.nome
+                };
+                await firebase.database().ref(`encomendas/${encomendaId}`).update(updates);
+                
+                M.toast({html: 'Aguardando confirmação do morador.', classes: 'blue'});
+                M.Modal.getInstance(document.getElementById('modalEntrega')).close();
+            } catch (error) {
+                console.error('Erro ao confirmar entrega:', error);
+                M.toast({html: 'Erro ao enviar solicitação.', classes: 'red'});
+            } finally {
+                mostrarCarregamento(false);
+            }
+        }
+
+        // --- MODAIS ---
+        const abrirModalEntrega = (encomendaId) => {
+            document.getElementById('btnConfirmarEntrega').setAttribute('data-id', encomendaId);
+            document.getElementById('nomeRetirante').value = '';
+            M.updateTextFields();
+            M.Modal.getInstance(document.getElementById('modalEntrega')).open();
+        };
+
+        const abrirModalDetalhes = async (encomendaId) => {
+            mostrarCarregamento(true);
+            try {
+                const snapshot = await firebase.database().ref(`encomendas/${encomendaId}`).once('value');
+                if (!snapshot.exists()) {
+                    M.toast({html: 'Encomenda não encontrada.', classes: 'red'});
+                    return;
+                }
+                const encomenda = snapshot.val();
+                
+                // Preenche dados básicos
+                document.getElementById('detalhesBlocoApto').textContent = encomenda.blocoApto;
+                document.getElementById('detalhesData').textContent = formatarData(encomenda.data);
+                document.getElementById('detalhesPorteiro').textContent = encomenda.registradoPorNome || 'N/A';
+                document.getElementById('detalhesQuantidade').textContent = encomenda.quantidade;
+                document.getElementById('detalhesDescricao').textContent = encomenda.descricao || 'Nenhuma';
+                
+                // Status
+                const statusBadge = document.getElementById('detalhesStatus');
+                statusBadge.textContent = encomenda.status.replace('_', ' ').replace('aguardando confirmacao', 'Aguardando Confirmação').replace('pendente', 'Pendente').replace('retirado', 'Retirada');
+                statusBadge.className = `badge ${encomenda.status === 'pendente' ? 'pendente' : encomenda.status === 'aguardando_confirmacao' ? 'confirmacao' : 'retirado'}`;
+
+                // Seção de Retirada
+                const retiradaSection = document.getElementById('detalhesRetiradaSection');
+                if (encomenda.status !== 'pendente') {
+                    document.getElementById('detalhesRetiradoPor').textContent = encomenda.retiradoPorNome || 'N/A';
+                    document.getElementById('detalhesDataRetirada').textContent = formatarData(encomenda.dataRetirada);
+                    retiradaSection.classList.remove('hide');
+                } else {
+                    retiradaSection.classList.add('hide');
+                }
+
+                // Botão de Entregar no Modal
+                const btnEntregar = document.getElementById('btnEntregarDetalhes');
+                if(encomenda.status === 'pendente') {
+                    btnEntregar.classList.remove('hide');
+                    btnEntregar.setAttribute('data-id', encomendaId);
+                } else {
+                    btnEntregar.classList.add('hide');
+                }
+
+                // Logs
+                const logList = document.getElementById('detalhes-log-list');
+                logList.innerHTML = '<li class="collection-item">Nenhum evento registrado.</li>';
+                if (encomenda.logs) {
+                    logList.innerHTML = '';
+                    Object.values(encomenda.logs).reverse().forEach(log => {
+                        logList.innerHTML += `<li class="collection-item log-item"><strong>${log.evento}:</strong> ${log.detalhes} <span class="grey-text right">${formatarData(log.data)}</span></li>`;
+                    });
+                }
+                
+                M.Modal.getInstance(document.getElementById('modalDetalhes')).open();
+
+            } catch (error) {
+                console.error('Erro ao carregar detalhes:', error);
+                M.toast({html: 'Erro ao carregar detalhes.', classes: 'red'});
+            } finally {
+                mostrarCarregamento(false);
+            }
+        };
+        
+        // --- EVENT LISTENERS ---
+        function configurarEventListeners() {
+            document.getElementById('btnRegistrarEncomenda').addEventListener('click', registrarNovaEncomenda);
+            document.getElementById('btnConfirmarEntrega').addEventListener('click', confirmarEntregaEncomenda);
+            document.getElementById('searchInput').addEventListener('input', filtrarEncomendas);
+            document.getElementById('btnEntregarDetalhes').addEventListener('click', function() {
+                M.Modal.getInstance(document.getElementById('modalDetalhes')).close();
+                abrirModalEntrega(this.getAttribute('data-id'));
+            });
+            document.getElementById('btnLogout').addEventListener('click', async () => {
+                await firebase.auth().signOut();
+                window.location.href = 'login.html';
+            });
+        }
+    </script>
 </body>
 </html>
