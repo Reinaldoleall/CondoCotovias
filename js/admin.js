@@ -1,77 +1,45 @@
- // Firebase Configuration
+
+    // Firebase Configuração
     const firebaseConfig = {
       apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
       authDomain: "rifas-c414b.firebaseapp.com",
       databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
       projectId: "rifas-c414b",
-      storageBucket: "rifas-c414b.firebasestorage.app",
+      storageBucket: "rifas-c414b.appspot.com",
       messagingSenderId: "770195193538",
       appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
     };
-    
-    // Initialize Firebase
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    
-    // DOM Elements
-    const passwordPrompt = document.getElementById('password-prompt');
-    const btnVerifyPassword = document.getElementById('btn-verify-password');
+
     const btnEnviar = document.getElementById('btn-enviar');
     const avisosRecentes = document.getElementById('avisos-recentes');
-    const mainContent = document.getElementById('main-content');
-    
-    // Variables
-    const ADMIN_SECURITY_PASSWORD = "";
-    let authenticated = false;
-    
-    // Initialize - Check authentication
+
     document.addEventListener('DOMContentLoaded', () => {
-      mainContent.style.display = 'none';
-      passwordPrompt.style.display = 'block';
+      carregarAvisos();
     });
-    
-    // Event Listeners
-    btnVerifyPassword.addEventListener('click', verificarSenha);
+
     btnEnviar.addEventListener('click', publicarAviso);
-    
-    // Functions
-    function verificarSenha() {
-      const inputPassword = document.getElementById('admin-password').value;
-      
-      if (inputPassword === ADMIN_SECURITY_PASSWORD) {
-        authenticated = true;
-        passwordPrompt.style.display = 'none';
-        mainContent.style.display = 'block';
-        showToast('Acesso concedido!', 'success');
-        carregarAvisos();
-      } else {
-        showToast('Senha incorreta!', 'error');
-      }
-    }
-    
+
     function publicarAviso() {
-      if (!authenticated) {
-        passwordPrompt.style.display = 'block';
-        return;
-      }
-      
       const titulo = document.getElementById('titulo').value;
       const mensagem = document.getElementById('mensagem').value;
       const urgente = document.getElementById('urgente').checked;
-      
+
       if (!titulo || !mensagem) {
         showToast('Preencha todos os campos!', 'error');
         return;
       }
-      
+
       const novoAviso = {
-        titulo: titulo,
-        mensagem: mensagem,
-        urgente: urgente,
+        titulo,
+        mensagem,
+        urgente,
         data: Date.now(),
         autor: "Administração Cotovias"
       };
-      
+
       db.ref('avisos').push(novoAviso)
         .then(() => {
           showToast('Aviso publicado com sucesso!', 'success');
@@ -83,11 +51,11 @@
           showToast(`Erro: ${error.message}`, 'error');
         });
     }
-    
+
     function carregarAvisos() {
       db.ref('avisos').orderByChild('data').limitToLast(10).on('value', (snapshot) => {
         avisosRecentes.innerHTML = '';
-        
+
         if (!snapshot.exists()) {
           avisosRecentes.innerHTML = `
             <div class="empty-state">
@@ -97,7 +65,7 @@
           `;
           return;
         }
-        
+
         const avisos = [];
         snapshot.forEach((childSnapshot) => {
           avisos.push({
@@ -105,15 +73,13 @@
             ...childSnapshot.val()
           });
         });
-        
-        // Sort by date (newest first)
+
         avisos.sort((a, b) => b.data - a.data);
-        
-        // Display each announcement
+
         avisos.forEach((aviso) => {
           const avisoElement = document.createElement('div');
           avisoElement.className = `card ${aviso.urgente ? 'urgent' : ''}`;
-          
+
           const data = new Date(aviso.data);
           const dataFormatada = data.toLocaleDateString('pt-BR', {
             day: '2-digit',
@@ -122,7 +88,7 @@
             hour: '2-digit',
             minute: '2-digit'
           });
-          
+
           avisoElement.innerHTML = `
             <div class="card__header ${aviso.urgente ? 'card__header--urgent' : 'card__header--primary'}">
               <h3 class="card__title">${aviso.titulo}</h3>
@@ -141,12 +107,12 @@
               </button>
             </div>
           `;
-          
+
           avisosRecentes.appendChild(avisoElement);
         });
       });
     }
-    
+
     window.excluirAviso = function(id) {
       if (confirm('Tem certeza que deseja excluir este aviso?')) {
         db.ref('avisos').child(id).remove()
@@ -158,7 +124,7 @@
           });
       }
     };
-    
+
     function showToast(message, type) {
       const toast = document.createElement('div');
       toast.style.position = 'fixed';
@@ -170,16 +136,16 @@
       toast.style.color = 'white';
       toast.style.zIndex = '1000';
       toast.style.transition = 'all 0.3s ease';
-      
+
       if (type === 'success') {
-        toast.style.backgroundColor = 'var(--md-success)';
+        toast.style.backgroundColor = '#4CAF50';
       } else {
-        toast.style.backgroundColor = 'var(--md-error)';
+        toast.style.backgroundColor = '#f44336';
       }
-      
+
       toast.textContent = message;
       document.body.appendChild(toast);
-      
+
       setTimeout(() => {
         toast.style.opacity = '0';
         setTimeout(() => {
@@ -187,3 +153,4 @@
         }, 300);
       }, 3000);
     }
+  
