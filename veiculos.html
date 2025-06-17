@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Controle de Veículos - Portaria</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#1e88e5">
+
+<style>
+    /* ==========================================================================
+       ESTILOS GERAIS E VARIÁVEIS (TEMA AZUL)
+       ========================================================================== */
+    :root {
+        --primary-color: #1e88e5; /* Azul Principal */
+        --primary-color-light: #6ab7ff;
+        --primary-color-dark: #005cb2;
+        --on-primary-color: #ffffff;
+        
+        --surface-color: #f5f5f5; /* Fundo geral um pouco mais escuro */
+        --background-color: #eeeeee;
+        --on-surface-color: #212121;
+        
+        --card-color: #ffffff;
+        --outline-color: #bdbdbd;
+        
+        --success-color: #43a047; /* Verde */
+        --error-color: #e53935;   /* Vermelho */
+        --neutral-color: #757575; /* Cinza */
+
+        --font-family: 'Roboto', sans-serif;
+        --border-radius-medium: 8px;
+        --border-radius-large: 16px;
+        --box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Reset Básico */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-tap-highlight-color: transparent; }
+
+    body {
+        font-family: var(--font-family);
+        background-color: var(--background-color);
+        color: var(--on-surface-color);
+        line-height: 1.6;
+    }
+
+    /* Layout */
+    .container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 16px; }
+    .row { display: flex; flex-wrap: wrap; margin: 0 -1rem; }
+    .col { padding: 0 1rem; flex: 1; }
+    .s12 { width: 100%; }
+    .m4 { flex-basis: 33.33%; max-width: 33.33%; }
+    .m8 { flex-basis: 66.66%; max-width: 66.66%; }
+
+    @media (max-width: 992px) {
+        .m4, .m8 { flex-basis: 100%; max-width: 100%; }
+    }
+
+    /* Cabeçalho */
+    .header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        margin-bottom: 1rem;
+    }
+    .user-info { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+    .user-info .material-icons { color: var(--primary-color); }
+    
+    /* Controles (Busca e Exportação) */
+    .controls-bar {
+        background-color: var(--card-color);
+        padding: 1rem;
+        border-radius: var(--border-radius-medium);
+        box-shadow: var(--box-shadow);
+        margin-bottom: 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+    }
+    .controls-bar .input-field { margin: 0; flex-grow: 1; }
+
+    /* Cards */
+    .card {
+        background-color: var(--card-color);
+        border-radius: var(--border-radius-large);
+        margin-bottom: 2rem;
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+    }
+    .card-content { padding: 1.5rem; }
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary-color-dark);
+    }
+
+    /* Formulários */
+    .input-field { position: relative; margin-top: 1rem; margin-bottom: 1rem; }
+    .input-field input, .input-field select {
+        width: 100%;
+        height: 56px;
+        padding: 16px;
+        font-size: 1rem;
+        border: 1px solid var(--outline-color);
+        border-radius: var(--border-radius-medium);
+        background-color: var(--surface-color);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-field input:focus, .input-field select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px var(--primary-color-light);
+    }
+    .input-field label {
+        color: var(--neutral-color);
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        font-size: 1rem;
+        cursor: text;
+        transition: all 0.2s ease-out;
+    }
+    .input-field input:focus + label, .input-field input:not(:placeholder-shown) + label {
+        transform: translateY(-26px) scale(0.8);
+        background-color: var(--card-color);
+        padding: 0 4px;
+        color: var(--primary-color);
+    }
+    /* Para o Select */
+    .input-field select { appearance: none; -webkit-appearance: none; padding-right: 32px; }
+    .input-field .select-arrow {
+        position: absolute;
+        right: 16px;
+        top: 16px;
+        pointer-events: none;
+    }
+
+    /* Botões */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 48px;
+        padding: 0 24px;
+        border: none;
+        border-radius: var(--border-radius-medium);
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background-color 0.2s, box-shadow 0.2s;
+    }
+    .btn-large { width: 100%; }
+    .btn-primary { background-color: var(--primary-color); color: var(--on-primary-color); }
+    .btn-primary:hover { background-color: var(--primary-color-dark); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+    .btn-flat { background-color: transparent; }
+    #btnLogout { color: var(--error-color); }
+    #btnPrint { color: var(--primary-color); }
+    #btnExportCSV { color: var(--success-color); }
+
+    /* Tabela de Registros */
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--surface-color); }
+    th { font-weight: 500; color: var(--neutral-color); font-size: 0.8rem; text-transform: uppercase; }
+    tr:hover { background-color: #f0f8ff; } /* Azul bem claro no hover */
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: white;
+        text-transform: uppercase;
+    }
+    .status-presente { background-color: var(--success-color); }
+    .status-saida { background-color: var(--neutral-color); }
+    .registro-saida { color: var(--neutral-color); text-decoration: line-through; }
+    .registro-saida .btn, .registro-saida .status-presente { display: none; }
+    .registro-saida .status-saida { text-decoration: none; }
+
+    /* Modais */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1002; display: none; }
+    .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card-color); border-radius: var(--border-radius-large); z-index: 1003; width: 90%; max-width: 500px; display: none; }
+    .modal.open, .modal-overlay.open { display: block; }
+    .modal-content { padding: 1.5rem; }
+    .modal-footer { padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.5rem; background-color: var(--surface-color); border-bottom-left-radius: var(--border-radius-large); border-bottom-right-radius: var(--border-radius-large); }
+
+    /* Loading */
+    #loadingIndicator { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.8); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+
+    /* ESTILOS PARA IMPRESSÃO */
+    @media print {
+        body { background-color: #fff; }
+        .no-print { display: none !important; }
+        .container { max-width: 100%; padding: 0; }
+        .print-only { display: block; }
+        .card { box-shadow: none; border: 1px solid #ccc; }
+        @page { size: A4 landscape; margin: 1.5cm; }
+        h1.print-title { text-align: center; margin-bottom: 1rem; }
+    }
+    .print-only { display: none; }
+</style>
+</head>
+
+<body>
+    <div id="loadingIndicator">
+        <div class="preloader-wrapper big active">Carregando...</div>
+    </div>
+
+    <div class="container">
+        <header class="header-bar no-print">
+            <div class="user-info">
+                <i class="material-icons">security</i>
+                <span id="nomePorteiroLogado">Carregando...</span>
+            </div>
+            <button id="btnLogout" class="btn btn-flat">Sair</button>
+        </header>
+
+        <main>
+            <div class="print-only">
+                <h1 class="print-title">Relatório de Entradas e Saídas de Veículos</h1>
+            </div>
+
+            <div class="row">
+                <div class="col s12 m4 no-print">
+                    <div class="card">
+                        <div class="card-content">
+                            <h2 class="card-title"><i class="material-icons">add_road</i>Registrar Entrada</h2>
+                            <form id="vehicleForm">
+                                <div class="input-field">
+                                    <input type="text" id="placa" name="placa" placeholder=" " required style="text-transform:uppercase">
+                                    <label for="placa">Placa do Veículo*</label>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" id="modeloCor" name="modeloCor" placeholder=" ">
+                                    <label for="modeloCor">Modelo / Cor</label>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" id="destino" name="destino" placeholder=" ">
+                                    <label for="destino">Destino (Bloco/Apto)</label>
+                                </div>
+                                <div class="input-field">
+                                    <select id="tipoEntrada" name="tipoEntrada">
+                                        <option value="Morador">Morador</option>
+                                        <option value="Visitante" selected>Visitante</option>
+                                        <option value="Prestador de Serviço">Prestador de Serviço</option>
+                                        <option value="Entrega/Delivery">Entrega/Delivery</option>
+                                    </select>
+                                    <i class="material-icons select-arrow">arrow_drop_down</i>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" id="obs" name="obs" placeholder=" ">
+                                    <label for="obs">Observações</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-large" id="btnRegistrar">Registrar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8">
+                    <div class="card">
+                        <div class="card-content">
+                            <h2 class="card-title"><i class="material-icons">view_list</i>Registros de Veículos</h2>
+                            
+                            <div class="controls-bar no-print">
+                                <div class="input-field">
+                                    <input type="search" id="searchInput" placeholder="Buscar por placa, modelo, destino...">
+                                </div>
+                                <button id="btnPrint" class="btn btn-flat"><i class="material-icons">print</i>Imprimir</button>
+                                <button id="btnExportCSV" class="btn btn-flat"><i class="material-icons">download</i>Exportar CSV</button>
+                            </div>
+
+                            <div class="table-container">
+                                <table id="vehicleTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Placa</th>
+                                            <th>Modelo/Cor</th>
+                                            <th>Destino</th>
+                                            <th>Entrada</th>
+                                            <th>Saída</th>
+                                            <th class="no-print">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="vehicleTableBody">
+                                        </tbody>
+                                </table>
+                                <p id="emptyState" style="text-align:center; padding: 2rem; display:none;">Nenhum registro encontrado.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay no-print" id="exitModalOverlay">
+        <div class="modal" id="exitModal">
+            <div class="modal-content">
+                <h4>Confirmar Saída</h4>
+                <p>Deseja realmente registrar a saída deste veículo?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-flat" id="btnCancelExit">Cancelar</button>
+                <button class="btn btn-primary" id="btnConfirmExit">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- CONFIGURAÇÃO DO FIREBASE ---
+        const firebaseConfig = {
+            // COLE SUAS CREDENCIAIS DO FIREBASE AQUI
+            apiKey: "AIza...",
+            authDomain: "seu-projeto.firebaseapp.com",
+            databaseURL: "https://seu-projeto-default-rtdb.firebaseio.com",
+            projectId: "seu-projeto",
+            storageBucket: "seu-projeto.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Referências do Firebase
+        const auth = firebase.auth();
+        const db = firebase.database();
+        const vehicleRef = db.ref('veiculos');
+
+        // Elementos do DOM
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const vehicleForm = document.getElementById('vehicleForm');
+        const vehicleTableBody = document.getElementById('vehicleTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const btnPrint = document.getElementById('btnPrint');
+        const btnExportCSV = document.getElementById('btnExportCSV');
+        const nomePorteiroEl = document.getElementById('nomePorteiroLogado');
+        const btnLogout = document.getElementById('btnLogout');
+        const emptyState = document.getElementById('emptyState');
+        
+        // Modal
+        const exitModalOverlay = document.getElementById('exitModalOverlay');
+        const exitModal = document.getElementById('exitModal');
+        const btnCancelExit = document.getElementById('btnCancelExit');
+        const btnConfirmExit = document.getElementById('btnConfirmExit');
+
+        // Variáveis globais
+        let currentUser = null;
+        let allEntries = [];
+        let entryIdToExit = null;
+
+        // --- FUNÇÕES AUXILIARES ---
+        const showLoading = (show) => {
+            loadingIndicator.style.display = show ? 'flex' : 'none';
+        };
+
+        const formatDate = (timestamp) => {
+            if (!timestamp) return '—';
+            const date = new Date(timestamp);
+            return date.toLocaleString('pt-BR', {
+                day: '2-digit', month: '2-digit', year: '2-digit',
+                hour: '2-digit', minute: '2-digit'
+            });
+        };
+
+        const openModal = () => {
+            exitModalOverlay.classList.add('open');
+            exitModal.classList.add('open');
+        };
+
+        const closeModal = () => {
+            exitModalOverlay.classList.remove('open');
+            exitModal.classList.remove('open');
+            entryIdToExit = null;
+        };
+
+        // --- LÓGICA DE AUTENTICAÇÃO ---
+        auth.onAuthStateChanged(user => {
+            showLoading(true);
+            if (user) {
+                db.ref(`users/${user.uid}`).once('value').then(snapshot => {
+                    if (snapshot.exists()) {
+                        currentUser = snapshot.val();
+                        currentUser.uid = user.uid;
+                        nomePorteiroEl.textContent = currentUser.nome || 'Porteiro';
+                        loadVehicleEntries();
+                    } else {
+                        auth.signOut();
+                    }
+                });
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        btnLogout.addEventListener('click', () => auth.signOut());
+
+        // --- LÓGICA PRINCIPAL ---
+        const loadVehicleEntries = () => {
+            vehicleRef.orderByChild('entryTimestamp').on('value', snapshot => {
+                allEntries = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach(childSnapshot => {
+                        allEntries.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                    });
+                }
+                // Ordena do mais novo para o mais antigo
+                allEntries.reverse(); 
+                displayEntries(allEntries);
+                showLoading(false);
+            }, error => {
+                console.error(error);
+                showLoading(false);
+            });
+        };
+
+        const displayEntries = (entries) => {
+            vehicleTableBody.innerHTML = '';
+            if (entries.length === 0) {
+                emptyState.style.display = 'block';
+                return;
+            }
+            emptyState.style.display = 'none';
+
+            entries.forEach(entry => {
+                const isExited = entry.status === 'saida';
+                const row = document.createElement('tr');
+                if (isExited) row.classList.add('registro-saida');
+
+                row.innerHTML = `
+                    <td><span class="status-badge status-${entry.status}">${entry.status === 'presente' ? 'No Pátio' : 'Saída'}</span></td>
+                    <td>${entry.placa}</td>
+                    <td>${entry.modeloCor || '—'}</td>
+                    <td>${entry.destino || '—'}</td>
+                    <td>${formatDate(entry.entryTimestamp)}</td>
+                    <td>${formatDate(entry.exitTimestamp)}</td>
+                    <td class="no-print">
+                        ${!isExited ? `<button class="btn btn-flat btn-exit" data-id="${entry.id}">Registrar Saída</button>` : ''}
+                    </td>
+                `;
+                vehicleTableBody.appendChild(row);
+            });
+        };
+
+        vehicleForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const placa = vehicleForm.placa.value.trim().toUpperCase();
+            if (!placa) {
+                alert('O campo Placa é obrigatório.');
+                return;
+            }
+
+            const newEntry = {
+                placa: placa,
+                modeloCor: vehicleForm.modeloCor.value.trim(),
+                destino: vehicleForm.destino.value.trim(),
+                tipoEntrada: vehicleForm.tipoEntrada.value,
+                observacoes: vehicleForm.obs.value.trim(),
+                porteiroEntrada: {
+                    uid: currentUser.uid,
+                    nome: currentUser.nome
+                },
+                entryTimestamp: firebase.database.ServerValue.TIMESTAMP,
+                status: 'presente' // 'presente' ou 'saida'
+            };
+
+            vehicleRef.push(newEntry)
+                .then(() => {
+                    vehicleForm.reset();
+                    // Simula um toast simples
+                    alert('Veículo registrado com sucesso!');
+                })
+                .catch(error => console.error(error));
+        });
+        
+        // Event delegation para os botões de saída
+        vehicleTableBody.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-exit')) {
+                entryIdToExit = e.target.dataset.id;
+                openModal();
+            }
+        });
+        
+        btnConfirmExit.addEventListener('click', () => {
+            if (entryIdToExit) {
+                const updates = {
+                    status: 'saida',
+                    exitTimestamp: firebase.database.ServerValue.TIMESTAMP,
+                    porteiroSaida: {
+                        uid: currentUser.uid,
+                        nome: currentUser.nome
+                    }
+                };
+                vehicleRef.child(entryIdToExit).update(updates)
+                    .then(() => closeModal())
+                    .catch(error => console.error(error));
+            }
+        });
+
+        btnCancelExit.addEventListener('click', closeModal);
+        exitModalOverlay.addEventListener('click', closeModal);
+
+        // --- BUSCA E EXPORTAÇÃO ---
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredEntries = allEntries.filter(entry => {
+                return Object.values(entry).some(value => 
+                    String(value).toLowerCase().includes(searchTerm)
+                );
+            });
+            displayEntries(filteredEntries);
+        });
+
+        btnPrint.addEventListener('click', () => {
+            window.print();
+        });
+
+        btnExportCSV.addEventListener('click', () => {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            const headers = ["Status", "Placa", "Modelo/Cor", "Destino", "Tipo de Entrada", "Data Entrada", "Porteiro Entrada", "Data Saída", "Porteiro Saída", "Observações"];
+            csvContent += headers.join(",") + "\r\n";
+
+            allEntries.forEach(entry => {
+                const row = [
+                    entry.status,
+                    entry.placa,
+                    `"${entry.modeloCor || ''}"`,
+                    `"${entry.destino || ''}"`,
+                    entry.tipoEntrada,
+                    formatDate(entry.entryTimestamp),
+                    `"${entry.porteiroEntrada ? entry.porteiroEntrada.nome : ''}"`,
+                    formatDate(entry.exitTimestamp),
+                    `"${entry.porteiroSaida ? entry.porteiroSaida.nome : ''}"`,
+                    `"${entry.observacoes || ''}"`
+                ];
+                csvContent += row.join(",") + "\r\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `registros_veiculos_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+    });
+    </script>
+</body>
+</html>
