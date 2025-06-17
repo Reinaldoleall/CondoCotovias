@@ -113,8 +113,8 @@
     }
 
     /* ==========================================================================
-   AJUSTE DE POSICIONAMENTO PARA NOTIFICAÇÕES (TOASTS)
-   ========================================================================== */
+    AJUSTE DE POSICIONAMENTO PARA NOTIFICAÇÕES (TOASTS)
+    ========================================================================== */
 
 #toast-container {
     /* Posicionamento Fixo e Centralizado */
@@ -175,6 +175,12 @@
     .user-info .material-icons {
         color: var(--md-sys-color-primary);
     }
+    /* NOVO: Container para os botões de ação do cabeçalho */
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px; /* Espaçamento entre os botões */
+    }
 
 
     /* --------------------------------------------------------------------------
@@ -182,14 +188,14 @@
        -------------------------------------------------------------------------- */
 
     /* ----- BOTÕES (BUTTONS) ----- */
-    .btn, button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 24px; border: none; border-radius: var(--md-sys-shape-corner-full); font-family: var(--md-sys-typescale-label-large-font); font-size: var(--md-sys-typescale-label-large-size); font-weight: var(--md-sys-typescale-label-large-weight); letter-spacing: 0.1px; text-decoration: none; cursor: pointer; user-select: none; vertical-align: middle; overflow: hidden; position: relative; transition: background-color 250ms, box-shadow 250ms; }
-    .btn .material-icons, button .material-icons { font-size: 18px; }
-    .btn::after, button::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: currentColor; opacity: 0; transition: opacity 150ms; }
-    .btn:hover::after, button:hover::after { opacity: var(--md-sys-state-hover-layer-opacity); }
-    .btn:focus-visible::after, button:focus-visible::after { opacity: var(--md-sys-state-focus-layer-opacity); }
-    .btn:active::after, button:active::after { opacity: var(--md-sys-state-pressed-layer-opacity); }
-    .btn, .btn.blue, .btn.blue.darken-3, button { background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
-    .btn:hover, .btn.blue:hover, .btn.blue.darken-3:hover, button:hover { box-shadow: 0 1px 2px 0 rgba(0,0,0, 0.3), 0 1px 3px 1px rgba(0,0,0, 0.15); }
+    .btn, button, a.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 24px; border: none; border-radius: var(--md-sys-shape-corner-full); font-family: var(--md-sys-typescale-label-large-font); font-size: var(--md-sys-typescale-label-large-size); font-weight: var(--md-sys-typescale-label-large-weight); letter-spacing: 0.1px; text-decoration: none; cursor: pointer; user-select: none; vertical-align: middle; overflow: hidden; position: relative; transition: background-color 250ms, box-shadow 250ms; }
+    .btn .material-icons, button .material-icons, a.btn .material-icons { font-size: 18px; }
+    .btn::after, button::after, a.btn::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: currentColor; opacity: 0; transition: opacity 150ms; }
+    .btn:hover::after, button:hover::after, a.btn:hover::after { opacity: var(--md-sys-state-hover-layer-opacity); }
+    .btn:focus-visible::after, button:focus-visible::after, a.btn:focus-visible::after { opacity: var(--md-sys-state-focus-layer-opacity); }
+    .btn:active::after, button:active::after, a.btn:active::after { opacity: var(--md-sys-state-pressed-layer-opacity); }
+    .btn, .btn.blue, .btn.blue.darken-3, button, a.btn { background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+    .btn:hover, .btn.blue:hover, .btn.blue.darken-3:hover, button:hover, a.btn:hover { box-shadow: 0 1px 2px 0 rgba(0,0,0, 0.3), 0 1px 3px 1px rgba(0,0,0, 0.15); }
     .btn.red, .btn.red.darken-2 { background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error); }
     .btn.red:hover, .btn.red.darken-2:hover { box-shadow: 0 1px 2px 0 rgba(0,0,0, 0.3), 0 1px 3px 1px rgba(0,0,0, 0.15); }
     .btn-flat { background-color: transparent; color: var(--md-sys-color-primary); padding: 0 12px; }
@@ -288,7 +294,6 @@
 </head>
 
 <body>
-    <!-- Loading Indicator -->
     <div id="loadingIndicator">
         <div class="preloader-wrapper big active">
             <div class="spinner-layer spinner-blue-only">
@@ -304,15 +309,21 @@
     </div>
 
     <div class="container">
-         <div class="header-bar">
+        <div class="header-bar">
             <div class="user-info">
                 <i class="material-icons">account_circle</i>
                 <span id="nomePorteiroLogado">Carregando...</span>
             </div>
-            <button id="btnLogout" class="btn-flat waves-effect waves-light" title="Sair do sistema">
-                <span>SAIR</span>
-                <i class="material-icons">logout</i>
-            </button>
+            <div class="header-actions">
+                <a href="veiculos.html" class="btn waves-effect waves-light blue darken-3" title="Gerenciar veículos">
+                    <i class="material-icons">directions_car</i>
+                    <span>VEÍCULOS</span>
+                </a>
+                <button id="btnLogout" class="btn-flat waves-effect waves-light" title="Sair do sistema">
+                    <span>SAIR</span>
+                    <i class="material-icons">logout</i>
+                </button>
+            </div>
         </div>
         <div class="row">
             <div class="col s12 right-align">
@@ -398,7 +409,6 @@
         </div>
     </div>
 
-    <!-- Modal de Entrega de Encomenda -->
     <div id="modalEntrega" class="modal">
         <div class="modal-content">
             <h4>Registrar Entrega</h4>
@@ -419,7 +429,6 @@
         </div>
     </div>
 
-    <!-- Modal de Detalhes da Encomenda -->
     <div id="modalDetalhes" class="modal">
         <div class="modal-content">
             <h4>Detalhes da Encomenda</h4>
