@@ -43,6 +43,38 @@ h4, h5 {
     color: var(--primary-color);
 }
 
+    /* ==========================================================================
+   AJUSTE DE POSICIONAMENTO PARA NOTIFICAÇÕES (TOASTS)
+   ========================================================================== */
+
+#toast-container {
+    /* Posicionamento Fixo e Centralizado */
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%); /* O truque para centralização perfeita */
+    
+    /* Distância da parte inferior da tela */
+    bottom: 30px; 
+    
+    /* Garante que não fique preso nos cantos */
+    top: auto;
+    right: auto; 
+    
+    /* Largura e Segurança */
+    width: fit-content; /* Faz o container ter a largura do conteúdo */
+    max-width: 90%; /* Evita que o toast toque as bordas em telas pequenas */
+    
+    /* Empilhamento e Alinhamento */
+    z-index: 10000; /* Garante que a notificação fique sobre todos os elementos */
+    text-align: center; /* Centraliza o texto dentro do toast */
+}
+
+/* Opcional: Garante que os toasts dentro do container se comportem bem */
+.toast {
+    display: inline-block;
+    word-wrap: break-word; /* Evita que texto longo "quebre" o layout */
+}
+
 /* ==========================================================================
    2. Cabeçalho e Botões de Ação
    ========================================================================== */
