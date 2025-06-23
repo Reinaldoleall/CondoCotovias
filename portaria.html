@@ -290,6 +290,29 @@
     .toast.green { background-color: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container); }
     .toast.red { background-color: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
     .toast.orange { background-color: var(--md-sys-color-warning-container); color: var(--md-sys-color-on-warning-container); }
+
+    /* Estilo para o botão tipo ícone */
+.icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #333; /* Cor do ícone */
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.icon-button:hover {
+    background-color: rgba(0, 0, 0, 0.05); /* leve efeito de hover */
+    color: #000;
+}
+
+.icon-button i.material-icons {
+    font-size: 28px;
+}
+
 </style>
 </head>
 
@@ -315,6 +338,10 @@
                 <span id="nomePorteiroLogado">Carregando...</span>
             </div>
             <div class="header-actions">
+                <a href="historico.html" class="icon-button" title="Histórico de Encomendas">
+    <i class="material-icons">history</i>
+</a>
+
                 <a href="veiculos.html" class="btn waves-effect waves-light blue darken-3" title="Gerenciar veículos">
                     <i class="material-icons">directions_car</i>
                     <span>VEÍCULOS</span>
