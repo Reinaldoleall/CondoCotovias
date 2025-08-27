@@ -2,347 +2,539 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>Condomínio Cotovias</title>
-    
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
-    <link rel="icon" href="https://via.placeholder.com/64" type="image/png">
-    
-    <meta name="theme-color" content="#2c3e50">
-    <meta name="description" content="Aplicativo do Condomínio Cotovias - Gestão de avisos, lojas e administração">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <meta name="apple-mobile-web-app-title" content="Cotovias">
-    <link rel="apple-touch-icon" href="https://via.placeholder.com/180">
-    
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="manifest.json">
-    
-<style>
-    :root {
-        --primary-color: #2c3e50; --primary-color-dark: #1a252f; --secondary-color: #3498db; --accent-color: #e74c3c; --background-color: #ecf0f1; --surface-color: #ffffff; --text-primary-color: #2c3e50; --text-secondary-color: #7f8c8d; --text-on-primary-color: #ffffff; --divider-color: #bdc3c7; --font-family: 'Roboto', sans-serif; --font-size-base: 16px; --font-weight-light: 300; --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-bold: 700; --spacing-xs: 4px; --spacing-sm: 8px; --spacing-md: 16px; --spacing-lg: 24px; --spacing-xl: 32px; --border-radius-sm: 4px; --border-radius-md: 8px; --border-radius-lg: 16px; --transition-fast: 0.2s ease-in-out; --transition-medium: 0.3s ease-in-out; --shadow-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); --shadow-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); --shadow-3: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    }
-    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html { font-size: var(--font-size-base); }
-    body { margin: 0; padding: 0; font-family: var(--font-family); background-color: var(--background-color); color: var(--text-primary-color); overflow: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-    ul { margin: 0; padding: 0; list-style: none; }
-    button { border: none; background: none; cursor: pointer; font-family: inherit; padding: 0; color: inherit; }
-    .app-container { display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; }
-    .app-bar { display: flex; align-items: center; padding: 0 var(--spacing-sm); height: 56px; background-color: var(--primary-color); color: var(--text-on-primary-color); box-shadow: var(--shadow-2); z-index: 100; flex-shrink: 0; }
-    .app-bar__button { border-radius: 50%; width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; transition: background-color var(--transition-fast); }
-    .app-bar__button:hover { background-color: rgba(255, 255, 255, 0.1); }
-    .app-bar__title { flex-grow: 1; margin: 0; padding: 0 var(--spacing-md); font-size: 1.25rem; font-weight: var(--font-weight-medium); text-align: left; }
-    .drawer-container { position: relative; flex-grow: 1; display: flex; }
-    .app-content { flex-grow: 1; overflow-y: auto; background-color: var(--background-color); padding: var(--spacing-md); }
-    .content-frame { width: 100%; height: 100%; border: none; background-color: var(--surface-color); border-radius: var(--border-radius-md); }
-    .drawer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); opacity: 0; visibility: hidden; transition: opacity var(--transition-medium), visibility 0s var(--transition-medium); z-index: 200; }
-    .drawer-overlay--visible { opacity: 1; visibility: visible; transition-delay: 0s; }
-    .drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; background-color: var(--surface-color); box-shadow: var(--shadow-3); transform: translateX(-100%); transition: transform var(--transition-medium); z-index: 300; display: flex; flex-direction: column; }
-    .drawer--open { transform: translateX(0); }
-    .drawer__header { padding: var(--spacing-lg) var(--spacing-md); background-color: var(--primary-color); color: var(--text-on-primary-color); flex-shrink: 0; }
-    .drawer__title { margin: 0; font-size: 1.2rem; font-weight: var(--font-weight-bold); }
-    .drawer__subtitle { margin: var(--spacing-xs) 0 0; font-size: 0.9rem; font-weight: var(--font-weight-light); opacity: 0.9; }
-    .drawer__list { padding: var(--spacing-sm) 0; flex-grow: 1; overflow-y: auto; }
-    .drawer__item { display: flex; align-items: center; padding: var(--spacing-md) var(--spacing-lg); cursor: pointer; color: var(--text-primary-color); font-weight: var(--font-weight-medium); transition: background-color var(--transition-fast), max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease; border-left: 4px solid transparent; max-height: 100px; }
-    .drawer__item:hover { background-color: rgba(0, 0, 0, 0.04); }
-    .drawer__item--active { background-color: rgba(52, 152, 219, 0.1); color: var(--secondary-color); border-left-color: var(--secondary-color); }
-    .drawer__icon { margin-right: var(--spacing-xl); color: var(--text-secondary-color); transition: color var(--transition-fast); }
-    .drawer__item--active .drawer__icon { color: var(--secondary-color); }
-    .drawer__item.is-hidden { display: none; }
-    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; padding: var(--spacing-md); opacity: 0; visibility: hidden; z-index: 1000; transition: opacity var(--transition-medium); }
-    .modal--visible { opacity: 1; visibility: visible; }
-    .modal__content { background: var(--surface-color); border-radius: var(--border-radius-md); box-shadow: var(--shadow-3); width: 100%; max-width: 420px; display: flex; flex-direction: column; transform: scale(0.95); transition: transform var(--transition-medium); }
-    .modal--visible .modal__content { transform: scale(1); }
-    .modal__header { display: flex; align-items: center; padding: var(--spacing-md); border-bottom: 1px solid var(--divider-color); }
-    .modal__header-icon { font-size: 1.8rem; margin-right: var(--spacing-md); color: var(--secondary-color); }
-    .modal__header-title { margin: 0; font-size: 1.2rem; font-weight: var(--font-weight-medium); }
-    .modal__body { padding: var(--spacing-lg); line-height: 1.6; color: var(--text-secondary-color); }
-    .modal__body p { margin: 0 0 var(--spacing-md); }
-    .modal__role-selection { display: flex; justify-content: center; gap: var(--spacing-md); }
-    .modal__footer { display: flex; justify-content: flex-end; gap: var(--spacing-sm); padding: var(--spacing-md); border-top: 1px solid var(--divider-color); }
-    .input-container { margin-bottom: var(--spacing-md); }
-    .input-field { position: relative; display: flex; align-items: center; background-color: var(--background-color); border-radius: var(--border-radius-sm); border: 1px solid var(--divider-color); transition: border-color var(--transition-fast), box-shadow var(--transition-fast); }
-    .input-field:focus-within { border-color: var(--secondary-color); box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2); }
-    .input-field__icon { padding: 0 var(--spacing-md); color: var(--text-secondary-color); }
-    .input-field__input { width: 100%; border: none; background: none; padding: var(--spacing-md) 0; font-size: 1rem; color: var(--text-primary-color); outline: none; }
-    .input-field__input::placeholder { color: var(--text-secondary-color); opacity: 0.8; }
-    .error-message { display: none; align-items: center; color: var(--accent-color); font-size: 0.85rem; margin-top: var(--spacing-sm); }
-    .error-message__icon { font-size: 1.2rem; margin-right: var(--spacing-sm); }
-    .button { display: inline-flex; align-items: center; justify-content: center; padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--border-radius-sm); font-weight: var(--font-weight-medium); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; cursor: pointer; transition: background-color var(--transition-fast), box-shadow var(--transition-fast); outline: none; user-select: none; }
-    .button__icon { margin-right: var(--spacing-sm); font-size: 1.2em; }
-    .button--text { background-color: transparent; color: var(--secondary-color); }
-    .button--text:hover { background-color: rgba(52, 152, 219, 0.1); }
-    .button--contained { background-color: var(--secondary-color); color: var(--text-on-primary-color); box-shadow: var(--shadow-1); }
-    .button--contained:hover { background-color: var(--secondary-color-dark, #2980b9); box-shadow: var(--shadow-2); }
-    .loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; visibility: hidden; transition: opacity var(--transition-fast), visibility 0s var(--transition-fast); }
-    .loading--visible { opacity: 1; visibility: visible; transition-delay: 0s; }
-    .loading__spinner { width: 48px; height: 48px; border: 4px solid var(--divider-color); border-top-color: var(--secondary-color); border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @media (min-width: 1024px) {
-        .app-bar { height: 64px; }
-        .app-bar__button#menuButton, .drawer-overlay { display: none; }
-        .drawer { position: static; transform: translateX(0); box-shadow: var(--shadow-1); flex-shrink: 0; border-right: 1px solid var(--divider-color); }
-        .app-content { padding: var(--spacing-lg); }
-    }
-</style>
+    <meta name="theme-color" content="#FFFFFF">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <style>
+        /* --- VARIÁVEIS DE DESIGN E RESET GLOBAL --- */
+        :root {
+            --cor-primaria: #4A90E2; /* Azul moderno */
+            --cor-primaria-hover: #357ABD;
+            --cor-fundo: #F9F9FB;
+            --cor-surface: #FFFFFF;
+            --cor-texto-principal: #333333;
+            --cor-texto-secundario: #777777;
+            --cor-borda: #EAEAEA;
+            --cor-erro: #E74C3C;
+            --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --fonte-principal: 'Inter', sans-serif;
+            --raio-borda: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: var(--fonte-principal);
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-principal);
+            height: 100vh;
+            height: -webkit-fill-available;
+            width: 100%;
+            overflow: hidden;
+            position: fixed;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* --- ESTRUTURA PRINCIPAL --- */
+        .drawer-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .app-content {
+            flex: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: var(--cor-fundo);
+        }
+
+        /* --- MENU LATERAL (DRAWER) --- */
+        .mdc-drawer {
+            width: 260px;
+            height: 100vh;
+            background-color: var(--cor-surface);
+            border-right: 1px solid var(--cor-borda);
+            padding: 16px 8px;
+            position: fixed;
+            left: -260px;
+            top: 0;
+            z-index: 200;
+            transition: transform 0.3s ease;
+        }
+
+        .mdc-drawer--open {
+            transform: translateX(260px);
+            box-shadow: 10px 0 30px -15px rgba(0,0,0,0.2);
+        }
+        
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 199;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay--visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .mdc-list {
+            list-style: none;
+        }
+        
+        .mdc-list-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: var(--raio-borda);
+            cursor: pointer;
+            color: var(--cor-texto-secundario);
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .mdc-list-item:hover {
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-principal);
+        }
+
+        .mdc-list-item.active {
+            background-color: var(--cor-primaria);
+            color: white;
+            font-weight: 600;
+        }
+
+        .mdc-list-item .material-icons-outlined {
+            margin-right: 16px;
+            font-size: 22px;
+        }
+
+        /* --- BARRA SUPERIOR E BOTÃO DE MENU --- */
+        .top-app-bar {
+            height: 64px;
+            background-color: var(--cor-surface);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            border-bottom: 1px solid var(--cor-borda);
+            z-index: 100;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cor-texto-principal);
+            transition: background-color 0.2s;
+        }
+
+        .menu-button:hover {
+            background-color: var(--cor-fundo);
+        }
+
+        .page-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* --- MODAL DE SENHA --- */
+        .password-modal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.4);
+            z-index: 300;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .password-modal-content {
+            background: var(--cor-surface);
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: modal-appear 0.3s ease-out forwards;
+        }
+        
+        .password-modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--cor-borda);
+        }
+
+        .password-modal-header h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .password-modal-body {
+            padding: 24px;
+        }
+
+        .password-input-container {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--cor-borda);
+            border-radius: var(--raio-borda);
+            padding: 12px;
+            margin-top: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .password-input-container:focus-within {
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        .password-input-container .material-icons-outlined {
+            margin-right: 10px;
+            color: var(--cor-texto-secundario);
+        }
+
+        .password-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            background: transparent;
+        }
+
+        .password-error {
+            display: none;
+            align-items: center;
+            color: var(--cor-erro);
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .password-error .material-icons-outlined {
+             font-size: 1.1rem;
+             margin-right: 6px;
+        }
+
+        .password-modal-footer {
+            padding: 16px 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .password-button {
+            font-family: var(--fonte-principal);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--raio-borda);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .password-button.cancel {
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-principal);
+        }
+        
+        .password-button.cancel:hover {
+            background-color: #e0e0e0;
+        }
+
+        .password-button.submit {
+            background-color: var(--cor-primaria);
+            color: white;
+        }
+
+        .password-button.submit:hover {
+            background-color: var(--cor-primaria-hover);
+        }
+        
+        /* --- SPINNER DE CARREGAMENTO --- */
+        .loading {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--cor-primaria);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        /* --- ANIMAÇÕES --- */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes modal-appear {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (min-width: 1024px) {
+            .mdc-drawer {
+                position: relative;
+                left: 0;
+                transform: none;
+                box-shadow: none;
+            }
+            .app-content {
+                margin-left: 0;
+            }
+            .menu-button, .overlay {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <header class="app-bar">
-            <button class="app-bar__button" id="menuButton">
-                <span class="material-icons">menu</span>
-            </button>
-            <h1 class="app-bar__title" id="pageTitle">Avisos</h1>
-            <button class="app-bar__button" id="helpButton">
-                <span class="material-icons">help_outline</span>
-            </button>
-        </header>
-        
-        <div class="drawer-container">
-            <div class="drawer-overlay" id="drawerOverlay"></div>
-            
-            <aside class="drawer" id="drawer">
-                <div class="drawer__header">
-                    <h2 class="drawer__title">Condomínio Cotovias</h2>
-                    <p class="drawer__subtitle">Área do Morador</p>
-                </div>
-                
-                <ul class="drawer__list">
-                    <li class="drawer__item drawer__item--active" data-page="aviso.html">
-                        <span class="material-icons drawer__icon">dashboard</span>
-                        <span class="drawer__text">Avisos</span>
-                    </li>
-                    
-                    <li class="drawer__item" data-page="login.html">
-                        <span class="material-icons drawer__icon">people</span>
-                        <span class="drawer__text">Usuários</span>
-                    </li>
-                    
-                    <li class="drawer__item" data-page="lojas.html">
-                        <span class="material-icons drawer__icon">store</span>
-                        <span class="drawer__text">Lojas</span>
-                    </li>
 
-                    <li class="drawer__item" data-page="admin.html" id="adminMenuItem">
-                        <span class="material-icons drawer__icon">admin_panel_settings</span>
-                        <span class="drawer__text">Administração</span>
-                    </li>
-                    
-                    <li class="drawer__item" data-page="criarlojas.html" id="createStoreBtn">
-                        <span class="material-icons drawer__icon">local_mall</span>
-                        <span class="drawer__text">Crie sua loja</span>
-                    </li>
-                </ul>
-            </aside>
-            
-            <main class="app-content">
-                <iframe class="content-frame" id="contentFrame" src="aviso.html" frameborder="0"></iframe>
+    <div class="drawer-container">
+        
+        <div class="overlay" id="overlay"></div>
+
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+        </div>
+
+        <div class="password-modal" id="passwordModal">
+            <div class="password-modal-content">
+                <div class="password-modal-header">
+                    <h2>Acesso Administrativo</h2>
+                </div>
+                <div class="password-modal-body">
+                    <p>Esta área é restrita. Por favor, digite a senha para continuar.</p>
+                    <div class="password-input-container">
+                        <i class="material-icons-outlined">lock</i>
+                        <input type="password" class="password-input" id="adminPassword" placeholder="Sua senha">
+                    </div>
+                    <div class="password-error" id="passwordError">
+                        <i class="material-icons-outlined">error_outline</i>
+                        <span>Senha incorreta. Tente novamente.</span>
+                    </div>
+                </div>
+                <div class="password-modal-footer">
+                    <button class="password-button cancel" id="cancelPassword">Cancelar</button>
+                    <button class="password-button submit" id="submitPassword">Acessar</button>
+                </div>
+            </div>
+        </div>
+
+        <aside class="mdc-drawer" id="drawer">
+            <nav class="mdc-list">
+                <div class="mdc-list-item" data-page="aviso.html">
+                    <i class="material-icons-outlined">campaign</i>
+                    <span>Avisos</span>
+                </div>
+                <div class="mdc-list-item" data-page="lojas.html">
+                    <i class="material-icons-outlined">storefront</i>
+                    <span>Estabelecimentos</span>
+                </div>
+                <div class="mdc-list-item" data-page="criarlojas.html">
+                    <i class="material-icons-outlined">add_business</i>
+                    <span>Crie sua loja</span>
+                </div>
+                <div class="mdc-list-item" data-page="login.html">
+                    <i class="material-icons-outlined">people_alt</i>
+                    <span>Usuários</span>
+                </div>
+                <div class="mdc-list-item" id="adminMenuItem">
+                    <i class="material-icons-outlined">admin_panel_settings</i>
+                    <span>Publique Avisos (ADM)</span>
+                </div>
+            </nav>
+        </aside>
+
+        <div class="app-content">
+            <header class="top-app-bar">
+                <button class="menu-button" id="menuButton">
+                    <i class="material-icons-outlined">menu</i>
+                </button>
+                <h1 class="page-title" id="pageTitle">Avisos</h1>
+            </header>
+            <main class="main-content">
+                <iframe class="content-frame" id="contentFrame" src="aviso.html"></iframe>
             </main>
         </div>
     </div>
-    
-    <div class="modal" id="accessModal">
-        <div class="modal__content">
-            <div class="modal__header">
-                <span class="material-icons modal__header-icon" id="accessModalIcon">lock</span>
-                <h2 class="modal__header-title" id="accessModalTitle">Acesso Restrito</h2>
-            </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- SELEÇÃO DE ELEMENTOS ---
+            const ui = {
+                menuButton: document.getElementById('menuButton'),
+                drawer: document.getElementById('drawer'),
+                overlay: document.getElementById('overlay'),
+                loading: document.getElementById('loading'),
+                contentFrame: document.getElementById('contentFrame'),
+                pageTitle: document.getElementById('pageTitle'),
+                passwordModal: document.getElementById('passwordModal'),
+                adminPasswordInput: document.getElementById('adminPassword'),
+                submitPasswordBtn: document.getElementById('submitPassword'),
+                cancelPasswordBtn: document.getElementById('cancelPassword'),
+                passwordError: document.getElementById('passwordError'),
+                adminMenuItem: document.getElementById('adminMenuItem'),
+                menuItems: document.querySelectorAll('.mdc-list-item')
+            };
+
+            let isMenuOpen = false;
+
+            // --- FUNÇÕES PRINCIPAIS ---
+
+            const toggleMenu = () => {
+                isMenuOpen = !isMenuOpen;
+                ui.drawer.classList.toggle('mdc-drawer--open', isMenuOpen);
+                ui.overlay.classList.toggle('overlay--visible', isMenuOpen);
+            };
+
+            const setActiveMenuItem = (selectedItem) => {
+                ui.menuItems.forEach(item => item.classList.remove('active'));
+                if (selectedItem) {
+                    selectedItem.classList.add('active');
+                }
+            };
             
-            <div class="modal__body" id="accessModalBody"></div>
-            <div class="modal__footer" id="accessModalFooter"></div>
-        </div>
-    </div>
-    
-    <div class="loading" id="loading">
-        <div class="loading__spinner"></div>
-    </div>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    
-<script>
-document.addEventListener('DOMContentLoaded', () => {
+            const loadPage = (pageUrl, title, activeItem) => {
+                ui.loading.style.display = 'flex';
+                ui.pageTitle.textContent = title;
+                document.title = `${title} | Condomínio Cotovias`;
+                
+                ui.contentFrame.src = pageUrl;
 
-    // ==========================================================================
-    // 1. Configurações e Dados
-    // ==========================================================================
-    const firebaseConfig = {
-        apiKey: "AIzaSyCwTNcpr_r75HH0igBtNyEbKvfuLkVFHiU",
-        authDomain: "rifalidiane-fde3b.firebaseapp.com",
-        databaseURL: "https://rifalidiane-fde3b-default-rtdb.firebaseio.com",
-        projectId: "rifalidiane-fde3b",
-        storageBucket: "rifalidiane-fde3b.appspot.com",
-        messagingSenderId: "649359518677",
-        appId: "1:649359518677:web:879b4ed9fa5150d24d2b5c"
-    };
-    firebase.initializeApp(firebaseConfig);
+                ui.contentFrame.onload = () => {
+                    ui.loading.style.display = 'none';
+                };
 
-    const ACCESS_PASSWORDS = {
-        admin: 'admin2025',
-        lojista: 'loja2025'
-    };
-    
-    // ==========================================================================
-    // 2. Elementos do DOM
-    // ==========================================================================
-    const menuButton = document.getElementById('menuButton');
-    const drawer = document.getElementById('drawer');
-    const drawerOverlay = document.getElementById('drawerOverlay');
-    const contentFrame = document.getElementById('contentFrame');
-    const pageTitle = document.getElementById('pageTitle');
-    const loading = document.getElementById('loading');
-    const helpButton = document.getElementById('helpButton');
-    const adminMenuItem = document.getElementById('adminMenuItem');
-    const createStoreBtn = document.getElementById('createStoreBtn');
-    const accessModal = document.getElementById('accessModal');
-    const accessModalIcon = document.getElementById('accessModalIcon');
-    const accessModalTitle = document.getElementById('accessModalTitle');
-    const accessModalBody = document.getElementById('accessModalBody');
-    const accessModalFooter = document.getElementById('accessModalFooter');
-    
-    // ==========================================================================
-    // 3. Estado e Funções Principais
-    // ==========================================================================
-    let isMenuOpen = false;
-    let selectedAccessRole = null;
+                setActiveMenuItem(activeItem);
 
-    const toggleMenu = () => {
-        isMenuOpen = !isMenuOpen;
-        drawer.classList.toggle('drawer--open', isMenuOpen);
-        drawerOverlay.classList.toggle('drawer-overlay--visible', isMenuOpen);
-    };
+                if (isMenuOpen && window.innerWidth < 1024) {
+                    toggleMenu();
+                }
+            };
 
-    const loadPage = (pageUrl, pageName) => {
-        loading.classList.add('loading--visible');
-        pageTitle.textContent = pageName;
-        document.title = `${pageName} | Condomínio Cotovias`;
-        document.querySelectorAll('.drawer__item').forEach(item => {
-            item.classList.toggle('drawer__item--active', item.getAttribute('data-page') === pageUrl);
+            const showPasswordModal = () => {
+                ui.passwordModal.style.display = 'flex';
+                ui.adminPasswordInput.focus();
+                if (isMenuOpen && window.innerWidth < 1024) {
+                    toggleMenu();
+                }
+            };
+            
+            const closePasswordModal = () => {
+                ui.passwordModal.style.display = 'none';
+                ui.passwordError.style.display = 'none';
+                ui.adminPasswordInput.value = '';
+            };
+
+            // --- EVENT LISTENERS ---
+
+            ui.menuButton.addEventListener('click', toggleMenu);
+            ui.overlay.addEventListener('click', toggleMenu);
+
+            ui.menuItems.forEach(item => {
+                if (item.id !== 'adminMenuItem') {
+                    item.addEventListener('click', () => {
+                        const pageUrl = item.getAttribute('data-page');
+                        const title = item.querySelector('span').textContent.trim();
+                        loadPage(pageUrl, title, item);
+                    });
+                }
+            });
+
+            ui.adminMenuItem.addEventListener('click', showPasswordModal);
+            
+            ui.cancelPasswordBtn.addEventListener('click', closePasswordModal);
+
+            ui.submitPasswordBtn.addEventListener('click', () => {
+                // ⚠️ ATENÇÃO: A senha diretamente no código é uma falha de segurança.
+                // Isto é apenas para fins de demonstração.
+                if (ui.adminPasswordInput.value === 'ADM12345') {
+                    closePasswordModal();
+                    loadPage('admin.html', 'Administração', ui.adminMenuItem);
+                } else {
+                    ui.passwordError.style.display = 'flex';
+                    ui.adminPasswordInput.focus();
+                }
+            });
+            
+            ui.adminPasswordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    ui.submitPasswordBtn.click();
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 1024 && isMenuOpen) {
+                    toggleMenu();
+                }
+            });
+            
+            // --- INICIALIZAÇÃO ---
+            // Define o primeiro item do menu como ativo ao carregar a página
+            setActiveMenuItem(document.querySelector('.mdc-list-item'));
         });
-        contentFrame.src = pageUrl;
-        if (isMenuOpen) toggleMenu();
-    };
-    
-    contentFrame.onload = () => loading.classList.remove('loading--visible');
-    const toggleModal = (modal, show) => modal.classList.toggle('modal--visible', show);
+    </script>
 
-    // --- LÓGICA DE PERMISSÕES CORRIGIDA ---
-
-    const unlockAdminFeature = () => {
-        adminMenuItem.classList.remove('is-hidden');
-        sessionStorage.setItem('adminUnlocked', 'true');
-    };
-
-    const unlockLojistaFeature = () => {
-        createStoreBtn.classList.remove('is-hidden');
-        sessionStorage.setItem('lojistaUnlocked', 'true');
-    };
-
-    const checkInitialPermissions = () => {
-        if (sessionStorage.getItem('adminUnlocked') === 'true') {
-            adminMenuItem.classList.remove('is-hidden');
-        } else {
-            adminMenuItem.classList.add('is-hidden');
-        }
-
-        if (sessionStorage.getItem('lojistaUnlocked') === 'true') {
-            createStoreBtn.classList.remove('is-hidden');
-        } else {
-            createStoreBtn.classList.add('is-hidden');
-        }
-    };
-    
-    // ==========================================================================
-    // 4. Lógica do Modal de Acesso
-    // ==========================================================================
-
-    const showRoleSelectionView = () => {
-        selectedAccessRole = null;
-        accessModalIcon.textContent = 'lock_person';
-        accessModalTitle.textContent = 'Acesso Restrito';
-        accessModalBody.innerHTML = `<p>Para visualizar as opções restritas, por favor, identifique-se.</p>`;
-        accessModalFooter.innerHTML = `
-            <div class="modal__role-selection">
-                <button class="button button--contained" id="selectAdminBtn">Administrador</button>
-                <button class="button button--contained" id="selectLojistaBtn">Lojista</button>
-            </div>`;
-        document.getElementById('selectAdminBtn').addEventListener('click', () => showPasswordView('admin'));
-        document.getElementById('selectLojistaBtn').addEventListener('click', () => showPasswordView('lojista'));
-        toggleModal(accessModal, true);
-    };
-
-    const showPasswordView = (role) => {
-        selectedAccessRole = role;
-        const roleName = role === 'admin' ? 'Administrador' : 'Lojista';
-        accessModalIcon.textContent = 'password';
-        accessModalTitle.textContent = `Senha de ${roleName}`;
-        accessModalBody.innerHTML = `
-            <p>Por favor, insira a senha para liberar a função de ${roleName}.</p>
-            <div class="input-container">
-                <div class="input-field">
-                    <span class="material-icons input-field__icon">key</span>
-                    <input type="password" class="input-field__input" id="accessPasswordInput" placeholder="Digite sua senha">
-                </div>
-                <div class="error-message" id="accessError">
-                    <span class="material-icons error-message__icon">error</span>
-                    <span>Senha incorreta. Tente novamente.</span>
-                </div>
-            </div>`;
-        accessModalFooter.innerHTML = `
-            <button class="button button--text" id="cancelAccessBtn">Cancelar</button>
-            <button class="button button--contained" id="submitAccessBtn">Acessar</button>`;
-        document.getElementById('cancelAccessBtn').addEventListener('click', () => toggleModal(accessModal, false));
-        document.getElementById('submitAccessBtn').addEventListener('click', verifyPassword);
-        const passwordInput = document.getElementById('accessPasswordInput');
-        passwordInput.focus();
-        passwordInput.addEventListener('keypress', (e) => e.key === 'Enter' && verifyPassword());
-    };
-
-    const verifyPassword = () => {
-        const passwordInput = document.getElementById('accessPasswordInput');
-        if (passwordInput.value === ACCESS_PASSWORDS[selectedAccessRole]) {
-            if (selectedAccessRole === 'admin') {
-                unlockAdminFeature();
-            } else if (selectedAccessRole === 'lojista') {
-                unlockLojistaFeature();
-            }
-            toggleModal(accessModal, false);
-            alert(`Acesso de ${selectedAccessRole} liberado!`);
-        } else {
-            document.getElementById('accessError').style.display = 'flex';
-            passwordInput.focus();
-        }
-    };
-
-    // ==========================================================================
-    // 5. Event Listeners
-    // ==========================================================================
-    menuButton.addEventListener('click', toggleMenu);
-    drawerOverlay.addEventListener('click', toggleMenu);
-    helpButton.addEventListener('click', showRoleSelectionView);
-    window.addEventListener('click', (e) => e.target === accessModal && toggleModal(accessModal, false));
-    document.querySelectorAll('.drawer__item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const pageUrl = item.getAttribute('data-page');
-            if (!pageUrl) return;
-            const pageName = item.querySelector('.drawer__text').textContent;
-            loadPage(pageUrl, pageName);
-        });
-    });
-    window.addEventListener('resize', () => window.innerWidth >= 1024 && isMenuOpen && toggleMenu());
-
-    // ==========================================================================
-    // 6. Carga Inicial
-    // ==========================================================================
-    checkInitialPermissions();
-    loadPage('aviso.html', 'Avisos');
-});
-</script>
 </body>
 </html>
